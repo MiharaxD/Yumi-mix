@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800" role="img" aria-label="Organizador Colmeia — vista frontal (ilustração)">
+<defs>
+  <pattern id="camadas" width="6" height="4" patternUnits="userSpaceOnUse"><rect width="6" height="1.2" fill="#000" opacity=".09"/></pattern>
+  <clipPath id="obj"><polygon points="200.4,309.0 164.0,330.0 127.6,309.0 127.6,267.0 164.0,246.0 200.4,267.0"/><polygon points="273.4,309.0 237.0,330.0 200.6,309.0 200.6,267.0 237.0,246.0 273.4,267.0"/><polygon points="236.4,247.0 200.0,268.0 163.6,247.0 163.6,205.0 200.0,184.0 236.4,205.0"/></clipPath>
+</defs>
+<rect width="400" height="400" fill="#ffffff"/>
+     <ellipse cx="214" cy="338" rx="120" ry="16" fill="#262a28" opacity=".14"/>
+     <g fill="#f2f1ec"><polygon points="200.4,309.0 164.0,330.0 127.6,309.0 127.6,267.0 164.0,246.0 200.4,267.0"/><polygon points="273.4,309.0 237.0,330.0 200.6,309.0 200.6,267.0 237.0,246.0 273.4,267.0"/><polygon points="236.4,247.0 200.0,268.0 163.6,247.0 163.6,205.0 200.0,184.0 236.4,205.0"/></g><g stroke-linecap="round" stroke-width="7">
+          <line x1="190" y1="226" x2="176" y2="132" stroke="#1f4e5a"/>
+          <line x1="206" y1="226" x2="222" y2="140" stroke="#d89a2b"/>
+          <line x1="164" y1="288" x2="150" y2="200" stroke="#b8613f"/>
+          <line x1="240" y1="288" x2="262" y2="196" stroke="#3d4240"/>
+        </g>
+        <g fill="#91918e"><circle cx="164" cy="288" r="22"/><circle cx="237" cy="288" r="22"/><circle cx="200" cy="226" r="22"/></g><rect width="400" height="400" fill="url(#camadas)" clip-path="url(#obj)"/>
+</svg>

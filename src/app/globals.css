@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+/* Yumi Mix — mundo "galeria".
+   Papel de parede de galeria como fundo, peças em molduras brancas,
+   tinta preta para texto e linhas finas de 1px dividindo tudo em células. */
+
+@theme {
+  --color-papel: #f5f4f0;
+  --color-branco: #ffffff;
+  --color-nevoa: #e9e8e2;
+  --color-cinza: #cfcec7;
+  --color-tinta: #121212;
+  --color-tinta-suave: #595954;
+  --color-erro: #a3341f;
+  --color-erro-fundo: #f6e2dc;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-galeria: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-papel);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--color-tinta);
+  color: var(--color-branco);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-tinta);
+  outline-offset: 3px;
+}
+
+input,
+textarea,
+select {
+  caret-color: var(--color-tinta);
+}
+
+a {
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+}
+
+/* Títulos: Archivo condensada e pesada, como letreiro de catálogo de galeria. */
+.titulo {
+  font-variation-settings: "wdth" 62;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  text-wrap-style: balance;
+}
+
+/* Contraponto do título: itálico leve, largura normal ("Personalize / your home"). */
+.italico {
+  font-style: italic;
+  font-weight: 300;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: -0.01em;
+}
+
+/* Rótulo de navegação e de botão: caixa alta pequena e espaçada. */
+.rotulo {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Painel: superfície branca com moldura fina, cantos retos. */
+.painel {
+  position: relative;
+  background: var(--color-branco);
+  border: 1px solid var(--color-tinta);
+}
+
+/* Grade de células: as linhas de 1px são o fundo aparecendo entre células. */
+.grade {
+  display: grid;
+  gap: 1px;
+  background: var(--color-tinta);
+  border: 1px solid var(--color-tinta);
+}
+.grade > * {
+  background: var(--color-papel);
+}
+
+/* Moldura: onde a peça é exposta (fundo branco, imagem inteira). */
+.moldura {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-branco);
+}
+
+/* Foto que cresce devagar sob o cursor (dentro de um .group). */
+.foto-viva {
+  transition: transform 700ms var(--ease-galeria);
+}
+@media (hover: hover) {
+  .group:hover .foto-viva {
+    transform: scale(1.05);
+  }
+}
+.group:focus-visible .foto-viva {
+  transform: scale(1.05);
+}
+
+/* Sublinhado que corre da esquerda (links de navegação). */
+.link-linha {
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+  transition: background-size 300ms var(--ease-galeria);
+}
+.link-linha:hover,
+.link-linha[aria-current="page"] {
+  background-size: 100% 1px;
+}
+
+/* Variante e opção de entrega: célula com moldura; escolhida fica preta. */
+.chip-variante {
+  border: 1px solid rgb(18 18 18 / 0.3);
+  background: var(--color-branco);
+  transition:
+    border-color 200ms,
+    background-color 200ms,
+    color 200ms;
+}
+.chip-variante:hover {
+  border-color: var(--color-tinta);
+}
+.chip-variante[aria-checked="true"] {
+  border-color: var(--color-tinta);
+  box-shadow: inset 0 0 0 1px var(--color-tinta);
+}
+
+/* Ação principal: bloco preto, rótulo em caixa alta, seta que avança. */
+.botao-principal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--color-tinta);
+  color: var(--color-branco);
+  border: 1px solid var(--color-tinta);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    background-color 200ms,
+    color 200ms;
+}
+.botao-principal svg {
+  transition: transform 300ms var(--ease-galeria);
+}
+.botao-principal:hover:not(:disabled) {
+  background: var(--color-branco);
+  color: var(--color-tinta);
+}
+.botao-principal:hover:not(:disabled) svg {
+  transform: translateX(4px);
+}
+.botao-principal:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Ação secundária: mesmo bloco, só com o contorno. */
+.botao-contorno {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: transparent;
+  color: var(--color-tinta);
+  border: 1px solid var(--color-tinta);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    background-color 200ms,
+    color 200ms;
+}
+.botao-contorno:hover:not(:disabled) {
+  background: var(--color-tinta);
+  color: var(--color-branco);
+}
+.botao-contorno:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Linha de lista que se inverte (preto) quando ativa, como na lista de artistas. */
+.linha-lista {
+  transition:
+    background-color 250ms var(--ease-galeria),
+    color 250ms var(--ease-galeria);
+}
+.linha-lista[data-ativa="true"] {
+  background: var(--color-tinta);
+  color: var(--color-branco);
+}
+.linha-lista .seta {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 250ms,
+    transform 300ms var(--ease-galeria);
+}
+.linha-lista[data-ativa="true"] .seta {
+  opacity: 1;
+  transform: none;
+}
+
+/* Trilho rolável dos destaques (sem barra visível; navegação pelas setas). */
+.trilho {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.trilho::-webkit-scrollbar {
+  display: none;
+}
+.trilho > * {
+  scroll-snap-align: start;
+}
+
+/* Entrada suave ao carregar. */
+@media (prefers-reduced-motion: no-preference) {
+  .surgir {
+    animation: surgir 900ms var(--ease-galeria) both;
+    animation-delay: var(--atraso, 0ms);
+  }
+  @keyframes surgir {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+* {
+  scrollbar-color: var(--color-tinta-suave) var(--color-papel);
+}

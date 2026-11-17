@@ -1,0 +1,449 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T12:38:33.221Z",
+  "title": "Design System: Yumi Mix",
+  "extensions": {
+    "colorMeta": {
+      "parede": {
+        "role": "primary",
+        "displayName": "Verde-água de Parede",
+        "canonical": "oklch(82.5% 0.060 171.5)",
+        "tonalRamp": [
+          "oklch(15% 0.022 171.5)",
+          "oklch(26% 0.039 171.5)",
+          "oklch(37% 0.055 171.5)",
+          "oklch(48% 0.060 171.5)",
+          "oklch(59% 0.060 171.5)",
+          "oklch(70% 0.045 171.5)",
+          "oklch(82% 0.027 171.5)",
+          "oklch(95% 0.015 171.5)"
+        ]
+      },
+      "parede-funda": {
+        "role": "primary",
+        "displayName": "Parede Funda",
+        "canonical": "oklch(70.2% 0.073 170.1)",
+        "tonalRamp": [
+          "oklch(15% 0.027 170.1)",
+          "oklch(26% 0.047 170.1)",
+          "oklch(37% 0.068 170.1)",
+          "oklch(48% 0.073 170.1)",
+          "oklch(59% 0.073 170.1)",
+          "oklch(70% 0.055 170.1)",
+          "oklch(82% 0.033 170.1)",
+          "oklch(95% 0.018 170.1)"
+        ]
+      },
+      "parede-sombra": {
+        "role": "primary",
+        "displayName": "Parede na Sombra",
+        "canonical": "oklch(52.0% 0.064 171.3)",
+        "tonalRamp": [
+          "oklch(15% 0.024 171.3)",
+          "oklch(26% 0.042 171.3)",
+          "oklch(37% 0.059 171.3)",
+          "oklch(48% 0.064 171.3)",
+          "oklch(59% 0.064 171.3)",
+          "oklch(70% 0.048 171.3)",
+          "oklch(82% 0.029 171.3)",
+          "oklch(95% 0.016 171.3)"
+        ]
+      },
+      "rejunte": {
+        "role": "primary",
+        "displayName": "Rejunte",
+        "canonical": "oklch(82.1% 0.021 164.5)",
+        "tonalRamp": [
+          "oklch(15% 0.008 164.5)",
+          "oklch(26% 0.013 164.5)",
+          "oklch(37% 0.019 164.5)",
+          "oklch(48% 0.021 164.5)",
+          "oklch(59% 0.021 164.5)",
+          "oklch(70% 0.015 164.5)",
+          "oklch(82% 0.009 164.5)",
+          "oklch(95% 0.005 164.5)"
+        ]
+      },
+      "ocre": {
+        "role": "secondary",
+        "displayName": "Ocre de Ação",
+        "canonical": "oklch(76.5% 0.138 80.4)",
+        "tonalRamp": [
+          "oklch(15% 0.052 80.4)",
+          "oklch(26% 0.090 80.4)",
+          "oklch(37% 0.128 80.4)",
+          "oklch(48% 0.138 80.4)",
+          "oklch(59% 0.138 80.4)",
+          "oklch(70% 0.104 80.4)",
+          "oklch(82% 0.062 80.4)",
+          "oklch(95% 0.035 80.4)"
+        ]
+      },
+      "ocre-funda": {
+        "role": "secondary",
+        "displayName": "Ocre Queimado",
+        "canonical": "oklch(67.9% 0.133 77.6)",
+        "tonalRamp": [
+          "oklch(15% 0.050 77.6)",
+          "oklch(26% 0.087 77.6)",
+          "oklch(37% 0.123 77.6)",
+          "oklch(48% 0.133 77.6)",
+          "oklch(59% 0.133 77.6)",
+          "oklch(70% 0.100 77.6)",
+          "oklch(82% 0.060 77.6)",
+          "oklch(95% 0.033 77.6)"
+        ]
+      },
+      "concreto": {
+        "role": "neutral",
+        "displayName": "Concreto Caiado",
+        "canonical": "oklch(91.4% 0.007 106.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 106.5)",
+          "oklch(26% 0.004 106.5)",
+          "oklch(37% 0.006 106.5)",
+          "oklch(48% 0.007 106.5)",
+          "oklch(59% 0.007 106.5)",
+          "oklch(70% 0.005 106.5)",
+          "oklch(82% 0.003 106.5)",
+          "oklch(95% 0.002 106.5)"
+        ]
+      },
+      "concreto-claro": {
+        "role": "neutral",
+        "displayName": "Concreto Claro",
+        "canonical": "oklch(95.7% 0.005 106.5)",
+        "tonalRamp": [
+          "oklch(15% 0.002 106.5)",
+          "oklch(26% 0.003 106.5)",
+          "oklch(37% 0.005 106.5)",
+          "oklch(48% 0.005 106.5)",
+          "oklch(59% 0.005 106.5)",
+          "oklch(70% 0.004 106.5)",
+          "oklch(82% 0.002 106.5)",
+          "oklch(95% 0.001 106.5)"
+        ]
+      },
+      "concreto-escuro": {
+        "role": "neutral",
+        "displayName": "Concreto Escuro",
+        "canonical": "oklch(83.4% 0.010 106.6)",
+        "tonalRamp": [
+          "oklch(15% 0.004 106.6)",
+          "oklch(26% 0.006 106.6)",
+          "oklch(37% 0.009 106.6)",
+          "oklch(48% 0.010 106.6)",
+          "oklch(59% 0.010 106.6)",
+          "oklch(70% 0.007 106.6)",
+          "oklch(82% 0.004 106.6)",
+          "oklch(95% 0.002 106.6)"
+        ]
+      },
+      "grafite": {
+        "role": "neutral",
+        "displayName": "Grafite",
+        "canonical": "oklch(28.0% 0.007 164.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 164.5)",
+          "oklch(26% 0.004 164.5)",
+          "oklch(37% 0.006 164.5)",
+          "oklch(48% 0.007 164.5)",
+          "oklch(59% 0.007 164.5)",
+          "oklch(70% 0.005 164.5)",
+          "oklch(82% 0.003 164.5)",
+          "oklch(95% 0.002 164.5)"
+        ]
+      },
+      "grafite-suave": {
+        "role": "neutral",
+        "displayName": "Grafite Suave",
+        "canonical": "oklch(42.5% 0.009 164.6)",
+        "tonalRamp": [
+          "oklch(15% 0.003 164.6)",
+          "oklch(26% 0.006 164.6)",
+          "oklch(37% 0.008 164.6)",
+          "oklch(48% 0.009 164.6)",
+          "oklch(59% 0.009 164.6)",
+          "oklch(70% 0.007 164.6)",
+          "oklch(82% 0.004 164.6)",
+          "oklch(95% 0.002 164.6)"
+        ]
+      },
+      "erro": {
+        "role": "error",
+        "displayName": "Erro",
+        "canonical": "oklch(48.6% 0.150 32.8)",
+        "tonalRamp": [
+          "oklch(15% 0.056 32.8)",
+          "oklch(26% 0.098 32.8)",
+          "oklch(37% 0.139 32.8)",
+          "oklch(48% 0.150 32.8)",
+          "oklch(59% 0.150 32.8)",
+          "oklch(70% 0.113 32.8)",
+          "oklch(82% 0.068 32.8)",
+          "oklch(95% 0.038 32.8)"
+        ]
+      },
+      "erro-fundo": {
+        "role": "error",
+        "displayName": "Fundo de Erro",
+        "canonical": "oklch(92.7% 0.024 37.4)",
+        "tonalRamp": [
+          "oklch(15% 0.009 37.4)",
+          "oklch(26% 0.015 37.4)",
+          "oklch(37% 0.022 37.4)",
+          "oklch(48% 0.024 37.4)",
+          "oklch(59% 0.024 37.4)",
+          "oklch(70% 0.018 37.4)",
+          "oklch(82% 0.011 37.4)",
+          "oklch(95% 0.006 37.4)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Nome Yumi Mix gigante na faixa verde da vitrine; 3.4rem no celular, 6rem a partir de sm."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de seção e de página; 1.875rem no celular."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nomes de peça nos blocos e títulos de módulo; 0.95rem no celular."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido, números tabulares, max-w-prose."
+      },
+      "body-lead": {
+        "displayName": "Body Lead",
+        "purpose": "Linha de apresentação e textos de chamada; 1.5rem na faixa da vitrine."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Rótulos de campo, navegação, botões."
+      },
+      "label-sm": {
+        "displayName": "Label Small",
+        "purpose": "Selos de prazo, status, dicas."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sombra-modulo",
+        "value": "10px 14px 26px -12px rgb(38 42 40 / 0.35)",
+        "purpose": "Módulos elevados sobre concreto."
+      },
+      {
+        "name": "sombra-botao",
+        "value": "6px 8px 18px -10px rgb(38 42 40 / 0.55)",
+        "purpose": "Botão principal em repouso."
+      },
+      {
+        "name": "sombra-variante",
+        "value": "4px 6px 12px -6px rgb(38 42 40 / 0.45)",
+        "purpose": "Chip de variante em repouso."
+      },
+      {
+        "name": "afundado",
+        "value": "inset 4px 5px 10px -3px rgb(38 42 40 / 0.45)",
+        "purpose": "Variante escolhida (com translateY(1px))."
+      },
+      {
+        "name": "botao-pressionado",
+        "value": "inset 3px 4px 10px -4px rgb(38 42 40 / 0.5)",
+        "purpose": "Botão principal pressionado."
+      },
+      {
+        "name": "campo-rebaixado",
+        "value": "inset 2px 3px 6px -3px rgb(38 42 40 / 0.25)",
+        "purpose": "Campos de formulário."
+      },
+      {
+        "name": "espessura-vazado",
+        "value": "linear-gradient(140deg, rgb(38 42 40 / 0.42) 0%, rgb(38 42 40 / 0.12) 22%, transparent 38%)",
+        "purpose": "Sombra interna do bloco no vazado; desliza para 35% 10% no hover/foco."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-luz",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Toda transição de luz, sombra e escala."
+      },
+      {
+        "name": "luz-deslizando",
+        "value": "900ms",
+        "purpose": "Sombra do vazado no hover/foco do bloco."
+      },
+      {
+        "name": "foto-crescendo",
+        "value": "700ms, scale(1.06)",
+        "purpose": "Foto da peça no hover do bloco."
+      },
+      {
+        "name": "afundar",
+        "value": "400ms",
+        "purpose": "Sombra e deslocamento de chip e botão."
+      },
+      {
+        "name": "troca-de-cor",
+        "value": "200ms",
+        "purpose": "Hover de cor de fundo."
+      },
+      {
+        "name": "luz-passando",
+        "value": "2200ms",
+        "purpose": "Entrada da luz no chão; só sem prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão Principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Única aparição do ocre: a ação que conclui a tarefa da tela.",
+      "html": "<button class=\"ds-btn-primary\">Adicionar ao carrinho</button>",
+      "css": ".ds-btn-primary{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;background:var(--color-ocre,#e0a83a);color:var(--color-grafite,#262a28);font-weight:700;font-size:1rem;padding:14px 40px;border:0;border-radius:9999px;box-shadow:6px 8px 18px -10px rgb(38 42 40/.55);cursor:pointer;transition:background-color 200ms,box-shadow 400ms cubic-bezier(.16,1,.3,1),transform 400ms cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:var(--color-ocre-funda,#c58c1f)}.ds-btn-primary:active{transform:translateY(1px);box-shadow:inset 3px 4px 10px -4px rgb(38 42 40/.5)}.ds-btn-primary:focus-visible{outline:3px solid var(--color-grafite,#262a28);outline-offset:3px}"
+    },
+    {
+      "name": "Botão Escuro",
+      "kind": "button",
+      "refersTo": "button-dark",
+      "description": "Ação secundária em grafite, com seta desenhada.",
+      "html": "<a class=\"ds-btn-dark\" href=\"#\">Pedir uma peça sob medida <svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-dark{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:inline-flex;align-items:center;gap:12px;background:var(--color-grafite,#262a28);color:var(--color-concreto-claro,#f1f1ed);font-weight:600;font-size:1rem;padding:16px 28px;border-radius:9999px;text-decoration:none;transition:background-color 150ms}.ds-btn-dark:hover{background:var(--color-grafite-suave,#4a504d)}.ds-btn-dark:focus-visible{outline:3px solid var(--color-grafite,#262a28);outline-offset:3px}"
+    },
+    {
+      "name": "Chip de Variante",
+      "kind": "chip",
+      "refersTo": "chip-variante",
+      "description": "Escolha de cor/material; a escolhida afunda no módulo.",
+      "html": "<div class=\"ds-chips\" role=\"radiogroup\" aria-label=\"Variante\"><button class=\"ds-chip\" role=\"radio\" aria-checked=\"true\"><span class=\"ds-sw\" style=\"background:#f2efe6\"></span><span>Marfim<small>PLA fosco · R$ 89,00</small></span></button><button class=\"ds-chip\" role=\"radio\" aria-checked=\"false\"><span class=\"ds-sw\" style=\"background:#3f7564\"></span><span>Verde musgo<small>PLA fosco · R$ 94,00</small></span></button></div>",
+      "css": ".ds-chips{display:flex;gap:10px;flex-wrap:wrap}.ds-chip{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border:0;border-radius:9999px;background:#f1f1ed;color:#262a28;font-size:.875rem;text-align:left;line-height:1.2;cursor:pointer;box-shadow:4px 6px 12px -6px rgb(38 42 40/.45);transition:box-shadow 400ms cubic-bezier(.16,1,.3,1),transform 400ms cubic-bezier(.16,1,.3,1),background-color 200ms}.ds-chip small{display:block;font-size:.75rem;color:#4a504d}.ds-chip:hover{background:#fff}.ds-chip[aria-checked=true]{background:#e3e3de;font-weight:600;box-shadow:inset 4px 5px 10px -3px rgb(38 42 40/.45);transform:translateY(1px)}.ds-chip:focus-visible{outline:3px solid var(--color-grafite,#262a28);outline-offset:3px}.ds-sw{width:28px;height:28px;border-radius:50%;flex:none;box-shadow:0 0 0 1px rgb(38 42 40/.15)}"
+    },
+    {
+      "name": "Selos de Prazo",
+      "kind": "chip",
+      "refersTo": "selo-pronta-entrega",
+      "description": "Pronta entrega (grafite com ponto verde) ou prazo de produção (contorno + relógio).",
+      "html": "<span class=\"ds-selo\"><span class=\"ds-dot\"></span>Pronta entrega</span> <span class=\"ds-selo ds-selo-prazo\"><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"8.5\"/><path d=\"M12 7.5V12l3 2\"/></svg>5 dias úteis</span>",
+      "css": ".ds-selo{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:9999px;background:#262a28;color:#f1f1ed;font-size:.75rem;font-weight:600}.ds-dot{width:6px;height:6px;border-radius:50%;background:#9fd3c1}.ds-selo-prazo{background:transparent;color:#262a28;border:1px solid rgb(38 42 40/.25)}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de concreto levemente rebaixado no módulo.",
+      "html": "<label class=\"ds-field\"><span>CEP</span><input class=\"ds-input\" placeholder=\"00000-000\"></label>",
+      "css": ".ds-field{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:block;color:#262a28}.ds-field span{display:block;margin-bottom:6px;font-size:.875rem;font-weight:600}.ds-input{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;width:100%;box-sizing:border-box;border-radius:6px;border:1px solid rgb(38 42 40/.25);background:#f1f1ed;padding:12px 14px;font-size:1rem;color:#262a28;box-shadow:inset 2px 3px 6px -3px rgb(38 42 40/.25)}.ds-input::placeholder{color:rgb(74 80 77/.8)}.ds-input:focus{border-color:#262a28;outline:none}.ds-input:focus-visible{outline:3px solid #262a28;outline-offset:1px}.ds-input[aria-invalid=true]{border-color:#a3341f;background:rgb(246 226 220/.4)}"
+    },
+    {
+      "name": "Cabeçalho",
+      "kind": "nav",
+      "refersTo": "parede",
+      "description": "Cabeçalho fixo em campo verde-água com letreiro e carrinho.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\">Yumi Mix</a><nav><a class=\"ds-link\" href=\"#\">Sob medida</a><a class=\"ds-cart\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8Z\"/><path d=\"M9 8V6.5a3 3 0 0 1 6 0V8\"/></svg>Carrinho<span class=\"ds-count\">2</span></a></nav></header>",
+      "css": ".ds-nav{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#9fd3c1;border-bottom:1px solid rgb(38 42 40/.1);color:#262a28}.ds-nav nav{display:flex;align-items:center;gap:12px}.ds-brand{font-size:1.5rem;font-weight:800;font-variation-settings:\"wdth\" 125;letter-spacing:-.02em;color:#262a28;text-decoration:none}.ds-link{font-size:.875rem;font-weight:600;color:#262a28;text-decoration:none;padding:10px 12px;text-underline-offset:4px}.ds-link:hover{text-decoration:underline}.ds-cart{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9999px;background:#262a28;color:#f1f1ed;font-size:.875rem;font-weight:600;text-decoration:none;transition:background-color 150ms}.ds-cart:hover{background:#4a504d}.ds-count{display:grid;place-items:center;min-width:24px;padding:0 6px;border-radius:9999px;background:#9fd3c1;color:#262a28;font-size:.75rem;line-height:24px}.ds-nav a:focus-visible{outline:3px solid var(--color-grafite,#262a28);outline-offset:3px}"
+    },
+    {
+      "name": "Módulo",
+      "kind": "card",
+      "refersTo": "modulo",
+      "description": "Superfície elevada de concreto com sombra de tarde (resumos, formulários).",
+      "html": "<div class=\"ds-modulo\"><h3>Resumo</h3><dl><dt>Subtotal</dt><dd>R$ 178,00</dd><dt>Frete</dt><dd>R$ 20,00</dd><dt class=\"ds-tot\">Total</dt><dd class=\"ds-tot\">R$ 198,00</dd></dl></div>",
+      "css": ".ds-modulo{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;background:#f1f1ed;border-radius:6px;padding:24px;box-shadow:10px 14px 26px -12px rgb(38 42 40/.35);color:#262a28;max-width:320px}.ds-modulo h3{margin:0 0 12px;font-size:1.125rem;font-weight:800;font-variation-settings:\"wdth\" 125;letter-spacing:-.02em}.ds-modulo dl{display:grid;grid-template-columns:1fr auto;gap:10px 0;margin:0;font-size:.875rem;font-variant-numeric:tabular-nums}.ds-modulo dd{margin:0;text-align:right;font-weight:600}.ds-tot{border-top:1px solid rgb(38 42 40/.15);padding-top:12px;font-weight:800}"
+    },
+    {
+      "name": "Parede de Cobogó",
+      "kind": "custom",
+      "refersTo": "bloco",
+      "description": "Assinatura: blocos encostados com rejunte de 3px, vazado olho e juntas redondas abertas.",
+      "html": "<ul class=\"ds-cobogo\"><li><a class=\"ds-bloco\" href=\"#\"><span class=\"ds-vazado\"></span><strong>Vaso Onda</strong><small>R$ 89,00</small></a></li><li><a class=\"ds-bloco\" href=\"#\"><span class=\"ds-vazado\"></span><strong>Luminária Favo</strong><small>R$ 149,00</small></a></li><li><a class=\"ds-bloco\" href=\"#\"><span class=\"ds-vazado\"></span><strong>Porta-joias Gota</strong><small>R$ 59,00</small></a></li><li><a class=\"ds-bloco\" href=\"#\"><span class=\"ds-vazado\"></span><strong>Cachepô Trama</strong><small>R$ 74,00</small></a></li></ul>",
+      "css": ".ds-cobogo{font-family: var(--font-archivo, Archivo), ui-sans-serif, system-ui, sans-serif;display:grid;grid-template-columns:repeat(2,1fr);gap:3px;padding:3px 3px 0;margin:0;list-style:none;background:#b9c9c1;overflow:hidden;max-width:420px}.ds-cobogo>li{position:relative}.ds-cobogo>li::after{content:\"\";position:absolute;right:-16px;bottom:-16px;width:29px;height:29px;border-radius:50%;background:#9fd3c1;z-index:1;pointer-events:none}.ds-bloco{display:flex;flex-direction:column;padding:20px 16px 16px;color:#262a28;text-decoration:none;background-color:#f1f1ed;background-image:radial-gradient(circle at 0 0,#9fd3c1 0 13px,transparent 14px),radial-gradient(circle at 100% 0,#9fd3c1 0 13px,transparent 14px),radial-gradient(circle at 0 100%,#9fd3c1 0 13px,transparent 14px),radial-gradient(circle at 100% 100%,#9fd3c1 0 13px,transparent 14px)}.ds-bloco strong{margin-top:14px;font-size:.95rem;font-weight:700}.ds-bloco small{margin-top:4px;font-size:.875rem;font-weight:600}.ds-vazado{position:relative;display:block;width:88%;aspect-ratio:1;margin:0 auto;background:#e3e3de;overflow:hidden;-webkit-mask:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 1 C 93 24 93 76 50 99 C 7 76 7 24 50 1 Z'/%3E%3C/svg%3E\") center/100% 100% no-repeat;mask:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 1 C 93 24 93 76 50 99 C 7 76 7 24 50 1 Z'/%3E%3C/svg%3E\") center/100% 100% no-repeat}.ds-vazado::after{content:\"\";position:absolute;inset:0;background-image:linear-gradient(140deg,rgb(38 42 40/.42) 0%,rgb(38 42 40/.12) 22%,transparent 38%);background-size:180% 180%;background-position:0 0;transition:background-position 900ms cubic-bezier(.16,1,.3,1)}.ds-bloco:hover .ds-vazado::after,.ds-bloco:focus-visible .ds-vazado::after{background-position:35% 10%}.ds-bloco:focus-visible{outline:3px solid #262a28;outline-offset:-4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Parede de Cobogó",
+    "overview": "A loja é um muro de cobogó num quintal brasileiro no fim da tarde. Cada peça à venda mora num bloco de concreto da parede e é vista através do vazado dele, um \"olho\" desenhado à mão. O verde-água de parede pintada cobre campos inteiros (faixa do topo, cabeçalho, moldura da galeria), o concreto caiado frio é o chão onde tudo se apoia, o grafite é a tinta e o ocre aparece só onde a pessoa age. A luz é sempre a mesma: vem do alto à esquerda, projeta sombras macias para baixo e à direita e, na vitrine, atravessa os vazados e desenha o cobogó no piso.\n\nA densidade é de vitrine de ateliê, não de marketplace: poucos módulos grandes, preço e prazo honestos à vista, nada de banners. As telas de operação (carrinho, checkout, pagamento, pedido personalizado, admin) herdam o mesmo material com contenção: concreto, módulos com sombra de tarde, grafite e o ocre no único botão que conclui a tarefa; a parede de cobogó em si é reservada à vitrine e à galeria de produto.\n\nRejeições confirmadas: o padrão \"banner + grade de cards brancos iguais\", modo escuro e qualquer textura simulada na parede (o verde-água é campo liso).",
+    "keyCharacteristics": [
+      "Parede verde-água lisa como campo de cor dominante (estratégia Committed).",
+      "Grade de blocos encostados com rejunte de 3px e vazados redondos abertos nas juntas.",
+      "Vazado \"olho\" como máscara de imagem; produto inteiro dentro dele, cena preenchendo.",
+      "Uma única fonte, Archivo, esticada no eixo de largura nos títulos.",
+      "Sombras de fim de tarde, sempre com luz do alto à esquerda.",
+      "Ocre exclusivo da ação principal."
+    ],
+    "rules": [
+      {
+        "name": "The Ocre Rule",
+        "body": "O ocre é só da ação principal de cada tela (adicionar ao carrinho, finalizar, pagar, enviar pedido, entrar). Uma tela tem no máximo um botão ocre visível por tarefa; ações secundárias são grafite ou texto sublinhado.",
+        "section": "colors"
+      },
+      {
+        "name": "The Campo Liso Rule",
+        "body": "O verde-água entra como campo inteiro e liso, de borda a borda, nunca como cor de detalhe espalhada ou com textura/gradiente.",
+        "section": "colors"
+      },
+      {
+        "name": "The Letreiro Rule",
+        "body": "Todo título usa a largura 125 com tracking -0.02em e quebra balanceada; o corpo nunca é esticado. A largura é a voz da marca, o peso sozinho não basta.",
+        "section": "typography"
+      },
+      {
+        "name": "The Uma Família Rule",
+        "body": "Não introduzir segunda família tipográfica; contraste vem de largura e peso do eixo variável da Archivo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Blocos Encostados Rule",
+        "body": "Os itens de uma parede de cobogó nunca flutuam com gap e sombra; eles se tocam, separados apenas pelo rejunte de 3px. O número de colunas da parede e o da luz no chão é sempre o mesmo.",
+        "section": "layout"
+      },
+      {
+        "name": "The Sol da Tarde Rule",
+        "body": "Toda sombra cai para baixo e à direita, desfocada, em grafite translúcido. Nunca sombra dura, nunca sombra para cima ou para a esquerda, nunca preto puro.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Afundar Rule",
+        "body": "Selecionar e pressionar afundam (sombra interna + 1px para baixo); nada \"salta\" no hover.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar a curva `--ease-luz` (cubic-bezier(0.16, 1, 0.3, 1)) em toda transição de luz, sombra ou escala, com durações longas (400–900ms) para luz e 200ms para troca de cor.",
+      "Do encostar os blocos de uma parede de cobogó com 3px de rejunte e deixar os vazados das juntas abertos e cortados na borda da parede.",
+      "Do mostrar o produto inteiro dentro do vazado (recuo de 16%, contain) e reservar o preenchimento para fotos de cena.",
+      "Do manter preço, \"a partir de\" e prazo (pronta entrega ou dias úteis) visíveis em todo bloco de produto.",
+      "Do usar o contorno grafite de 3px como foco em tudo; dentro de blocos, o contorno entra 4px.",
+      "Do desligar a animação da luz no chão quando `prefers-reduced-motion` pedir."
+    ],
+    "donts": [
+      "Don't usar ocre fora da ação principal: nada de ocre em selos, status, ícones, links ou fundos.",
+      "Don't montar a vitrine como \"banner + grade de cards brancos iguais\" com gap e sombra por card; produto vive em bloco de parede.",
+      "Don't colocar textura, ruído ou gradiente no campo verde-água.",
+      "Don't usar sombras duras, deslocadas sem desfoque, ou vindas de outra direção que não o alto à esquerda.",
+      "Don't introduzir uma segunda família tipográfica nem títulos em largura normal.",
+      "Don't criar modo escuro nem cinzas fora da paleta; bordas são grafite translúcido.",
+      "Don't pôr rótulos em caixa alta pequena acima dos títulos (kickers/eyebrows); o letreiro largo já abre cada seção."
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+import type { Metadata } from "next";
+import { CartView } from "./CartView";
+
+export const metadata: Metadata = { title: "Carrinho" };
+
+export default function CarrinhoPage() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 sm:px-6 sm:pt-14 sm:pb-24">
+      <h1 className="titulo mb-8 text-[2.75rem] leading-[0.95] sm:mb-10 sm:text-[4rem]">Carrinho</h1>
+      <CartView />
+    </div>
+  );
+}

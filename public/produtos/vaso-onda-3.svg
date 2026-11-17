@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800" role="img" aria-label="Vaso Onda — detalhe das camadas de impressão (ilustração)">
+<defs>
+  <pattern id="camadas" width="6" height="4" patternUnits="userSpaceOnUse"><rect width="6" height="1.2" fill="#000" opacity=".09"/></pattern>
+  <clipPath id="obj"><path d="M150 330 C138 300 166 272 150 240 C134 208 172 190 165 160 C158 130 176 112 170 92 L230 92 C224 112 242 130 235 160 C228 190 266 208 250 240 C234 272 262 300 250 330 Z"/></clipPath>
+</defs>
+<rect width="400" height="400" fill="#405b52"/>
+     <g transform="translate(-260 -330) scale(2.6)"><g fill="#8fcbb6"><path d="M150 330 C138 300 166 272 150 240 C134 208 172 190 165 160 C158 130 176 112 170 92 L230 92 C224 112 242 130 235 160 C228 190 266 208 250 240 C234 272 262 300 250 330 Z"/></g><ellipse cx="200" cy="92" rx="30" ry="7" fill="#5d8476"/>
+      <path d="M200 92 C206 130 196 170 212 210 C226 250 210 290 222 330 L250 330 C262 300 234 272 250 240 C266 208 228 190 235 160 C242 130 224 112 230 92 Z" fill="#7eb3a0"/><rect width="400" height="400" fill="url(#camadas)" clip-path="url(#obj)"/></g>
+     <rect x="18" y="352" width="150" height="30" rx="4" fill="#f5f4f0" opacity=".92"/>
+     <text x="30" y="372" font-family="Arial, sans-serif" font-size="14" fill="#262a28">detalhe das camadas</text>
+</svg>
