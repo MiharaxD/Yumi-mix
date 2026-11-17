@@ -1,7 +1,7 @@
 # Yumi Mix — loja de impressão 3D (versão de teste)
 
-Loja autoral em Next.js (App Router) + TypeScript + Tailwind, com SQLite via Prisma e uploads em disco.
-Roda 100% local: o pagamento é simulado e nada sai da sua máquina.
+Loja autoral em Next.js (App Router) + TypeScript + Tailwind, com Postgres (Neon) via Prisma e uploads em disco.
+O pagamento é simulado; o banco é hospedado (Neon) e compartilhado entre o `npm run dev` local e o deploy na Vercel.
 
 ## Como rodar
 
@@ -9,8 +9,10 @@ Requer Node 20.19+ (testado no 24).
 
 ```bash
 npm install            # instala e gera o Prisma Client
-cp .env.example .env.local   # e preencha os valores (veja abaixo)
-npm run db:setup       # cria prisma/dev.db e carrega os 6 produtos de teste
+cp .env.example .env.local   # ADMIN_PASSWORD / ADMIN_SESSION_SECRET
+# crie também um arquivo .env com DATABASE_URL e DATABASE_URL_UNPOOLED (Postgres/Neon,
+# copiados em vercel.com/mihara1/yumi-mix → Storage) — o Prisma CLI só lê .env, não .env.local
+npm run db:setup       # roda as migrations no Postgres e carrega os 6 produtos de teste
 npm run dev            # http://localhost:3000
 ```
 
@@ -21,14 +23,15 @@ Outros comandos: `npm run build`, `npm run lint`, `npm test`, `npm run db:seed` 
 
 > No Windows, pare o `npm run dev` antes de `npm install`/`npx prisma generate`: o servidor trava o arquivo do Prisma.
 
-## Variáveis de ambiente (`.env.local`)
+## Variáveis de ambiente
 
-| Variável | Para quê |
-| --- | --- |
-| `ADMIN_PASSWORD` | Senha do painel `/admin`. |
-| `ADMIN_SESSION_SECRET` | Texto aleatório (mín. 32 caracteres) que assina o cookie de sessão do admin. |
+| Variável | Arquivo | Para quê |
+| --- | --- | --- |
+| `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | `.env` | Conexão com o Postgres (Neon); mesmo banco usado na Vercel. |
+| `ADMIN_PASSWORD` | `.env.local` | Senha do painel `/admin`. |
+| `ADMIN_SESSION_SECRET` | `.env.local` | Texto aleatório (mín. 32 caracteres) que assina o cookie de sessão do admin. |
 
-O banco é o arquivo `prisma/dev.db` (caminho fixo em `prisma/schema.prisma`). Frete, limite de frete grátis e limites de upload ficam em `src/config.ts`.
+O banco é Postgres (Neon), compartilhado entre o `npm run dev` local e o deploy na Vercel — schema fixo em `prisma/schema.prisma`. Frete, limite de frete grátis e limites de upload ficam em `src/config.ts`.
 
 ## O que dá para testar
 

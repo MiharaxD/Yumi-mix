@@ -37,7 +37,7 @@
 
 ## Banco / seed
 - **Ir direto para:** `prisma/schema.prisma` → `prisma/migrations/` → `prisma/seed.mts` (produtos + SVGs em `public/produtos/`).
-- **Cuidados:** seed é idempotente (upsert, IDs de variante `slug--chave` estáveis). Não editar `public/produtos/*.svg` à mão: são gerados pelo seed (vista frontal com fundo branco, para casar com a `.moldura`).
+- **Cuidados:** Postgres (Neon), não SQLite — `DATABASE_URL`/`DATABASE_URL_UNPOOLED` ficam em `.env` (Prisma CLI não lê `.env.local`). Seed é idempotente (upsert, IDs de variante `slug--chave` estáveis). Não editar `public/produtos/*.svg` à mão: são gerados pelo seed (vista frontal com fundo branco, para casar com a `.moldura`).
 - **Arquivo grande?** `prisma/seed.mts` (~300 linhas): busque `const products` (catálogo) ou `draws` (desenhos).
 
 ## Build / config

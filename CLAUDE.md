@@ -1,9 +1,9 @@
 @AGENTS.md
 
-# Yumi Mix — loja de impressão 3D (versão de TESTE, 100% local)
+# Yumi Mix — loja de impressão 3D (versão de TESTE, deploy na Vercel)
 
-Loja autoral de decoração impressa em 3D: catálogo → carrinho → checkout → pagamento **simulado** → painel admin, mais pedido personalizado com upload de fotos. Nada de serviço externo nesta etapa.
-Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · React 19.3 · TypeScript 5 · Tailwind 4.3 · Prisma **6.19** + SQLite (`prisma/dev.db`) · zod 4 · vitest 5. Node 20.19+ (testado no 24).
+Loja autoral de decoração impressa em 3D: catálogo → carrinho → checkout → pagamento **simulado** → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção; fora isso, nenhum serviço externo (pagamento continua simulado).
+Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · React 19.3 · TypeScript 5 · Tailwind 4.3 · Prisma **6.19** + Postgres (Neon) · zod 4 · vitest 5. Node 20.19+ (testado no 24).
 
 ## Comandos
 - Instalar: `npm install` (o `postinstall` roda `prisma generate`)
@@ -21,7 +21,7 @@ Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · Reac
 - Dinheiro em centavos (Int). Endereço sempre obrigatório no checkout.
 - Fora de escopo (não adicionar sem pedido): SDK de pagamento real, email/Telegram, login de cliente, cupons, avaliações, dark mode, i18n.
 - Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest. Qualquer outra: perguntar antes.
-- Segredos só em `.env.local` (nomes em `.env.example`). Nunca commitar `.env.local`, `prisma/dev.db`, `uploads/`.
+- Segredos em `.env.local` (admin) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
 - Visual: seguir `DESIGN.md` (mundo "A Galeria": preto e branco, linhas de 1px, cantos retos). Produto/público em `PRODUCT.md`.
 
 ## Estilo

@@ -6,6 +6,7 @@
 - Pedido personalizado com 1–4 imagens (validação por bytes, ≤5 MB, honeypot) → status `nova`.
 - Admin com senha + cookie assinado: pedidos (filtro/status), sob medida (imagens, orçamento, status), avisos.
 - Testes vitest de frete/total e transições de status. Visual "A Galeria" (preto e branco) aplicado em loja e admin; DESIGN.md reescrito.
+- Banco migrado de SQLite local para Postgres hospedado (Neon); mesmo banco em dev local e no deploy da Vercel (`vercel.com/mihara1/yumi-mix`).
 
 ## Pendências (prioridade)
 1. Integrar provedor real (Mercado Pago, Pix/cartão) implementando `PaymentProvider` + rota de webhook — planejado, não iniciado.

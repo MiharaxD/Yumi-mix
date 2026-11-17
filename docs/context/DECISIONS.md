@@ -1,6 +1,7 @@
 # Decisões ativas
 
-- **Prisma fixado na 6.19 (não 7/8).** Por quê: a 7+ exige driver adapter para SQLite, que seria dependência fora da lista. Exige: não atualizar o Prisma sem aprovar o adapter.
+- **Prisma fixado na 6.19 (não 7/8).** Por quê: versões novas exigem driver adapter como dependência extra, fora da lista aprovada. Exige: não atualizar o Prisma sem aprovar o adapter.
+- **Banco trocado de SQLite local para Postgres hospedado (Neon), conectado via Storage da Vercel.** Por quê: a usuária quis mostrar o site pra outra pessoa em outro PC; SQLite é arquivo local e não funciona em serverless (Vercel). Mesmo banco serve dev local e produção. Exige: `DATABASE_URL`/`DATABASE_URL_UNPOOLED` em `.env` (Prisma CLI só lê esse arquivo, não `.env.local`); já injetadas na Vercel pela integração Neon.
 - **`cacheComponents` desligado no `next.config.ts`.** Por quê: modelo de renderização clássico, mais simples para páginas com banco. Exige: `export const dynamic = "force-dynamic"` em páginas que leem o banco.
 - **`build` não roda `prisma generate`.** Por quê: no Windows o dev server trava a DLL e o build falhava. Exige: gerar o client via `postinstall`/`npx prisma generate` com o dev parado.
 - **Endereço sempre obrigatório no checkout, inclusive na retirada.** Por quê: escolha da dona da loja. Proíbe: tornar opcional sem pedido.

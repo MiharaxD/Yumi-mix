@@ -1,12 +1,13 @@
-// Banco SQLite local (arquivo prisma/dev.db). Valores em centavos (Int).
+// Banco Postgres (Neon). Valores em centavos (Int).
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Product {
