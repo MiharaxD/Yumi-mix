@@ -13,6 +13,9 @@ export const dynamic = "force-dynamic";
 // foto de ambiente do hero: banheiro arrumado, sem texto do fornecedor por cima
 const CENA_HERO = "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg";
 
+// arte da campanha do topo (texto já embutido na imagem, no canto superior direito)
+const BANNER_TOPO = "/banners/natal.webp";
+
 const PASSOS = ["Você manda foto e medidas", "A gente responde com orçamento", "Buscamos e preparamos a peça pra você"];
 
 const botaoClaro =
@@ -60,8 +63,28 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* banner de campanha: a arte já traz o título, só o botão vai por cima */}
+      <section className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-4" aria-label="Campanha de Natal">
+        <div className="relative isolate aspect-[16/9] overflow-hidden rounded-[2rem] bg-tinta">
+          <Image
+            src={BANNER_TOPO}
+            alt="Sua casa mais organizada e charmosa, com um toque de Natal"
+            fill
+            priority
+            sizes="(min-width: 1280px) 1232px, 100vw"
+            className="-z-10 object-cover"
+          />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-tinta/70 via-tinta/10 to-transparent" aria-hidden />
+          <div className="absolute bottom-0 left-0 p-4 sm:p-10">
+            <Link href="#pecas" className={`surgir ${botaoClaro} max-sm:px-4 max-sm:py-2.5 max-sm:text-sm`}>
+              Ver produtos <IconeSeta className="size-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* hero: cartão de ambiente + painel de destaques */}
-      <section className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-4" aria-labelledby="titulo-vitrine">
+      <section className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-5" aria-labelledby="titulo-vitrine">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr] lg:gap-5">
           <div className="relative isolate min-h-[30rem] overflow-hidden rounded-[2rem] bg-tinta text-branco sm:min-h-[34rem] lg:min-h-[38rem]">
             <Image src={CENA_HERO} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" className="-z-10 object-cover" />
