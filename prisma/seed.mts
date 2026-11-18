@@ -1,6 +1,7 @@
 // Seed da Yumi Mix: 2 categorias e 7 produtos reais (fotos em public/produtos/<pasta>/main_images).
 // Rodar: npm run db:seed  (idempotente: pode rodar de novo sem duplicar)
 
+import { existsSync } from "node:fs";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -148,6 +149,13 @@ const products: ProductSeed[] = [
   },
 ];
 
+// vídeo do fornecedor fica ao lado das fotos: public/produtos/<pasta>/product_videos/1.mp4
+function videoDaPasta(fotoUrl: string | undefined): string | null {
+  if (!fotoUrl) return null;
+  const url = fotoUrl.replace(/\/main_images\/[^/]+$/, "/product_videos/1.mp4");
+  return url !== fotoUrl && existsSync(`public${url}`) ? url : null;
+}
+
 async function main() {
   // remove o catálogo fictício anterior (produtos e categorias que não existem mais na lista acima)
   await prisma.product.deleteMany({ where: { slug: { notIn: products.map((p) => p.slug) } } });
@@ -170,6 +178,7 @@ async function main() {
       dimensions: p.dimensions,
       productionDays: p.productionDays,
       readyToShip: p.readyToShip,
+      videoUrl: videoDaPasta(p.images[0]?.url),
       position: index,
       categoryId: categoryIds.get(p.category),
     };

@@ -49,6 +49,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
           <ProductGallery
             name={product.name}
             images={product.images.map((i) => ({ id: i.id, url: i.url, alt: i.alt }))}
+            video={product.videoUrl}
           />
         </div>
 

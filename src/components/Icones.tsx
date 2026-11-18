@@ -26,6 +26,14 @@ export function IconeSeta({ className = "size-5" }: P) {
   );
 }
 
+export function IconePlay({ className = "size-5" }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base} fill="currentColor">
+      <path d="M8 5.8v12.4a1 1 0 0 0 1.5.86l10.2-6.2a1 1 0 0 0 0-1.72L9.5 4.94A1 1 0 0 0 8 5.8Z" />
+    </svg>
+  );
+}
+
 export function IconeVoltar({ className = "size-5" }: P) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>

@@ -8,19 +8,29 @@ import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
 import { MAX_QUANTITY_PER_ITEM } from "@/config";
 import { QuantityStepper } from "@/components/QuantityStepper";
-import { IconeCheck, IconeSeta } from "@/components/Icones";
+import { IconeCheck, IconePlay, IconeSeta } from "@/components/Icones";
 import { SeloPrazo } from "@/components/Prazo";
 
 type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number };
 type Img = { id: string; url: string; alt: string };
 
-export function ProductGallery({ images, name }: { images: Img[]; name: string }) {
+export function ProductGallery({ images, name, video }: { images: Img[]; name: string; video?: string | null }) {
   const { atual, anterior, ir } = useFotoAtiva();
   const toque = useRef<number | null>(null);
+  const [vendoVideo, setVendoVideo] = useState(false);
   const total = images.length;
+  // o vídeo entra como último item da galeria, depois das fotos
+  const itens = total + (video ? 1 : 0);
+  const selecionado = vendoVideo ? total : atual;
+
+  function escolher(i: number) {
+    if (video && i === total) return setVendoVideo(true);
+    setVendoVideo(false);
+    ir(i);
+  }
 
   function passar(direcao: 1 | -1) {
-    ir((atual + direcao + total) % total);
+    escolher((selecionado + direcao + itens) % itens);
   }
 
   return (
@@ -32,7 +42,7 @@ export function ProductGallery({ images, name }: { images: Img[]; name: string }
         }}
         onPointerUp={(e) => {
           // arrastar o dedo para os lados troca a foto
-          if (toque.current === null || total < 2) return;
+          if (toque.current === null || itens < 2) return;
           const dx = e.clientX - toque.current;
           toque.current = null;
           if (Math.abs(dx) > 40) passar(dx < 0 ? 1 : -1);
@@ -40,24 +50,36 @@ export function ProductGallery({ images, name }: { images: Img[]; name: string }
         onPointerCancel={() => (toque.current = null)}
       >
         <CamadasFotos fotos={images} sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, 100vw" atual={atual} anterior={anterior} priority />
-        {total > 1 && (
-          <span className="absolute right-3 bottom-3 z-[3] rounded-full bg-branco/95 px-2.5 py-1 text-xs font-semibold tabular-nums shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] lg:hidden" aria-hidden>
-            {atual + 1} / {total}
+        {video && vendoVideo && (
+          <video
+            src={video}
+            className="surgir absolute inset-0 z-[2] size-full bg-tinta object-contain"
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label={`Vídeo de ${name}`}
+          />
+        )}
+        {itens > 1 && (
+          <span className="pointer-events-none absolute top-3 right-3 z-[3] rounded-full bg-branco/95 px-2.5 py-1 text-xs font-semibold tabular-nums shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] lg:hidden" aria-hidden>
+            {selecionado + 1} / {itens}
           </span>
         )}
       </div>
-      {total > 1 && (
+      {itens > 1 && (
         <div
           className="grid gap-2 lg:flex lg:w-20 lg:shrink-0 lg:flex-col"
-          style={{ gridTemplateColumns: `repeat(${total}, minmax(0, 1fr))` }}
+          style={{ gridTemplateColumns: `repeat(${itens}, minmax(0, 1fr))` }}
           role="group"
-          aria-label={`Fotos de ${name}`}
+          aria-label={`Fotos e vídeo de ${name}`}
           onKeyDown={(e) => {
             const passo = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
             if (!passo) return;
             e.preventDefault();
-            const prox = (atual + passo + total) % total;
-            ir(prox);
+            const prox = (selecionado + passo + itens) % itens;
+            escolher(prox);
             (e.currentTarget.children[prox] as HTMLElement | undefined)?.focus();
           }}
         >
@@ -65,16 +87,34 @@ export function ProductGallery({ images, name }: { images: Img[]; name: string }
             <button
               key={img.id}
               type="button"
-              onClick={() => ir(i)}
+              onClick={() => escolher(i)}
               aria-label={`Ver foto ${i + 1}: ${img.alt}`}
-              aria-pressed={i === atual}
-              className={`group relative rounded-[0.875rem] transition-[opacity,box-shadow] duration-300 ${i === atual ? "shadow-[0_0_0_2px_var(--color-tinta)]" : "opacity-60 hover:opacity-100"}`}
+              aria-pressed={i === selecionado}
+              className={`group relative rounded-[0.875rem] transition-[opacity,box-shadow] duration-300 ${i === selecionado ? "shadow-[0_0_0_2px_var(--color-tinta)]" : "opacity-60 hover:opacity-100"}`}
             >
               <span className="moldura block aspect-[4/3] rounded-[0.875rem] lg:aspect-square">
                 <ImagemPeca src={img.url} alt="" sizes="(min-width: 1024px) 96px, 34vw" inteira={false} />
               </span>
             </button>
           ))}
+          {video && (
+            <button
+              type="button"
+              onClick={() => escolher(total)}
+              aria-label="Ver vídeo da peça"
+              aria-pressed={vendoVideo}
+              className={`group relative rounded-[0.875rem] transition-[opacity,box-shadow] duration-300 ${vendoVideo ? "shadow-[0_0_0_2px_var(--color-tinta)]" : "opacity-80 hover:opacity-100"}`}
+            >
+              <span className="moldura block aspect-[4/3] rounded-[0.875rem] lg:aspect-square">
+                {images[0] && <ImagemPeca src={images[0].url} alt="" sizes="(min-width: 1024px) 96px, 34vw" inteira={false} />}
+                <span className="absolute inset-0 z-[2] grid place-items-center bg-tinta/35">
+                  <span className="grid size-8 place-items-center rounded-full bg-branco text-tinta shadow-[0_4px_12px_-4px_rgb(0_0_0/0.4)]">
+                    <IconePlay className="size-4 translate-x-px" />
+                  </span>
+                </span>
+              </span>
+            </button>
+          )}
         </div>
       )}
     </div>

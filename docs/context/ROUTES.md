@@ -7,7 +7,7 @@
 - **Não precisa ler:** `.impeccable/mocks`, `.impeccable/review/antigo` (rascunhos e capturas de rodadas de design).
 
 ## Páginas da loja
-- **Ir direto para:** `src/app/(loja)/layout.tsx` (header fixo + `CategoryNav`/rodapé, busca categorias no banco) · home `src/app/(loja)/page.tsx` (seções por categoria + banda "Coleções") + `src/components/ProductTile.tsx` · categoria `src/app/(loja)/categoria/[slug]/page.tsx` · produto `src/app/(loja)/produto/[slug]/page.tsx` + `src/components/ProductBuy.tsx` · carrinho `src/app/(loja)/carrinho/CartView.tsx` · checkout `src/app/(loja)/checkout/CheckoutForm.tsx` · pagamento `src/app/(loja)/pedido/[id]/pagamento/` · sob medida `src/app/(loja)/personalizado/` · 404 `src/app/not-found.tsx` (reexportado em `(loja)/not-found.tsx` para sair com cabeçalho).
+- **Ir direto para:** `src/app/(loja)/layout.tsx` (header fixo + `CategoryNav`/rodapé, busca categorias no banco) · home `src/app/(loja)/page.tsx` (seções por categoria + banda "Coleções") + `src/components/ProductTile.tsx` · categoria `src/app/(loja)/categoria/[slug]/page.tsx` · produto `src/app/(loja)/produto/[slug]/page.tsx` + `src/components/ProductBuy.tsx` (`ProductGallery`: fotos + vídeo `Product.videoUrl` como último item) · carrinho `src/app/(loja)/carrinho/CartView.tsx` · checkout `src/app/(loja)/checkout/CheckoutForm.tsx` · pagamento `src/app/(loja)/pedido/[id]/pagamento/` · sob medida `src/app/(loja)/personalizado/` · 404 `src/app/not-found.tsx` (reexportado em `(loja)/not-found.tsx` para sair com cabeçalho).
 - **Cuidados:** `params`/`searchParams` são Promises (`PageProps<"/rota">`). Antes de usar API do Next, confira `node_modules/next/dist/docs/` (ver AGENTS.md).
 
 ## Carrinho e preços
@@ -36,7 +36,7 @@
 - **Cuidados:** mudou fluxo? Atualize testes, rótulos e cores em `src/app/admin/(painel)/ui.tsx`.
 
 ## Banco / seed
-- **Ir direto para:** `prisma/schema.prisma` (`Category` 1:N `Product`, `categoryId` opcional) → `prisma/migrations/` → `prisma/seed.mts` (2 categorias + 7 produtos reais, fotos em `public/produtos/<pasta>/main_images/*.jpg`) → `src/lib/catalog.ts` (`listCategories`/`getCategoryBySlug`).
+- **Ir direto para:** `prisma/schema.prisma` (`Category` 1:N `Product`, `categoryId` opcional) → `prisma/migrations/` → `prisma/seed.mts` (2 categorias + 7 produtos reais, fotos em `public/produtos/<pasta>/main_images/*.jpg`; `videoUrl` sai de `<pasta>/product_videos/1.mp4` via `videoDaPasta`) → `src/lib/catalog.ts` (`listCategories`/`getCategoryBySlug`).
 - **Cuidados:** Postgres (Neon), não SQLite — `DATABASE_URL`/`DATABASE_URL_UNPOOLED` ficam em `.env` (Prisma CLI não lê `.env.local`). Seed é idempotente (upsert, IDs de variante `slug--chave` estáveis; produtos/categorias fora da lista do seed são removidos). Produto novo? As pastas em `public/produtos/` trazem várias fotos com banner de marketing (texto em cima) — abra as imagens antes de escolher, só use as sem texto sobreposto no `images` do seed. Categoria nova? Adicione em `categories` e aponte o `category` de cada produto.
 - **Arquivo grande?** `prisma/seed.mts` (~300 linhas): busque `const products` (catálogo) ou `draws` (desenhos).
 

@@ -18,6 +18,7 @@ model Product {
   dimensions     String
   productionDays Int
   readyToShip    Boolean        @default(false)
+  videoUrl       String?
   position       Int            @default(0)
   createdAt      DateTime       @default(now())
   categoryId     String?
