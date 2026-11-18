@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/r1/pote.html"
+        ],
+        "createdAt": "2026-11-18T03:35:41.246Z",
+        "reason": "agent: rascunho de direção não escolhida (mock descartável, não vai para produção)"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/r1/pote.html"
+        ],
+        "createdAt": "2026-11-18T03:35:42.109Z",
+        "reason": "agent: rascunho de direção não escolhida (mock descartável, não vai para produção)"
+      }
+    ]
+  }
+}

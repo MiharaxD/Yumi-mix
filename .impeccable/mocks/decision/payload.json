@@ -1,0 +1,103 @@
+{
+  "title": "Escolha o novo mundo visual da Yumi Mix",
+  "question": "A rolagem sorteou \"Barra de Sabonete\". Fique com ela, escolha outra ou peça nova rodada.",
+  "options": [
+    {
+      "id": "assigned", "kind": "assigned", "label": "Barra de Sabonete", "kicker": "THE ROLL",
+      "lineage": "sabonetes de ateliê embrulhados com cinta de papel",
+      "thesis": "Cada peça é uma barra macia de cor, embrulhada com uma cinta de papel que leva nome e preço.",
+      "palette": ["#1f5c4a", "#e8a598", "#b9a7e0", "#f2c14e", "#fbfaf7", "#14261f"],
+      "materials": ["barras arredondadas com relevo suave", "cinta de papel com preço", "campo verde-eucalipto"],
+      "viewport": "Campo verde-eucalipto; título grande; grade de barras arredondadas em 4 cores com fotos das peças e cinta de preço; botão mel em pílula.",
+      "risk": "Se as cores das barras brigarem com as fotos, as peças somem; exige fundo de foto controlado.",
+      "raised": [
+        {"from": "challenger-cloud", "raise": "Texto e campos ficam sempre neutros; a cor mora só nas barras e no campo."},
+        {"from": "challenger-tensegrity", "raise": "Mel é reservado à ação principal, como a única corda tensionada."},
+        {"from": "challenger-exposure", "raise": "Cada cor vira uma rampa de 5 tons e só esses tons existem como tokens."},
+        {"from": "challenger-nixie", "raise": "Preço vive sempre na mesma cinta, números tabulares, nunca solto."},
+        {"from": "challenger-decollage", "raise": "Profundidade tem significado: cinta sobre barra sobre campo, nunca camada decorativa."}
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html", "htmlFrame": "390x844",
+      "comp": ".impeccable/mocks/decision/assigned.webp"
+    },
+    {
+      "id": "model-pick", "kind": "pick", "label": "Bandeja Organizadora", "kicker": "IMPECCABLE’S PICK",
+      "lineage": "organizadores de gaveta termoformados",
+      "thesis": "A loja é uma bandeja de gaveta: cada peça mora num compartimento arredondado do seu tamanho.",
+      "palette": ["#2b4a46", "#355954", "#e7e1d6", "#a8854a", "#1d2a2a"],
+      "materials": ["plástico fosco termoformado", "compartimentos afundados"],
+      "viewport": "Bandeja verde-petróleo em bento com compartimentos de tamanhos diferentes, título num deles, botão pílula abaixo.",
+      "risk": "Familiar: bento arredondado é onde muitas lojas modernas chegam.",
+      "html": ".impeccable/mocks/decision/model-pick.html", "htmlFrame": "390x844",
+      "comp": ".impeccable/mocks/decision/model-pick.webp"
+    },
+    {
+      "id": "challenger-tropicalia", "kind": "challenger", "catalogId": "posters-covers-sleeves-tropicalia-sleeve-collage",
+      "label": "Colagem Tropicália", "verdict": "competitive",
+      "lineage": "capas de disco tropicalistas",
+      "thesis": "A vitrine é uma colagem: peças recortadas em escalas trocadas sobre um painel tropical.",
+      "palette": ["#178a4a", "#0d5e30", "#ffb21e", "#ff5a36", "#fff7e0"],
+      "materials": ["recortes com sombra de papel", "letras em poesia concreta"],
+      "viewport": "Painel verde com folhas, YUMI MIX quebrado em sílabas, fotos recortadas e inclinadas, botão coral.",
+      "case": "Muito brasileira e memorável; perde em clareza de compra e em confiança.",
+      "risk": "Pode parecer bagunçado demais para quem quer sentir segurança ao pagar.",
+      "html": ".impeccable/mocks/decision/challenger-tropicalia.html", "htmlFrame": "390x844",
+      "comp": ".impeccable/mocks/decision/challenger-tropicalia.webp",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-tropicalia-sleeve-collage-hero.webp"
+    },
+    {
+      "id": "challenger-cloud", "kind": "challenger", "catalogId": "clouds-storms-auroras-iridescent-cloud-edge",
+      "label": "Borda de Nuvem Iridescente", "verdict": "declined",
+      "palette": ["#ffffff", "#5b6470", "#9fe3c9", "#f2b3c6", "#a58be0"], "materials": ["branco de nuvem", "franja pastel"],
+      "thesis": "Branco calmo com franja de cor só nas bordas.", "viewport": "Fundo branco, faixas pastel nas bordas dos cards.",
+      "case": "Bonito mas frio; a cliente não se reconhece nele.", "risk": "Some como mais uma loja clara.",
+      "kept": "Texto sempre neutro; cor só em campos."
+    },
+    {
+      "id": "challenger-tensegrity", "kind": "challenger", "catalogId": "kinetic-sculpture-automata-tensegrity-breathing-column",
+      "label": "Coluna de Tensegridade", "verdict": "declined",
+      "palette": ["#1a1a1a", "#d9d6cf", "#d2342a", "#9a9a9a"], "materials": ["hastes pretas", "corda vermelha"],
+      "thesis": "Forças em equilíbrio.", "viewport": "Coluna de hastes com rótulos de força.",
+      "case": "Técnico demais para decoração de casa.", "risk": "Frio e de engenharia.",
+      "kept": "Uma única cor de tensão, só na ação."
+    },
+    {
+      "id": "challenger-decollage", "kind": "challenger", "catalogId": "design-canon-decollage-torn-billboard",
+      "label": "Cartaz Rasgado", "verdict": "declined",
+      "palette": ["#e8e2d4", "#9a958a", "#c44b2b", "#2a2a2a"], "materials": ["papel rasgado", "camadas de cartaz"],
+      "thesis": "Camadas rasgadas revelam história.", "viewport": "Muro de cartazes rasgados.",
+      "case": "Desgaste passa descuido, o oposto de confiança.", "risk": "Parece sujo.",
+      "kept": "Camadas com significado de profundidade."
+    },
+    {
+      "id": "challenger-exposure", "kind": "challenger", "catalogId": "operate-b-exposure-record-zone-sheets",
+      "label": "Ficha de Exposição", "verdict": "declined",
+      "palette": ["#f0f0ee", "#8a8a88", "#2a2a2a", "#c2188f"], "materials": ["folhas translúcidas", "rampa de zonas"],
+      "thesis": "Rampa tonal estrita como única fonte de tons.", "viewport": "Folhas sobrepostas com hachuras.",
+      "case": "Ferramenta de laboratório, não loja de casa.", "risk": "Hermético.",
+      "kept": "Rampa tonal fechada como tokens."
+    },
+    {
+      "id": "challenger-nixie", "kind": "challenger", "catalogId": "signals-instruments-nixie-laboratory-counter",
+      "label": "Contador Nixie", "verdict": "declined",
+      "palette": ["#111111", "#ff7a1a", "#6a6a6a"], "materials": ["vidro", "brilho laranja"],
+      "thesis": "Números como interface física.", "viewport": "Bancos de tubos com dígitos acesos.",
+      "case": "Escuro e técnico; foge do público.", "risk": "Parece painel de máquina.",
+      "kept": "Preço com forma física fixa e consistente."
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "code"},
+  "canon": true,
+  "canonCard": {
+    "kind": "canon", "label": "O padrão da categoria",
+    "thesis": "Loja de casa moderna clara, cards arredondados, sombras suaves, feita com capricho.",
+    "palette": ["#ffffff", "#f2f2f2", "#111111", "#c6a469"],
+    "materials": ["grade limpa", "fotos de produto"],
+    "viewport": "Banner arredondado com foto, título e botão; grade de cards brancos.",
+    "risk": "Fica igual às concorrentes de propósito.",
+    "html": ".impeccable/mocks/decision/canon.html", "htmlFrame": "390x844",
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

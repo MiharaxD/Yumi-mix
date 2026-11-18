@@ -34,18 +34,18 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div className="flex flex-col gap-6">
-          <section className="bg-branco p-5 border border-tinta sm:p-6" aria-labelledby="t-status">
+          <section className="painel p-5 sm:p-6" aria-labelledby="t-status">
             <h2 id="t-status" className="mb-3 font-bold">
               Próximo passo
             </h2>
             <OrderStatusForm orderId={order.id} options={options} />
           </section>
 
-          <section className="bg-branco p-5 border border-tinta sm:p-6" aria-labelledby="t-itens">
+          <section className="painel p-5 sm:p-6" aria-labelledby="t-itens">
             <h2 id="t-itens" className="mb-3 font-bold">
               Itens
             </h2>
-            <ul className="divide-y divide-tinta/10 text-sm">
+            <ul className="divide-y divide-linha text-sm">
               {order.items.map((it) => (
                 <li key={it.id} className="flex justify-between gap-4 py-2.5">
                   <span>
@@ -60,7 +60,7 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
                 </li>
               ))}
             </ul>
-            <dl className="mt-3 grid grid-cols-[1fr_auto] gap-y-1.5 border-t border-tinta/15 pt-3 text-sm">
+            <dl className="mt-3 grid grid-cols-[1fr_auto] gap-y-1.5 border-t border-linha pt-3 text-sm">
               <dt>Subtotal</dt>
               <dd className="text-right">{formatBRL(order.subtotalCents)}</dd>
               <dt>{order.deliveryMethod === "entrega" ? "Entrega" : "Retirada"}</dt>
@@ -72,7 +72,7 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
         </div>
 
         <aside className="flex flex-col gap-6">
-          <section className="bg-branco p-5 text-sm border border-tinta sm:p-6" aria-labelledby="t-cliente">
+          <section className="painel p-5 text-sm sm:p-6" aria-labelledby="t-cliente">
             <h2 id="t-cliente" className="mb-3 font-bold">
               Cliente
             </h2>
@@ -89,7 +89,7 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
               {order.city}/{order.uf} · CEP {order.cep.slice(0, 5)}-{order.cep.slice(5)}
             </p>
           </section>
-          <section className="bg-branco p-5 text-sm border border-tinta sm:p-6" aria-labelledby="t-datas">
+          <section className="painel p-5 text-sm sm:p-6" aria-labelledby="t-datas">
             <h2 id="t-datas" className="mb-3 font-bold">
               Datas e prazo
             </h2>

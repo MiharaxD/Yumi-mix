@@ -24,3 +24,9 @@ export const CUSTOM_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 /** Numeração inicial visível dos pedidos (#1001…). */
 export const FIRST_ORDER_NUMBER = 1001;
 export const FIRST_CUSTOM_REQUEST_NUMBER = 1;
+
+/** Links de rede social no rodapé. Placeholder até a loja ter perfis de verdade. */
+export const SOCIAL_LINKS = {
+  instagram: "https://instagram.com/yumimix",
+  whatsapp: "https://wa.me/5500000000000",
+};

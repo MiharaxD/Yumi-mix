@@ -1,135 +1,216 @@
 import Image from "next/image";
 import Link from "next/link";
-import { listProducts, hasPriceRange, minPriceCents } from "@/lib/catalog";
+import { listProducts, listCategories, hasPriceRange, minPriceCents } from "@/lib/catalog";
 import { ProductTile } from "@/components/ProductTile";
-import { Destaques, ListaPecas, type PecaResumo } from "@/components/Vitrine";
-import { IconeSeta } from "@/components/Icones";
+import { Destaques, type PecaResumo } from "@/components/Vitrine";
+import { IconeCaminhao, IconeLoja, IconeRelogio, IconeSeta } from "@/components/Icones";
+import { diasUteis } from "@/components/Prazo";
+import { FREE_SHIPPING_THRESHOLD_CENTS, READY_TO_SHIP_DAYS, SHIPPING_FEE_CENTS } from "@/config";
+import { formatBRL } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
 
-const PASSOS = ["Você manda foto e medidas", "A gente responde com orçamento", "Imprimimos e acabamos à mão"];
+// foto de ambiente do hero: banheiro arrumado, sem texto do fornecedor por cima
+const CENA_HERO = "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg";
 
-export default async function HomePage() {
-  const products = await listProducts();
+const PASSOS = ["Você manda foto e medidas", "A gente responde com orçamento", "Buscamos e preparamos a peça pra você"];
 
-  const pecas: PecaResumo[] = products.map((p) => ({
+const botaoClaro =
+  "inline-flex items-center justify-center gap-2 rounded-full bg-branco px-6 py-3.5 text-[0.9375rem] font-semibold text-tinta shadow-[0_8px_24px_-10px_rgb(0_0_0/0.5)] transition-colors hover:bg-dourado-claro";
+
+function paraPeca(p: {
+  slug: string;
+  name: string;
+  images: { url: string; alt: string }[];
+  variants: { priceCents: number; colorHex: string }[];
+  readyToShip: boolean;
+  productionDays: number;
+}): PecaResumo {
+  return {
     slug: p.slug,
     name: p.name,
-    imageUrl: p.images[0]?.url ?? null,
-    imageAlt: p.images[0]?.alt ?? p.name,
+    images: p.images,
     fromPriceCents: minPriceCents(p.variants),
     priceRange: hasPriceRange(p.variants),
     readyToShip: p.readyToShip,
     productionDays: p.productionDays,
     colors: p.variants.map((v) => v.colorHex),
-  }));
-  // a foto de ambiente da primeira peça vira a "sala" do hero
-  const cena = products[0]?.images[1] ?? products[0]?.images[0];
+  };
+}
+
+export default async function HomePage() {
+  const [products, categorias] = await Promise.all([listProducts(), listCategories()]);
+
+  const pecas: PecaResumo[] = products.map(paraPeca);
+
+  const colecoes = categorias.filter((c) => c.products.length > 0);
+
+  const garantias = [
+    { icone: IconeRelogio, titulo: "Pronta entrega", texto: `Sai em até ${diasUteis(READY_TO_SHIP_DAYS)} depois do pagamento.` },
+    { icone: IconeLoja, titulo: "Retirada grátis", texto: "Combinamos dia e horário pelo WhatsApp." },
+    {
+      icone: IconeCaminhao,
+      titulo: "Entrega",
+      texto:
+        FREE_SHIPPING_THRESHOLD_CENTS !== null
+          ? `${formatBRL(SHIPPING_FEE_CENTS)}, ou grátis acima de ${formatBRL(FREE_SHIPPING_THRESHOLD_CENTS)}.`
+          : `${formatBRL(SHIPPING_FEE_CENTS)} por pedido.`,
+    },
+  ];
 
   return (
     <>
-      {/* hero dividido: ambiente à esquerda, destaques à direita */}
-      <section className="border-b border-tinta" aria-labelledby="titulo-vitrine">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 sm:px-6 lg:grid-cols-2">
-          <div className="relative min-h-[26rem] overflow-hidden bg-tinta text-branco sm:border-x sm:border-tinta lg:min-h-[36rem]">
-            {cena && (
-              <Image src={cena.url} alt="" fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" unoptimized />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-tinta/90 via-tinta/45 to-tinta/5" aria-hidden />
+      {/* hero: cartão de ambiente + painel de destaques */}
+      <section className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-4" aria-labelledby="titulo-vitrine">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr] lg:gap-5">
+          <div className="relative isolate min-h-[30rem] overflow-hidden rounded-[2rem] bg-tinta text-branco sm:min-h-[34rem] lg:min-h-[38rem]">
+            <Image src={CENA_HERO} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" className="-z-10 object-cover" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-tinta/90 via-tinta/40 to-transparent" aria-hidden />
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
-              <h1 id="titulo-vitrine" className="surgir leading-[0.9]">
-                <span className="titulo block text-[3.25rem] sm:text-[5rem]">Peças para</span>
-                <span className="italico block text-[2.6rem] leading-[1.05] sm:text-[4rem]">a sua casa</span>
+              <h1 id="titulo-vitrine" className="surgir titulo text-[2.75rem] leading-[0.98] sm:text-[4.25rem]">
+                Peças para
+                <br />
+                <span className="text-branco/75">a sua casa.</span>
               </h1>
-              <p className="surgir mt-4 max-w-sm text-sm leading-relaxed text-branco/85 [--atraso:120ms] sm:text-base">
-                Decoração impressa em 3D, camada por camada, no nosso ateliê.
+              <p className="surgir mt-4 max-w-sm text-base leading-relaxed text-pretty text-branco/85 [--atraso:100ms] sm:text-lg">
+                Organização e decoração em pronta entrega: sai em até {diasUteis(READY_TO_SHIP_DAYS)}, com retirada grátis.
               </p>
-              <Link
-                href="#pecas"
-                className="surgir mt-6 inline-flex items-center gap-3 bg-branco px-4 py-2.5 text-[0.6875rem] font-bold tracking-[0.1em] text-tinta uppercase transition-colors [--atraso:220ms] hover:bg-tinta hover:text-branco"
-              >
-                Ver as peças <IconeSeta className="size-4" />
-              </Link>
+              <div className="surgir mt-7 flex flex-wrap gap-3 [--atraso:200ms]">
+                <Link href="#pecas" className={botaoClaro}>
+                  Ver as peças <IconeSeta className="size-4" />
+                </Link>
+                <Link
+                  href="/personalizado"
+                  className="inline-flex items-center justify-center rounded-full bg-branco/15 px-6 py-3.5 text-[0.9375rem] font-semibold text-branco backdrop-blur-md transition-colors hover:bg-branco/25"
+                >
+                  Sob medida
+                </Link>
+              </div>
             </div>
           </div>
 
-          <div id="destaques" className="flex min-w-0 scroll-mt-24 flex-col bg-papel sm:border-r sm:border-tinta lg:border-l-0">
-            <h2 className="titulo px-5 pt-8 pb-6 text-[2rem] leading-[0.95] sm:px-8 sm:pt-10 sm:text-[2.5rem]">
-              Destaques
-              <br />
-              do ateliê
-            </h2>
+          <div id="destaques" className="painel flex min-w-0 scroll-mt-28 flex-col overflow-hidden">
+            <div className="px-5 pt-6 pb-5 sm:px-7 sm:pt-8">
+              <h2 className="titulo text-[1.75rem] leading-[1.05] sm:text-[2.125rem]">
+                Destaques <span className="italico">do ateliê</span>
+              </h2>
+              <p className="mt-1.5 text-sm text-tinta-suave">Uma seleção para começar.</p>
+            </div>
             {pecas.length > 0 ? (
-              <div className="flex flex-1 flex-col">
-                <Destaques pecas={pecas} />
-              </div>
+              <Destaques pecas={pecas} />
             ) : (
-              <p className="mx-5 mb-8 border border-tinta bg-branco p-6 text-tinta-suave sm:mx-8">
+              <p className="mx-5 mb-6 rounded-2xl bg-papel p-5 text-tinta-suave sm:mx-7">
                 Nenhuma peça cadastrada ainda. Rode <code className="font-semibold">npm run db:seed</code> para carregar o
                 catálogo de teste.
               </p>
             )}
           </div>
         </div>
+
+        {/* garantias: prazo e frete visíveis antes de escolher */}
+        <ul className="painel mt-4 grid gap-5 px-5 py-6 sm:mt-5 md:grid-cols-3 md:gap-6 sm:px-8 sm:py-7" aria-label="Como funciona a compra">
+          {garantias.map(({ icone: Icone, titulo, texto }) => (
+            <li key={titulo} className="flex items-start gap-4">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-dourado-claro text-tinta">
+                <Icone className="size-5" />
+              </span>
+              <span>
+                <span className="block font-semibold">{titulo}</span>
+                <span className="mt-0.5 block text-sm leading-snug text-tinta-suave">{texto}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      {pecas.length > 0 && (
-        <>
-          <section id="pecas" className="mx-auto max-w-7xl scroll-mt-20 px-4 pt-16 pb-16 sm:px-6 sm:pt-24" aria-labelledby="titulo-pecas">
-            <div className="mb-8 flex items-end justify-between gap-6 sm:mb-10">
-              <h2 id="titulo-pecas" className="leading-[0.95]">
-                <span className="titulo block text-[2.5rem] sm:text-[3.5rem]">Todas as peças</span>
-                <span className="italico block text-[1.75rem] sm:text-[2.5rem]">feitas aqui</span>
-              </h2>
-              <p className="rotulo hidden text-tinta-suave sm:block">
-                {pecas.length} {pecas.length === 1 ? "peça" : "peças"}
-              </p>
-            </div>
-            <ul className="grade grid-cols-2 lg:grid-cols-3" aria-label="Peças à venda">
-              {pecas.map((p, i) => (
-                <li key={p.slug}>
-                  <ProductTile {...p} priority={i < 2} />
-                </li>
-              ))}
-            </ul>
-          </section>
+      {colecoes.length > 0 && (
+        <section id="pecas" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 pb-6 sm:px-6 sm:pt-24" aria-labelledby="titulo-pecas">
+          <h2 id="titulo-pecas" className="titulo mb-10 text-[2.25rem] leading-[1.02] sm:mb-14 sm:text-[3.25rem]">
+            Todas as peças. <span className="italico">Em pronta entrega.</span>
+          </h2>
 
-          <section className="pb-16 sm:pb-24" aria-labelledby="titulo-lista">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6">
-              <h2 id="titulo-lista" className="mb-8 leading-[0.95] sm:mb-10">
-                <span className="titulo block text-[2.5rem] sm:text-[3.5rem]">Escolha pelo nome</span>
-                <span className="italico block text-[1.75rem] sm:text-[2.5rem]">e veja de perto</span>
-              </h2>
-              <ListaPecas pecas={pecas} />
-            </div>
-          </section>
-        </>
+          <div className="flex flex-col gap-14 sm:gap-20">
+            {colecoes.map((categoria) => (
+              <div key={categoria.id}>
+                <div className="mb-5 flex items-center justify-between gap-4 sm:mb-7">
+                  <h3 className="titulo text-[1.5rem] leading-tight sm:text-[1.875rem]">{categoria.name}</h3>
+                  <Link href={`/categoria/${categoria.slug}`} className="botao-contorno shrink-0 px-4 py-2 text-sm">
+                    Ver todas <IconeSeta className="size-4" />
+                  </Link>
+                </div>
+                <ul className="grade grid-cols-2 lg:grid-cols-3" aria-label={categoria.name}>
+                  {categoria.products.map((p, i) => (
+                    <li key={p.slug}>
+                      <ProductTile {...paraPeca(p)} priority={i < 2} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
-      <section className="border-t border-tinta bg-branco" aria-labelledby="titulo-sob-medida">
-        <div className="mx-auto grid max-w-7xl sm:px-6 md:grid-cols-[1.2fr_1fr]">
-          <div className="px-4 py-14 sm:px-0 sm:py-20 md:border-r md:border-tinta md:pr-12">
-            <h2 id="titulo-sob-medida" className="leading-[0.95]">
-              <span className="titulo block text-[2.5rem] sm:text-[3.75rem]">Não achou a peça</span>
-              <span className="italico block text-[1.9rem] sm:text-[2.75rem]">que imaginou?</span>
+      {colecoes.length > 0 && (
+        <section id="colecoes" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 pb-6 sm:px-6 sm:pt-24" aria-labelledby="titulo-colecoes">
+          <h2 id="titulo-colecoes" className="titulo mb-10 text-[2.25rem] leading-[1.02] sm:mb-14 sm:text-[3.25rem]">
+            Coleções. <span className="italico">Por cômodo e ocasião.</span>
+          </h2>
+          <ul className={`grade grid-cols-1 ${colecoes.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`} aria-label="Coleções">
+            {colecoes.map((categoria) => {
+              const imagem = categoria.products[0]?.images[1] ?? categoria.products[0]?.images[0];
+              return (
+                <li key={categoria.id}>
+                  <Link
+                    href={`/categoria/${categoria.slug}`}
+                    className="cartao group relative isolate block aspect-[4/3] overflow-hidden bg-tinta text-branco sm:aspect-[5/4]"
+                  >
+                    {imagem && (
+                      <Image src={imagem.url} alt="" fill sizes="(min-width: 640px) 50vw, 100vw" className="foto-viva -z-10 object-cover object-[center_85%]" />
+                    )}
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-tinta/80 via-tinta/10 to-transparent" aria-hidden />
+                    <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 sm:p-7">
+                      <span>
+                        <span className="titulo block text-[1.75rem] leading-tight sm:text-[2rem]">{categoria.name}</span>
+                        <span className="mt-1 block text-sm text-branco/75">
+                          {categoria.products.length} {categoria.products.length === 1 ? "peça" : "peças"}
+                        </span>
+                      </span>
+                      <span className="grid size-12 shrink-0 place-items-center rounded-full bg-branco text-tinta transition-transform duration-300 ease-galeria group-hover:translate-x-1">
+                        <IconeSeta className="size-5" />
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 sm:pt-24" aria-labelledby="titulo-sob-medida">
+        <div className="grid gap-10 overflow-hidden rounded-[2rem] bg-tinta px-6 py-10 text-branco sm:px-12 sm:py-14 md:grid-cols-[1.15fr_1fr] md:gap-14">
+          <div>
+            <h2 id="titulo-sob-medida" className="titulo text-[2.25rem] leading-[1.02] sm:text-[3.25rem]">
+              Não achou a peça <span className="italico">que imaginou?</span>
             </h2>
-            <p className="mt-6 max-w-prose text-base leading-relaxed text-tinta-suave sm:text-lg">
-              Manda uma foto ou um rabisco, conta as medidas e a cor. A gente estuda a impressão e responde com o
-              orçamento e o prazo.
+            <p className="mt-5 max-w-prose text-base leading-relaxed text-branco/70 sm:text-lg">
+              Manda uma foto ou um rabisco, conta as medidas e a cor. A gente estuda o pedido e responde com o orçamento
+              e o prazo.
             </p>
+            <Link href="/personalizado" className={`${botaoClaro} mt-8`}>
+              Pedir uma peça sob medida <IconeSeta className="size-4" />
+            </Link>
           </div>
-          <ol className="flex flex-col border-t border-tinta md:border-t-0">
+          <ol className="flex flex-col gap-3 self-center">
             {PASSOS.map((passo, i) => (
-              <li key={passo} className="flex items-baseline gap-5 border-b border-tinta px-4 py-5 sm:px-8">
-                <span className="titulo text-2xl text-tinta-suave">0{i + 1}</span>
-                <span className="text-base font-semibold">{passo}</span>
+              <li key={passo} className="flex items-center gap-4 rounded-[1.25rem] bg-branco/[0.07] px-4 py-4 sm:px-5">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-dourado text-sm font-bold text-tinta">
+                  {i + 1}
+                </span>
+                <span className="font-semibold">{passo}</span>
               </li>
             ))}
-            <li className="flex flex-1 items-end px-4 py-6 sm:px-8">
-              <Link href="/personalizado" className="botao-principal w-full px-6 py-4 sm:w-auto">
-                Pedir uma peça sob medida <IconeSeta className="size-4" />
-              </Link>
-            </li>
           </ol>
         </div>
       </section>

@@ -16,7 +16,7 @@ export default async function AdminNotificacoesPage() {
           Nenhum aviso. Quando um pedido for pago, ele aparece aqui.
         </p>
       ) : (
-        <ul className="divide-y divide-tinta/10 overflow-hidden bg-branco border border-tinta">
+        <ul className="divide-y divide-linha painel overflow-hidden">
           {notifications.map((n) => (
             <li key={n.id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-5 py-4">
               <span className="flex items-center gap-3">

@@ -20,8 +20,18 @@ model Product {
   readyToShip    Boolean        @default(false)
   position       Int            @default(0)
   createdAt      DateTime       @default(now())
+  categoryId     String?
+  category       Category?      @relation(fields: [categoryId], references: [id])
   images         ProductImage[]
   variants       Variant[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  position Int       @default(0)
+  products Product[]
 }
 
 model ProductImage {

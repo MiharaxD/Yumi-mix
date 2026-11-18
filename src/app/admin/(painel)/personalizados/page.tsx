@@ -63,7 +63,7 @@ export default async function AdminPersonalizadosPage(props: PageProps<"/admin/p
             const options = nextCustomStatuses(r.status).map((s) => ({ value: s, label: CUSTOM_STATUS_LABEL[s] }));
             const locked = r.status !== "nova" && r.status !== "orcada";
             return (
-              <li key={r.id} id={`s-${r.id}`} className="bg-branco p-5 border border-tinta sm:p-6">
+              <li key={r.id} id={`s-${r.id}`} className="painel p-5 sm:p-6">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <h2 className="text-lg font-bold">Solicitação nº {r.number}</h2>
                   <CustomStatusPill status={r.status} />
@@ -110,7 +110,7 @@ export default async function AdminPersonalizadosPage(props: PageProps<"/admin/p
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-5 border-t border-tinta/12 pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6">
+                  <div className="flex flex-col gap-5 border-t border-linha pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6">
                     <QuoteForm requestId={r.id} current={centsToInput(r.quotedPriceCents)} locked={locked} />
                     <div>
                       <p className="mb-2 text-sm font-semibold">Status</p>

@@ -54,7 +54,7 @@ export default async function AdminPedidosPage(props: PageProps<"/admin">) {
           {filter ? `Nenhum pedido com status "${ORDER_STATUS_LABEL[filter]}".` : "Nenhum pedido ainda. Faça uma compra de teste pela loja."}
         </p>
       ) : (
-        <div className="overflow-hidden bg-branco border border-tinta">
+        <div className="painel overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead className="hidden bg-papel text-xs tracking-wide text-tinta-suave uppercase sm:table-header-group">
               <tr>
@@ -66,7 +66,7 @@ export default async function AdminPedidosPage(props: PageProps<"/admin">) {
                 <th className="px-5 py-3 font-semibold">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-tinta/10">
+            <tbody className="divide-y divide-linha">
               {orders.map((o) => (
                 <tr key={o.id} className="relative grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 px-4 py-4 hover:bg-white sm:table-row sm:p-0">
                   <td className="col-start-1 row-start-1 font-bold sm:px-5 sm:py-3.5">

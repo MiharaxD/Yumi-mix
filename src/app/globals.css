@@ -1,20 +1,30 @@
 @import "tailwindcss";
 
-/* Yumi Mix — mundo "galeria".
-   Papel de parede de galeria como fundo, peças em molduras brancas,
-   tinta preta para texto e linhas finas de 1px dividindo tudo em células. */
+/* Yumi Mix — loja clara e acolhedora.
+   Chão névoa, superfícies brancas que flutuam com sombra macia, cantos bem arredondados,
+   grafite no texto e na ação principal, dourado da marca só em detalhes. Sem linhas divisórias. */
 
 @theme {
-  --color-papel: #f5f4f0;
+  --color-papel: #f5f5f3;
   --color-branco: #ffffff;
-  --color-nevoa: #e9e8e2;
-  --color-cinza: #cfcec7;
-  --color-tinta: #121212;
-  --color-tinta-suave: #595954;
-  --color-erro: #a3341f;
-  --color-erro-fundo: #f6e2dc;
+  --color-nevoa: #ececea;
+  --color-cinza: #d9d9d5;
+  --color-tinta: #17181c;
+  --color-tinta-suave: #5c606a;
+  --color-linha: rgb(23 24 28 / 0.09);
+  --color-dourado: #b8955a;
+  --color-dourado-claro: #f3ead9;
+  --color-erro: #b3261e;
+  --color-erro-fundo: #fdecea;
 
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-cartao: 1.75rem;
+  --radius-foto: 1.25rem;
+  --radius-campo: 0.875rem;
+
+  --shadow-cartao: 0 1px 2px rgb(23 24 28 / 0.04), 0 10px 28px -14px rgb(23 24 28 / 0.14);
+  --shadow-alto: 0 2px 6px rgb(23 24 28 / 0.05), 0 24px 48px -20px rgb(23 24 28 / 0.26);
 
   --ease-galeria: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -29,11 +39,12 @@ body {
   color: var(--color-tinta);
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--color-tinta);
-  color: var(--color-branco);
+  background: var(--color-dourado-claro);
+  color: var(--color-tinta);
 }
 
 :focus-visible {
@@ -44,7 +55,12 @@ body {
 input,
 textarea,
 select {
-  caret-color: var(--color-tinta);
+  caret-color: var(--color-dourado);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--color-tinta);
 }
 
 a {
@@ -52,206 +68,302 @@ a {
   text-decoration-thickness: 1px;
 }
 
-/* Títulos: Archivo condensada e pesada, como letreiro de catálogo de galeria. */
-.titulo {
-  font-variation-settings: "wdth" 62;
-  font-weight: 800;
-  letter-spacing: -0.005em;
-  text-wrap-style: balance;
-}
+/* Classes do visual em @layer components: utilitários do Tailwind podem sobrescrevê-las. */
+@layer components {
+  /* Títulos: firmes, tracking fechado. */
+  .titulo {
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    text-wrap-style: balance;
+  }
 
-/* Contraponto do título: itálico leve, largura normal ("Personalize / your home"). */
-.italico {
-  font-style: italic;
-  font-weight: 300;
-  font-variation-settings: "wdth" 100;
-  letter-spacing: -0.01em;
-}
+  /* Segunda linha do título, no mesmo peso, em tom mais suave (funciona em fundo claro e escuro). */
+  .italico {
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    color: color-mix(in srgb, currentColor 52%, transparent);
+  }
 
-/* Rótulo de navegação e de botão: caixa alta pequena e espaçada. */
-.rotulo {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
+  /* Rótulo de campo, navegação e termos de ficha. */
+  .rotulo {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
 
-/* Painel: superfície branca com moldura fina, cantos retos. */
-.painel {
-  position: relative;
-  background: var(--color-branco);
-  border: 1px solid var(--color-tinta);
-}
+  /* Painel: superfície branca que flutua. Formulários, resumos, avisos. */
+  .painel {
+    position: relative;
+    background: var(--color-branco);
+    border-radius: var(--radius-cartao);
+    box-shadow: var(--shadow-cartao);
+  }
 
-/* Grade de células: as linhas de 1px são o fundo aparecendo entre células. */
-.grade {
-  display: grid;
-  gap: 1px;
-  background: var(--color-tinta);
-  border: 1px solid var(--color-tinta);
-}
-.grade > * {
-  background: var(--color-papel);
-}
+  /* Grade de cartões com respiro. */
+  .grade {
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .grade {
+      gap: 1.25rem;
+    }
+  }
 
-/* Moldura: onde a peça é exposta (fundo branco, imagem inteira). */
-.moldura {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-branco);
-}
+  /* Cartão que sobe sob o cursor (peças, coleções). */
+  .cartao {
+    background: var(--color-branco);
+    border-radius: var(--radius-cartao);
+    box-shadow: var(--shadow-cartao);
+    transition:
+      transform 400ms var(--ease-galeria),
+      box-shadow 400ms var(--ease-galeria);
+  }
+  @media (hover: hover) {
+    .cartao:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-alto);
+    }
+  }
 
-/* Foto que cresce devagar sob o cursor (dentro de um .group). */
-.foto-viva {
-  transition: transform 700ms var(--ease-galeria);
-}
-@media (hover: hover) {
-  .group:hover .foto-viva {
-    transform: scale(1.05);
+  /* Moldura: onde a foto mora (cantos arredondados, foto preenche). */
+  .moldura {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-nevoa);
+    border-radius: var(--radius-foto);
+    isolation: isolate;
+  }
+
+  /* Foto que cresce devagar sob o cursor (dentro de um .group). */
+  .foto-viva {
+    transition: transform 900ms var(--ease-galeria);
+  }
+  @media (hover: hover) {
+    .group:hover .foto-viva {
+      transform: scale(1.04);
+    }
+  }
+  .group:focus-visible .foto-viva {
+    transform: scale(1.04);
+  }
+
+  /* Sublinhado que corre da esquerda (links de texto). */
+  .link-linha {
+    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+    transition: background-size 300ms var(--ease-galeria);
+  }
+  .link-linha:hover,
+  .link-linha[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+
+  /* Pílula de navegação e de categoria. */
+  .pilula {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      background-color 200ms,
+      color 200ms,
+      box-shadow 200ms;
+  }
+  .pilula:hover {
+    background: var(--color-nevoa);
+  }
+  .pilula[aria-current="page"] {
+    background: var(--color-tinta);
+    color: var(--color-branco);
+  }
+
+  /* Variante e opção de entrega: cartão macio; escolhido ganha contorno grafite. */
+  .chip-variante {
+    border-radius: 1rem;
+    background: var(--color-branco);
+    box-shadow: inset 0 0 0 1.5px var(--color-linha);
+    transition:
+      box-shadow 200ms,
+      background-color 200ms;
+  }
+  .chip-variante:hover {
+    box-shadow: inset 0 0 0 1.5px rgb(23 24 28 / 0.3);
+  }
+  .chip-variante[aria-checked="true"] {
+    box-shadow:
+      inset 0 0 0 2px var(--color-tinta),
+      var(--shadow-cartao);
+  }
+
+  /* Ação principal: pílula grafite, seta que avança. */
+  .botao-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: var(--color-tinta);
+    color: var(--color-branco);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    box-shadow: 0 8px 20px -10px rgb(23 24 28 / 0.55);
+    transition:
+      background-color 200ms,
+      transform 300ms var(--ease-galeria),
+      box-shadow 300ms var(--ease-galeria);
+  }
+  .botao-principal svg {
+    transition: transform 300ms var(--ease-galeria);
+  }
+  .botao-principal:hover:not(:disabled) {
+    background: #2b2d33;
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px -12px rgb(23 24 28 / 0.6);
+  }
+  .botao-principal:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+  .botao-principal:hover:not(:disabled) svg {
+    transform: translateX(3px);
+  }
+  .botao-principal:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Ação secundária: pílula branca com contorno suave. */
+  .botao-contorno {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: var(--color-branco);
+    color: var(--color-tinta);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    box-shadow: inset 0 0 0 1.5px rgb(23 24 28 / 0.14);
+    transition:
+      background-color 200ms,
+      box-shadow 200ms;
+  }
+  .botao-contorno:hover:not(:disabled) {
+    background: var(--color-nevoa);
+    box-shadow: inset 0 0 0 1.5px rgb(23 24 28 / 0.24);
+  }
+  .botao-contorno:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Botão redondo de ícone (setas do trilho). */
+  .botao-redondo {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background: var(--color-branco);
+    color: var(--color-tinta);
+    box-shadow: var(--shadow-cartao);
+    transition:
+      background-color 200ms,
+      color 200ms,
+      opacity 200ms;
+  }
+  .botao-redondo:hover:not(:disabled) {
+    background: var(--color-tinta);
+    color: var(--color-branco);
+  }
+  .botao-redondo:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* Linha de lista que se destaca quando ativa (admin). */
+  .linha-lista {
+    transition:
+      background-color 250ms var(--ease-galeria),
+      color 250ms var(--ease-galeria);
+  }
+  .linha-lista[data-ativa="true"] {
+    background: var(--color-tinta);
+    color: var(--color-branco);
+  }
+  .linha-lista .seta {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity 250ms,
+      transform 300ms var(--ease-galeria);
+  }
+  .linha-lista[data-ativa="true"] .seta {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Trilho rolável (sem barra visível; navegação pelas setas). */
+  .trilho {
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .trilho::-webkit-scrollbar {
+    display: none;
+  }
+  .trilho > * {
+    scroll-snap-align: start;
+  }
+
+  /* Check que se desenha (confirmação de "adicionado"). */
+  .check-desenha path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 0;
   }
 }
-.group:focus-visible .foto-viva {
-  transform: scale(1.05);
-}
 
-/* Sublinhado que corre da esquerda (links de navegação). */
-.link-linha {
-  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
-  transition: background-size 300ms var(--ease-galeria);
-}
-.link-linha:hover,
-.link-linha[aria-current="page"] {
-  background-size: 100% 1px;
-}
-
-/* Variante e opção de entrega: célula com moldura; escolhida fica preta. */
-.chip-variante {
-  border: 1px solid rgb(18 18 18 / 0.3);
-  background: var(--color-branco);
-  transition:
-    border-color 200ms,
-    background-color 200ms,
-    color 200ms;
-}
-.chip-variante:hover {
-  border-color: var(--color-tinta);
-}
-.chip-variante[aria-checked="true"] {
-  border-color: var(--color-tinta);
-  box-shadow: inset 0 0 0 1px var(--color-tinta);
-}
-
-/* Ação principal: bloco preto, rótulo em caixa alta, seta que avança. */
-.botao-principal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  background: var(--color-tinta);
-  color: var(--color-branco);
-  border: 1px solid var(--color-tinta);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition:
-    background-color 200ms,
-    color 200ms;
-}
-.botao-principal svg {
-  transition: transform 300ms var(--ease-galeria);
-}
-.botao-principal:hover:not(:disabled) {
-  background: var(--color-branco);
-  color: var(--color-tinta);
-}
-.botao-principal:hover:not(:disabled) svg {
-  transform: translateX(4px);
-}
-.botao-principal:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-/* Ação secundária: mesmo bloco, só com o contorno. */
-.botao-contorno {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  background: transparent;
-  color: var(--color-tinta);
-  border: 1px solid var(--color-tinta);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition:
-    background-color 200ms,
-    color 200ms;
-}
-.botao-contorno:hover:not(:disabled) {
-  background: var(--color-tinta);
-  color: var(--color-branco);
-}
-.botao-contorno:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-/* Linha de lista que se inverte (preto) quando ativa, como na lista de artistas. */
-.linha-lista {
-  transition:
-    background-color 250ms var(--ease-galeria),
-    color 250ms var(--ease-galeria);
-}
-.linha-lista[data-ativa="true"] {
-  background: var(--color-tinta);
-  color: var(--color-branco);
-}
-.linha-lista .seta {
-  opacity: 0;
-  transform: translateX(-8px);
-  transition:
-    opacity 250ms,
-    transform 300ms var(--ease-galeria);
-}
-.linha-lista[data-ativa="true"] .seta {
-  opacity: 1;
-  transform: none;
-}
-
-/* Trilho rolável dos destaques (sem barra visível; navegação pelas setas). */
-.trilho {
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
-}
-.trilho::-webkit-scrollbar {
-  display: none;
-}
-.trilho > * {
-  scroll-snap-align: start;
-}
-
-/* Entrada suave ao carregar. */
 @media (prefers-reduced-motion: no-preference) {
+  /* Entrada suave ao carregar. */
   .surgir {
-    animation: surgir 900ms var(--ease-galeria) both;
+    animation: surgir 800ms var(--ease-galeria) both;
     animation-delay: var(--atraso, 0ms);
   }
   @keyframes surgir {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(16px);
     }
   }
+
+  .check-desenha path {
+    animation: desenhar 500ms var(--ease-galeria) 120ms both;
+  }
+  @keyframes desenhar {
+    from {
+      stroke-dashoffset: 24;
+    }
+  }
+
+  /* Contador da sacola pulsa quando muda. */
+  .pulsar {
+    animation: pulsar 600ms var(--ease-galeria);
+  }
+  @keyframes pulsar {
+    30% {
+      transform: scale(1.35);
+    }
+  }
+
   html {
     scroll-behavior: smooth;
   }
 }
 
 * {
-  scrollbar-color: var(--color-tinta-suave) var(--color-papel);
+  scrollbar-color: var(--color-cinza) transparent;
 }

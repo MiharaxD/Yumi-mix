@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
-import { Marca } from "@/components/Icones";
+import { LogoYumiMix } from "@/components/Logo";
 import { logoutAction } from "../actions";
 import { AdminNav } from "./AdminNav";
 
@@ -22,19 +22,20 @@ export default async function PainelLayout({ children }: LayoutProps<"/admin">) 
     <>
       <header className="bg-tinta text-branco">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
-          <Link href="/admin" className="flex items-center gap-2.5 text-branco">
-            <Marca className="size-7" />
+          <Link href="/admin" className="flex items-center gap-3 text-branco">
+            <LogoYumiMix className="h-6 w-auto" />
+            <span className="h-5 w-px bg-branco/30" aria-hidden />
             <span className="titulo font-extrabold text-branco">Painel</span>
           </Link>
           <div className="order-3 w-full sm:order-none sm:w-auto sm:flex-1">
             <AdminNav unread={recent} />
           </div>
           <div className="ml-auto flex items-center gap-2 text-sm">
-            <Link href="/" className="px-3 py-2 text-papel hover:bg-tinta-suave">
+            <Link href="/" className="rounded-full px-3.5 py-2 text-papel transition-colors hover:bg-branco/10">
               Ver loja
             </Link>
             <form action={logoutAction}>
-              <button type="submit" className="px-3 py-2 text-papel hover:bg-tinta-suave">
+              <button type="submit" className="rounded-full px-3.5 py-2 text-papel transition-colors hover:bg-branco/10">
                 Sair
               </button>
             </form>

@@ -63,7 +63,7 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
   }
 
   const simButtons = simulation ? (
-    <div className="mt-6 border border-dashed border-tinta/40 bg-papel p-4">
+    <div className="mt-6 rounded-[1.25rem] bg-papel p-5">
       <p className="text-sm font-semibold">Modo de teste</p>
       <p className="mt-0.5 text-sm text-tinta-suave">Nenhum dinheiro circula. Escolha o que o provedor responderia:</p>
       <div className="mt-3 flex flex-col gap-2.5 sm:flex-row">
@@ -86,14 +86,14 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
       </div>
     </div>
   ) : (
-    <p className="mt-6 bg-papel px-4 py-3 text-sm text-tinta-suave">
+    <p className="mt-6 rounded-2xl bg-papel px-4 py-3 text-sm text-tinta-suave">
       A simulação de pagamento fica desligada em produção.
     </p>
   );
 
   return (
-    <div className="painel p-5 sm:p-7">
-      <div role="tablist" aria-label="Forma de pagamento" className="inline-flex border border-tinta">
+    <div className="painel p-5 sm:p-8">
+      <div role="tablist" aria-label="Forma de pagamento" className="inline-flex rounded-full bg-papel p-1">
         {TABS.map((t, i) => (
           <button
             key={t.id}
@@ -108,8 +108,8 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
             tabIndex={tab === t.id ? 0 : -1}
             onClick={() => setTab(t.id)}
             onKeyDown={(e) => onTabKey(e, i)}
-            className={`px-6 py-2.5 text-sm font-bold transition-all ${
-              tab === t.id ? "bg-tinta text-branco " : "text-tinta-suave hover:text-tinta"
+            className={`rounded-full px-6 py-2.5 text-sm font-bold transition-all ${
+              tab === t.id ? "bg-branco text-tinta shadow-cartao" : "text-tinta-suave hover:text-tinta"
             }`}
           >
             {t.label}
@@ -119,7 +119,7 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
 
       <div aria-live="assertive">
         {error && (
-          <p className="mt-5 bg-erro-fundo px-4 py-3 text-sm font-medium text-erro" role="alert">
+          <p className="mt-5 rounded-2xl bg-erro-fundo px-4 py-3 text-sm font-medium text-erro" role="alert">
             {error} Seu pedido continua pendente; você pode tentar de novo.
           </p>
         )}
@@ -127,7 +127,7 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
 
       <div role="tabpanel" id="painel-pix" aria-labelledby="aba-pix" hidden={tab !== "pix"} className="mt-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-          <div className="mx-auto w-48 shrink-0 bg-white p-3 border border-tinta sm:mx-0">
+          <div className="mx-auto w-48 shrink-0 rounded-[1.25rem] bg-white p-3 shadow-[inset_0_0_0_1.5px_var(--color-linha)] sm:mx-0">
             {/* eslint-disable-next-line @next/next/no-img-element -- QR gerado como data URI */}
             <img src={pix.qrImageSrc} alt="QR code Pix de teste (não é um Pix real)" className="aspect-square w-full" />
           </div>
@@ -145,12 +145,12 @@ export function PaymentTabs({ orderId, pix, simulation }: Props) {
                 readOnly
                 value={pix.copyPaste}
                 onFocus={(e) => e.currentTarget.select()}
-                className="min-w-0 flex-1 truncate border border-tinta/25 bg-papel px-3 py-2.5 font-mono text-xs"
+                className="min-w-0 flex-1 truncate rounded-campo bg-papel px-4 py-3 font-mono text-xs"
               />
               <button
                 type="button"
                 onClick={copy}
-                className="inline-flex shrink-0 items-center gap-1.5 bg-tinta px-4 text-sm font-semibold text-branco hover:bg-tinta-suave"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-tinta px-5 text-sm font-semibold text-branco transition-colors hover:bg-[#2b2d33]"
               >
                 {copied ? (
                   <>

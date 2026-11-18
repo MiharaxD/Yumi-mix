@@ -18,7 +18,7 @@ const ORDER_TONE: Record<string, string> = {
   pago: "bg-nevoa text-tinta",
   em_producao: "bg-tinta-suave text-branco",
   enviado: "bg-tinta text-branco",
-  entregue: "border border-tinta/40 text-tinta",
+  entregue: "bg-branco text-tinta shadow-[inset_0_0_0_1.5px_rgb(23_24_28/0.2)]",
   cancelado: "bg-erro-fundo text-erro",
 };
 
@@ -31,7 +31,7 @@ const CUSTOM_TONE: Record<string, string> = {
 
 export function OrderStatusPill({ status }: { status: string }) {
   return (
-    <span className={`inline-flex px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ORDER_TONE[status] ?? "bg-papel"}`}>
+    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ORDER_TONE[status] ?? "bg-papel"}`}>
       {isOrderStatus(status) ? ORDER_STATUS_LABEL[status] : status}
     </span>
   );
@@ -39,7 +39,7 @@ export function OrderStatusPill({ status }: { status: string }) {
 
 export function CustomStatusPill({ status }: { status: string }) {
   return (
-    <span className={`inline-flex px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${CUSTOM_TONE[status] ?? "bg-papel"}`}>
+    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${CUSTOM_TONE[status] ?? "bg-papel"}`}>
       {isCustomStatus(status) ? CUSTOM_STATUS_LABEL[status] : status}
     </span>
   );

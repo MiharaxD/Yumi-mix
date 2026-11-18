@@ -6,6 +6,7 @@ export async function listProducts() {
     include: {
       images: { orderBy: { position: "asc" } },
       variants: { orderBy: { position: "asc" } },
+      category: true,
     },
   });
 }
@@ -16,6 +17,30 @@ export async function getProductBySlug(slug: string) {
     include: {
       images: { orderBy: { position: "asc" } },
       variants: { orderBy: { position: "asc" } },
+    },
+  });
+}
+
+export async function listCategories() {
+  return prisma.category.findMany({
+    orderBy: { position: "asc" },
+    include: {
+      products: {
+        orderBy: { position: "asc" },
+        include: { images: { orderBy: { position: "asc" } }, variants: { orderBy: { position: "asc" } } },
+      },
+    },
+  });
+}
+
+export async function getCategoryBySlug(slug: string) {
+  return prisma.category.findUnique({
+    where: { slug },
+    include: {
+      products: {
+        orderBy: { position: "asc" },
+        include: { images: { orderBy: { position: "asc" } }, variants: { orderBy: { position: "asc" } } },
+      },
     },
   });
 }

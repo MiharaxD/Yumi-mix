@@ -23,11 +23,11 @@ export function ImagemPeca({
   className?: string;
 }) {
   if (!inteira) {
-    return <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={`object-cover ${className}`} unoptimized />;
+    return <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={`object-cover ${className}`} />;
   }
   return (
     <span className={`absolute block ${respiro}`}>
-      <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={`object-contain ${className}`} unoptimized />
+      <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={`object-contain ${className}`} />
     </span>
   );
 }

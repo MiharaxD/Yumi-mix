@@ -1,7 +1,7 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 export const inputClass =
-  "w-full border border-tinta/30 bg-branco px-3.5 py-3 text-base text-tinta transition-colors placeholder:text-tinta-suave/80 hover:border-tinta/60 focus:border-tinta focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tinta aria-invalid:border-erro aria-invalid:bg-erro-fundo/40";
+  "w-full min-w-0 rounded-campo border-0 bg-papel px-4 py-3.5 text-base text-tinta shadow-[inset_0_0_0_1.5px_transparent] transition-[box-shadow,background-color] placeholder:text-tinta-suave hover:bg-nevoa focus:bg-branco focus:shadow-[inset_0_0_0_2px_var(--color-tinta)] focus:outline-none aria-invalid:bg-erro-fundo aria-invalid:shadow-[inset_0_0_0_1.5px_var(--color-erro)]";
 
 type Base = { label: string; name: string; error?: string; hint?: ReactNode; className?: string };
 
@@ -83,7 +83,7 @@ export function CampoSelect({
         name={name}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(name, error, hint)}
-        className={`${inputClass} appearance-none bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23121212'%20stroke-width='1.5'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E")] bg-[length:1.1rem] bg-[right_0.8rem_center] bg-no-repeat pr-10`}
+        className={`${inputClass} appearance-none bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23121212'%20stroke-width='1.75'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E")] bg-[length:1.1rem] bg-[right_0.8rem_center] bg-no-repeat pr-10`}
         {...rest}
       >
         {children}

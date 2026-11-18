@@ -30,12 +30,12 @@ export function CheckoutForm() {
   const [placed, setPlaced] = useState(false);
 
   if (!hydrated || placed) {
-    return <div className="h-96 animate-pulse bg-cinza/40" aria-busy="true" aria-label="Carregando" />;
+    return <div className="h-96 animate-pulse rounded-cartao bg-nevoa" aria-busy="true" aria-label="Carregando" />;
   }
 
   if (items.length === 0) {
     return (
-      <div className="painel max-w-lg p-6">
+      <div className="painel max-w-lg p-7">
         <p className="font-semibold">Seu carrinho está vazio.</p>
         <Link href="/" className="mt-3 inline-flex items-center gap-2 font-semibold underline">
           Escolher peças <IconeSeta className="size-4" />
@@ -95,10 +95,10 @@ export function CheckoutForm() {
       : formatBRL(SHIPPING_FEE_CENTS);
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
-      <div className="flex flex-col gap-8">
-        <fieldset className="bg-branco p-5 border border-tinta sm:p-7">
-          <legend className="float-left titulo mb-6 w-full text-[1.75rem] leading-none">Seus dados</legend>
+    <form onSubmit={onSubmit} noValidate className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
+      <div className="flex min-w-0 flex-col gap-8">
+        <fieldset className="painel min-w-0 p-5 sm:p-8">
+          <legend className="float-left titulo mb-6 w-full text-[1.5rem] leading-none">Seus dados</legend>
           <div className="clear-both grid gap-4 sm:grid-cols-2">
             <Campo className="sm:col-span-2" label="Nome completo" name="customerName" autoComplete="name" error={errors.customerName} />
             <Campo label="Email" name="email" type="email" inputMode="email" autoComplete="email" error={errors.email} />
@@ -115,8 +115,8 @@ export function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset className="bg-branco p-5 border border-tinta sm:p-7">
-          <legend className="float-left titulo mb-6 w-full text-[1.75rem] leading-none">Endereço</legend>
+        <fieldset className="painel min-w-0 p-5 sm:p-8">
+          <legend className="float-left titulo mb-6 w-full text-[1.5rem] leading-none">Endereço</legend>
           <div className="clear-both grid grid-cols-6 gap-4">
             <Campo className="col-span-6 sm:col-span-2" label="CEP" name="cep" inputMode="numeric" autoComplete="postal-code" placeholder="00000-000" error={errors.cep} />
             <Campo className="col-span-6 sm:col-span-4" label="Rua" name="street" autoComplete="address-line1" error={errors.street} />
@@ -135,8 +135,8 @@ export function CheckoutForm() {
           </div>
         </fieldset>
 
-        <fieldset className="bg-branco p-5 border border-tinta sm:p-7">
-          <legend className="float-left titulo mb-5 w-full text-[1.75rem] leading-none">Como você quer receber?</legend>
+        <fieldset className="painel min-w-0 p-5 sm:p-8">
+          <legend className="float-left titulo mb-5 w-full text-[1.5rem] leading-none">Como você quer receber?</legend>
           <div className="clear-both grid gap-3 sm:grid-cols-2">
             {(
               [
@@ -148,7 +148,7 @@ export function CheckoutForm() {
               return (
                 <label
                   key={opt.value}
-                  className="chip-variante flex cursor-pointer gap-3 p-4"
+                  className="chip-variante flex cursor-pointer gap-3 p-4 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-tinta"
                   aria-checked={checked}
                 >
                   <input
@@ -171,15 +171,15 @@ export function CheckoutForm() {
       </div>
 
       <aside className="painel p-5 sm:p-6 lg:sticky lg:top-24" aria-label="Resumo do pedido">
-        <h2 className="titulo text-[1.75rem] leading-none">Seu pedido</h2>
+        <h2 className="titulo text-[1.5rem] leading-none">Seu pedido</h2>
         {quoteError && <p className="mt-3 text-sm text-erro">{quoteError}</p>}
         {quote ? (
           <>
-            <ul className="mt-4 flex flex-col gap-3 border-b border-tinta/15 pb-4">
+            <ul className="mt-4 flex flex-col gap-3 pb-1">
               {quote.lines.map((l) => (
                 <li key={l.variantId} className="flex items-center gap-3 text-sm">
-                  <span className="moldura relative size-12 shrink-0 border border-tinta/20">
-                    {l.imageUrl && <ImagemPeca src={l.imageUrl} alt="" sizes="44px" />}
+                  <span className="moldura relative size-12 shrink-0 rounded-xl">
+                    {l.imageUrl && <ImagemPeca src={l.imageUrl} alt="" sizes="48px" inteira={false} />}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold">
@@ -203,11 +203,11 @@ export function CheckoutForm() {
             </div>
           </>
         ) : (
-          <div className="mt-4 h-40 animate-pulse bg-papel" />
+          <div className="mt-4 h-40 animate-pulse rounded-2xl bg-papel" />
         )}
 
         <div aria-live="assertive">
-          {formError && <p className="mt-4 bg-erro-fundo px-3 py-2.5 text-sm font-medium text-erro">{formError}</p>}
+          {formError && <p className="mt-4 rounded-2xl bg-erro-fundo px-4 py-3 text-sm font-medium text-erro">{formError}</p>}
         </div>
 
         <button

@@ -25,18 +25,18 @@ export function CartView() {
 
   if (!hydrated || (items.length > 0 && !quote && !error)) {
     return (
-      <div className="h-64 animate-pulse bg-cinza/40" aria-busy="true" aria-label="Carregando carrinho" />
+      <div className="h-64 animate-pulse rounded-cartao bg-nevoa" aria-busy="true" aria-label="Carregando carrinho" />
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="painel max-w-lg p-6 sm:p-8">
-          <h2 className="titulo text-[2rem] leading-none">Seu carrinho está vazio</h2>
+      <div className="painel max-w-lg p-7 sm:p-9">
+          <h2 className="titulo text-[1.75rem] leading-tight">Seu carrinho está vazio</h2>
           <p className="mt-2 text-tinta-suave">Escolha uma peça na vitrine e ela aparece aqui.</p>
           <Link
             href="/"
-            className="mt-6 inline-flex items-center gap-2 bg-tinta px-6 py-3 font-semibold text-branco hover:bg-tinta-suave"
+            className="botao-principal mt-6 px-6 py-3.5"
           >
             Ver as peças <IconeSeta />
           </Link>
@@ -45,19 +45,19 @@ export function CartView() {
   }
 
   if (error || !quote) {
-    return <p className="bg-erro-fundo px-4 py-3 text-erro">{error}</p>;
+    return <p className="rounded-2xl bg-erro-fundo px-4 py-3 text-erro">{error}</p>;
   }
 
   const missing = missingForFreeShipping(quote.subtotalCents);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
-      <ul className="divide-y divide-tinta/12 bg-branco px-4 border border-tinta sm:px-6">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
+      <ul className="flex flex-col gap-3">
         {quote.lines.map((line) => (
-          <li key={line.variantId} className="flex gap-4 py-5">
-            <Link href={`/produto/${line.productSlug}`} className="moldura relative size-20 shrink-0 border border-tinta/20 sm:size-28">
+          <li key={line.variantId} className="painel flex gap-4 p-4 sm:p-5">
+            <Link href={`/produto/${line.productSlug}`} className="moldura relative size-20 shrink-0 rounded-2xl sm:size-28">
               {line.imageUrl && (
-                <ImagemPeca src={line.imageUrl} alt="" sizes="96px" />
+                <ImagemPeca src={line.imageUrl} alt="" sizes="112px" inteira={false} />
               )}
             </Link>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -87,7 +87,7 @@ export function CartView() {
                 <button
                   type="button"
                   onClick={() => removeFromCart(line.variantId)}
-                  className="inline-flex items-center gap-1.5 px-2 py-1.5 text-sm text-tinta-suave hover:bg-papel hover:text-erro"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-tinta-suave transition-colors hover:bg-erro-fundo hover:text-erro"
                 >
                   <IconeLixeira className="size-4" /> Remover
                 </button>
@@ -99,7 +99,7 @@ export function CartView() {
       </ul>
 
       <aside className="painel p-5 sm:p-6 lg:sticky lg:top-24" aria-label="Resumo do carrinho">
-        <h2 className="titulo text-[1.75rem] leading-none">Resumo</h2>
+        <h2 className="titulo text-[1.5rem] leading-none">Resumo</h2>
         <div className="mt-4">
           <CartTotals
             muted={loading}
@@ -110,7 +110,7 @@ export function CartView() {
             shippingLabel="Entrega"
           />
         </div>
-        <p className="mt-4 border border-tinta/25 bg-papel px-3 py-2.5 text-sm">
+        <p className="mt-4 rounded-2xl bg-dourado-claro px-4 py-3 text-sm">
           {FREE_SHIPPING_THRESHOLD_CENTS !== null && missing === 0
             ? "Entrega grátis neste pedido."
             : FREE_SHIPPING_THRESHOLD_CENTS !== null && missing !== null

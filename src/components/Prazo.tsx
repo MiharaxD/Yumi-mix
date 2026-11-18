@@ -20,16 +20,16 @@ export function SeloPrazo({
   if (readyToShip) {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 bg-tinta px-2 py-1 text-[0.6875rem] font-semibold tracking-[0.06em] text-branco uppercase ${className}`}
+        className={`inline-flex items-center gap-1.5 rounded-full bg-branco/95 px-2.5 py-1 text-[0.6875rem] font-semibold text-tinta shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] sm:text-xs ${className}`}
       >
-        <span className="size-1.5 rounded-full bg-branco" aria-hidden />
+        <span className="size-1.5 rounded-full bg-[#2f9e5b]" aria-hidden />
         Pronta entrega
       </span>
     );
   }
   return (
     <span
-      className={`inline-flex items-center gap-1.5 border border-tinta/40 px-2 py-1 text-[0.6875rem] font-semibold tracking-[0.06em] text-tinta uppercase ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full bg-branco/95 px-2.5 py-1 text-[0.6875rem] font-semibold text-tinta shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] sm:text-xs ${className}`}
       title={`Produzida depois do pedido; envio em até ${diasUteis(productionDays)}.`}
     >
       <IconeRelogio className="size-3.5" />

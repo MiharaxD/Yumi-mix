@@ -86,11 +86,11 @@ export function CustomRequestForm() {
 
   if (done !== null) {
     return (
-      <div className="painel max-w-xl p-6 sm:p-8" role="status">
-          <span className="grid size-14 place-items-center bg-tinta text-branco">
-            <IconeCheck className="size-8" />
+      <div className="painel max-w-xl p-7 sm:p-9" role="status">
+          <span className="grid size-14 place-items-center rounded-full bg-tinta text-branco">
+            <IconeCheck className="check-desenha size-7" />
           </span>
-          <p className="titulo mt-5 text-[2rem] leading-none">Pedido recebido{done ? ` (nº ${done})` : ""}.</p>
+          <p className="titulo mt-5 text-[1.75rem] leading-tight">Pedido recebido{done ? ` (nº ${done})` : ""}.</p>
           <p className="mt-2 text-tinta-suave">
             Vamos estudar a peça e responder pelo contato que você deixou com o orçamento e o prazo. Nada é cobrado até
             você aprovar.
@@ -110,8 +110,8 @@ export function CustomRequestForm() {
         <input id="site" name="site" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <fieldset className="bg-branco p-5 border border-tinta sm:p-7">
-        <legend className="titulo float-left mb-6 w-full text-[1.75rem] leading-none">A peça</legend>
+      <fieldset className="painel min-w-0 p-5 sm:p-8">
+        <legend className="titulo float-left mb-6 w-full text-[1.5rem] leading-none">A peça</legend>
         <div className="clear-both grid gap-4 sm:grid-cols-2">
           <CampoTexto
             className="sm:col-span-2"
@@ -122,14 +122,14 @@ export function CustomRequestForm() {
             rows={5}
           />
           <Campo label="Medidas aproximadas" name="dimensions" placeholder="ex.: 15 × 10 × 8 cm" error={errors.dimensions} />
-          <Campo label="Material ou cor" name="materialColor" placeholder="ex.: PLA verde-água" error={errors.materialColor} />
+          <Campo label="Material ou cor" name="materialColor" placeholder="ex.: branco fosco" error={errors.materialColor} />
           <Campo label="Quantidade" name="quantity" type="number" inputMode="numeric" min={1} max={500} defaultValue={1} error={errors.quantity} />
           <Campo label="Prazo desejado" name="desiredDate" placeholder="ex.: até 20/12, ou sem pressa" error={errors.desiredDate} />
         </div>
 
         <div className="mt-6">
           <p id="imagens-rotulo" className="rotulo">
-            Imagens de referência <span className="font-normal tracking-normal text-tinta-suave normal-case">(1 a {CUSTOM_MAX_IMAGES}, JPG, PNG ou WEBP, até 5 MB cada)</span>
+            Imagens de referência <span className="font-normal text-tinta-suave">(1 a {CUSTOM_MAX_IMAGES}, JPG, PNG ou WEBP, até 5 MB cada)</span>
           </p>
           <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {picked.map((p, i) => (
@@ -141,7 +141,7 @@ export function CustomRequestForm() {
                 <button
                   type="button"
                   onClick={() => removePicked(i)}
-                  className="mt-1.5 w-full truncate px-2 py-1 text-xs text-tinta-suave hover:bg-papel hover:text-erro"
+                  className="mt-1.5 w-full truncate rounded-full px-2 py-1 text-xs text-tinta-suave hover:bg-erro-fundo hover:text-erro"
                   aria-label={`Remover ${p.file.name}`}
                 >
                   Remover
@@ -154,7 +154,7 @@ export function CustomRequestForm() {
                 id="imagens"
                 onClick={() => inputRef.current?.click()}
                 aria-describedby={errors.imagens ? "imagens-erro" : "imagens-rotulo"}
-                className={`flex aspect-square flex-col items-center justify-center gap-2 border border-dashed border-tinta/50 bg-papel text-sm font-semibold text-tinta-suave transition-colors hover:border-tinta hover:text-tinta ${errors.imagens ? "border-erro" : ""}`}
+                className={`flex aspect-square flex-col items-center justify-center gap-2 rounded-foto border-2 border-dashed bg-papel text-sm font-semibold text-tinta-suave transition-colors hover:border-tinta/40 hover:bg-nevoa hover:text-tinta ${errors.imagens ? "border-erro" : "border-tinta/15"}`}
               >
                 <IconeUpload />
                 {picked.length === 0 ? "Escolher fotos" : "Mais uma"}
@@ -180,8 +180,8 @@ export function CustomRequestForm() {
         </div>
       </fieldset>
 
-      <fieldset className="bg-branco p-5 border border-tinta sm:p-7">
-        <legend className="titulo float-left mb-6 w-full text-[1.75rem] leading-none">Quem está pedindo</legend>
+      <fieldset className="painel min-w-0 p-5 sm:p-8">
+        <legend className="titulo float-left mb-6 w-full text-[1.5rem] leading-none">Quem está pedindo</legend>
         <div className="clear-both grid gap-4 sm:grid-cols-2">
           <Campo label="Nome" name="name" autoComplete="name" error={errors.name} />
           <Campo label="WhatsApp ou email" name="contact" autoComplete="email" error={errors.contact} hint="É por aqui que mandamos o orçamento." />

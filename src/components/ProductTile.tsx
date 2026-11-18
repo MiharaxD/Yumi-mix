@@ -1,13 +1,14 @@
+"use client";
+
 import Link from "next/link";
-import { ImagemPeca } from "@/components/ImagemPeca";
 import { formatBRL } from "@/lib/money";
 import { SeloPrazo } from "@/components/Prazo";
+import { CamadasFotos, IndicadorFotos, useCicloFotos } from "@/components/FotosPeca";
 
 type Props = {
   slug: string;
   name: string;
-  imageUrl: string | null;
-  imageAlt: string;
+  images: { url: string; alt: string }[];
   fromPriceCents: number;
   priceRange: boolean;
   readyToShip: boolean;
@@ -16,36 +17,55 @@ type Props = {
   priority?: boolean;
 };
 
-/** Célula da grade da galeria: a peça em moldura branca, ficha técnica embaixo. */
+/** Cartão de peça: foto grande arredondada, nome e preço embaixo. Sob o mouse, sobe e as fotos passam por dissolve. */
 export function ProductTile(p: Props) {
+  const ciclo = useCicloFotos(p.images.length);
+
   return (
-    <Link href={`/produto/${p.slug}`} className="group flex h-full flex-col bg-papel p-3 transition-colors hover:bg-branco sm:p-5">
-      <div className="moldura aspect-[4/5] w-full lg:aspect-[6/5]">
-        {p.imageUrl && (
-          <ImagemPeca
-            src={p.imageUrl}
-            alt={p.imageAlt}
-            sizes="(min-width: 1024px) 30vw, 48vw"
-            className="foto-viva"
+    <Link
+      href={`/produto/${p.slug}`}
+      onPointerEnter={(e) => e.pointerType === "mouse" && ciclo.entrar()}
+      onPointerLeave={ciclo.sair}
+      className="cartao group flex h-full flex-col p-2 sm:p-2.5"
+    >
+      <div className="moldura aspect-square w-full bg-papel">
+        <span className="foto-viva absolute inset-0 block mix-blend-multiply">
+          <CamadasFotos
+            fotos={p.images}
+            sizes="(min-width: 1280px) 400px, (min-width: 1024px) 31vw, 47vw"
+            atual={ciclo.atual}
+            anterior={ciclo.anterior}
+            montadas={ciclo.montadas}
             priority={p.priority}
+            onCarregada={ciclo.marcarCarregada}
           />
-        )}
+        </span>
+        <SeloPrazo
+          readyToShip={p.readyToShip}
+          productionDays={p.productionDays}
+          compact
+          className="absolute top-2 right-2 z-[3] whitespace-nowrap sm:top-3 sm:right-3"
+        />
+        <IndicadorFotos
+          total={p.images.length}
+          atual={ciclo.atual}
+          className="absolute inset-x-6 bottom-3 z-[3] opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-coarse:hidden"
+        />
       </div>
-      <div className="mt-3 flex flex-1 flex-col sm:mt-4">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          <h3 className="text-[0.9375rem] leading-tight font-bold text-balance sm:text-base">{p.name}</h3>
-          <p className="text-sm whitespace-nowrap sm:text-right">
-            {p.priceRange && <span className="text-tinta-suave">a partir de </span>}
-            <span className="font-semibold">{formatBRL(p.fromPriceCents)}</span>
+      <div className="flex flex-1 flex-col px-1.5 pt-3 pb-1.5 sm:px-2.5 sm:pt-4 sm:pb-2.5">
+        <h3 className="text-[0.9375rem] leading-snug font-semibold text-balance sm:text-base">{p.name}</h3>
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-2 pt-2.5">
+          <p className="leading-tight tabular-nums">
+            {p.priceRange && <span className="block text-xs text-tinta-suave">a partir de</span>}
+            <span className="text-base font-bold sm:text-lg">{formatBRL(p.fromPriceCents)}</span>
           </p>
-        </div>
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3">
-          <SeloPrazo readyToShip={p.readyToShip} productionDays={p.productionDays} compact className="whitespace-nowrap" />
-          <span className="flex gap-1" aria-label={`${p.colors.length} ${p.colors.length === 1 ? "cor" : "cores"}`}>
-            {p.colors.map((c) => (
-              <span key={c} className="size-3 rounded-full ring-1 ring-tinta/20" style={{ backgroundColor: c }} />
-            ))}
-          </span>
+          {p.colors.length > 1 && (
+            <span className="flex -space-x-1 pb-1" aria-label={`${p.colors.length} cores`}>
+              {p.colors.map((c) => (
+                <span key={c} className="size-3.5 rounded-full ring-2 ring-branco" style={{ backgroundColor: c }} />
+              ))}
+            </span>
+          )}
         </div>
       </div>
     </Link>

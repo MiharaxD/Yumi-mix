@@ -1,14 +1,12 @@
-// Seed da Yumi Mix: 6 produtos fictícios de decoração impressa em 3D,
-// cada um com 3 imagens SVG geradas localmente em public/produtos.
+// Seed da Yumi Mix: 2 categorias e 7 produtos reais (fotos em public/produtos/<pasta>/main_images).
 // Rodar: npm run db:seed  (idempotente: pode rodar de novo sem duplicar)
 
 import { PrismaClient } from "@prisma/client";
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 
 const prisma = new PrismaClient();
 
 type VariantSeed = { key: string; name: string; material: string; colorHex: string; priceCents: number };
+type ImageSeed = { url: string; alt: string };
 type ProductSeed = {
   slug: string;
   name: string;
@@ -16,253 +14,156 @@ type ProductSeed = {
   dimensions: string;
   productionDays: number;
   readyToShip: boolean;
-  draw: (color: string) => { shapes: string; details: string };
+  category: string;
+  images: ImageSeed[];
   variants: VariantSeed[];
 };
 
-// ---------- utilidades de cor ----------
-function shade(hex: string, amount: number): string {
-  const n = parseInt(hex.slice(1), 16);
-  const ch = (v: number) => Math.max(0, Math.min(255, Math.round(v + amount * (amount < 0 ? v : 255 - v))));
-  const r = ch((n >> 16) & 255);
-  const g = ch((n >> 8) & 255);
-  const b = ch(n & 255);
-  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
-}
-
-// ---------- desenhos das peças (viewBox 400x400, base em y≈330) ----------
-const draws: Record<string, ProductSeed["draw"]> = {
-  vaso: (c) => ({
-    shapes: `<path d="M150 330 C138 300 166 272 150 240 C134 208 172 190 165 160 C158 130 176 112 170 92 L230 92 C224 112 242 130 235 160 C228 190 266 208 250 240 C234 272 262 300 250 330 Z"/>`,
-    details: `<ellipse cx="200" cy="92" rx="30" ry="7" fill="${shade(c, -0.35)}"/>
-      <path d="M200 92 C206 130 196 170 212 210 C226 250 210 290 222 330 L250 330 C262 300 234 272 250 240 C266 208 228 190 235 160 C242 130 224 112 230 92 Z" fill="${shade(c, -0.12)}"/>`,
-  }),
-  luminaria: (c) => {
-    let holes = "";
-    for (let row = 0; row < 6; row++)
-      for (let col = 0; col < 3; col++)
-        holes += `<circle cx="${172 + col * 28}" cy="${150 + row * 30}" r="9" fill="#ffd27a"/>`;
-    return {
-      shapes: `<rect x="150" y="118" width="100" height="212" rx="14"/>`,
-      details: `<rect x="200" y="118" width="50" height="212" rx="0" fill="${shade(c, -0.1)}" opacity=".7"/>
-        <rect x="146" y="110" width="108" height="16" rx="6" fill="${shade(c, -0.3)}"/>
-        ${holes}
-        <ellipse cx="200" cy="330" rx="70" ry="10" fill="#ffd27a" opacity=".25"/>`,
-    };
-  },
-  cachepo: (c) => ({
-    shapes: `<polygon points="140,182 200,166 260,182 250,330 200,342 150,330"/>`,
-    details: `<polygon points="200,166 260,182 250,330 200,342" fill="${shade(c, -0.18)}"/>
-      <polygon points="140,182 200,166 260,182 200,196" fill="${shade(c, -0.35)}"/>
-      <g fill="#4f7d4a">
-        <ellipse cx="178" cy="140" rx="14" ry="44" transform="rotate(-28 178 140)"/>
-        <ellipse cx="222" cy="134" rx="14" ry="48" transform="rotate(24 222 134)"/>
-        <ellipse cx="200" cy="120" rx="12" ry="54"/>
-      </g>
-      <g fill="#3c6338"><ellipse cx="200" cy="120" rx="4" ry="50"/></g>`,
-  }),
-  incenso: (c) => ({
-    shapes: `<path d="M84 302 C150 240 284 240 334 290 C284 334 150 342 84 302 Z"/>`,
-    details: `<path d="M98 300 C170 288 260 286 322 291" stroke="${shade(c, -0.3)}" stroke-width="3" fill="none"/>
-      <path d="M84 302 C150 330 284 334 334 290 C284 340 150 350 84 302 Z" fill="${shade(c, -0.25)}"/>
-      <line x1="236" y1="292" x2="292" y2="122" stroke="#6b4a2f" stroke-width="5" stroke-linecap="round"/>
-      <path d="M292 120 C280 96 306 84 292 60 C280 40 300 26 292 8" stroke="#9aa3a0" stroke-width="3" fill="none" opacity=".7"/>`,
-  }),
-  colmeia: (c) => {
-    const hex = (cx: number, cy: number) => {
-      const pts = Array.from({ length: 6 }, (_, i) => {
-        const a = (Math.PI / 3) * i + Math.PI / 6;
-        return `${(cx + 42 * Math.cos(a)).toFixed(1)},${(cy + 42 * Math.sin(a)).toFixed(1)}`;
-      }).join(" ");
-      return `<polygon points="${pts}"/>`;
-    };
-    return {
-      shapes: hex(164, 288) + hex(237, 288) + hex(200, 226),
-      details: `<g stroke-linecap="round" stroke-width="7">
-          <line x1="190" y1="226" x2="176" y2="132" stroke="#1f4e5a"/>
-          <line x1="206" y1="226" x2="222" y2="140" stroke="#d89a2b"/>
-          <line x1="164" y1="288" x2="150" y2="200" stroke="#b8613f"/>
-          <line x1="240" y1="288" x2="262" y2="196" stroke="#3d4240"/>
-        </g>
-        <g fill="${shade(c, -0.4)}"><circle cx="164" cy="288" r="22"/><circle cx="237" cy="288" r="22"/><circle cx="200" cy="226" r="22"/></g>`,
-    };
-  },
-  nuvem: (c) => ({
-    shapes: `<circle cx="150" cy="248" r="48"/><circle cx="210" cy="226" r="62"/><circle cx="272" cy="250" r="44"/><rect x="104" y="250" width="214" height="46" rx="10"/>`,
-    details: `<rect x="104" y="288" width="214" height="10" rx="4" fill="${shade(c, -0.25)}"/>
-      <polygon points="186,170 234,170 228,206 192,206" fill="#b8613f"/>
-      <g fill="#4f7d4a"><ellipse cx="198" cy="150" rx="10" ry="24" transform="rotate(-24 198 150)"/><ellipse cx="220" cy="148" rx="10" ry="26" transform="rotate(20 220 148)"/></g>`,
-  }),
-};
-
-// ---------- composição das 3 vistas ----------
-function svgDoc(inner: string, defs: string, label: string): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800" role="img" aria-label="${label}">
-<defs>
-  <pattern id="camadas" width="6" height="4" patternUnits="userSpaceOnUse"><rect width="6" height="1.2" fill="#000" opacity=".09"/></pattern>
-  ${defs}
-</defs>
-${inner}
-</svg>
-`;
-}
-
-function objectLayer(p: ProductSeed, color: string, id: string): { defs: string; body: string } {
-  const { shapes, details } = p.draw(color);
-  return {
-    defs: `<clipPath id="${id}">${shapes}</clipPath>`,
-    body: `<g fill="${color}">${shapes}</g>${details}<rect width="400" height="400" fill="url(#camadas)" clip-path="url(#${id})"/>`,
-  };
-}
-
-function viewFront(p: ProductSeed, color: string): string {
-  const o = objectLayer(p, color, "obj");
-  return svgDoc(
-    `<rect width="400" height="400" fill="#ffffff"/>
-     <ellipse cx="214" cy="338" rx="120" ry="16" fill="#262a28" opacity=".14"/>
-     ${o.body}`,
-    o.defs,
-    `${p.name} — vista frontal (ilustração)`,
-  );
-}
-
-function viewDetail(p: ProductSeed, color: string): string {
-  const o = objectLayer(p, color, "obj");
-  return svgDoc(
-    `<rect width="400" height="400" fill="${shade(color, -0.55)}"/>
-     <g transform="translate(-260 -330) scale(2.6)">${o.body}</g>
-     <rect x="18" y="352" width="150" height="30" rx="4" fill="#f5f4f0" opacity=".92"/>
-     <text x="30" y="372" font-family="Arial, sans-serif" font-size="14" fill="#262a28">detalhe das camadas</text>`,
-    o.defs,
-    `${p.name} — detalhe das camadas de impressão (ilustração)`,
-  );
-}
-
-function viewRoom(p: ProductSeed, color: string): string {
-  const o = objectLayer(p, color, "obj");
-  // parede verde-água com sombra de cobogó projetada
-  let cobogo = "";
-  for (let y = -40; y < 340; y += 64)
-    for (let x = -40; x < 440; x += 64)
-      cobogo += `<circle cx="${x + 32}" cy="${y + 32}" r="22"/>`;
-  return svgDoc(
-    `<rect width="400" height="400" fill="#9fd3c1"/>
-     <g fill="#5e9c88" opacity=".35" transform="skewX(-14) translate(60 0)">${cobogo}</g>
-     <rect y="330" width="400" height="70" fill="#c9b79a"/>
-     <rect y="326" width="400" height="8" fill="#a8946f"/>
-     <g transform="translate(40 0) scale(0.82) translate(40 72)">
-       <ellipse cx="214" cy="338" rx="120" ry="14" fill="#262a28" opacity=".18"/>
-       ${o.body}
-     </g>`,
-    o.defs,
-    `${p.name} — em ambiente (ilustração)`,
-  );
-}
+// ---------- categorias ----------
+const categories = [
+  { slug: "organizacao", name: "Organização" },
+  { slug: "decoracao-sazonal", name: "Decoração sazonal" },
+];
 
 // ---------- catálogo ----------
 const products: ProductSeed[] = [
   {
-    slug: "vaso-onda",
-    name: "Vaso Onda",
+    slug: "kit-ganchos-adesivos-parede",
+    name: "Kit 3 Ganchos Adesivos para Parede",
     description:
-      "Vaso de linhas onduladas que pega a luz de um jeito diferente em cada hora do dia. Serve para flores secas ou, na versão PETG, para água.",
-    dimensions: "10 × 10 × 24 cm",
-    productionDays: 5,
+      "Três ganchos adesivos para toalhas, roupões ou utensílios. Cola na parede sem furar e já aguenta o uso do dia a dia.",
+    dimensions: "6 × 6 × 4 cm (cada gancho)",
+    productionDays: 2,
     readyToShip: true,
-    draw: draws.vaso,
-    variants: [
-      { key: "pla-verde-agua", name: "Verde-água", material: "PLA", colorHex: "#8fcbb6", priceCents: 8990 },
-      { key: "pla-areia", name: "Areia", material: "PLA", colorHex: "#d9c6a5", priceCents: 8990 },
-      { key: "petg-translucido", name: "Translúcido", material: "PETG", colorHex: "#cfe3e6", priceCents: 10990 },
+    category: "organizacao",
+    images: [
+      { url: "/produtos/kit_3_ganchos_adesivos_para_parede_tolhas_cabide_m/main_images/5.jpg", alt: "Ganchos adesivos no quarto, com jaqueta e bolsa pendurada" },
+      { url: "/produtos/kit_3_ganchos_adesivos_para_parede_tolhas_cabide_m/main_images/6.jpg", alt: "Ganchos adesivos no banheiro e na cozinha, com toalhas" },
+      { url: "/produtos/kit_3_ganchos_adesivos_para_parede_tolhas_cabide_m/main_images/7.jpg", alt: "Ganchos adesivos na entrada, com boné e bolsa" },
     ],
+    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 1990 }],
   },
   {
-    slug: "luminaria-cobogo",
-    name: "Luminária Cobogó",
+    slug: "kit-saboneteira-parede-2-ganchos",
+    name: "Kit Saboneteira de Parede com 2 Ganchos",
     description:
-      "Luminária de mesa vazada inspirada nos cobogós das varandas. Acompanha soquete E27 e cabo com interruptor; a lâmpada LED não está inclusa.",
-    dimensions: "12 × 12 × 26 cm",
-    productionDays: 7,
-    readyToShip: false,
-    draw: draws.luminaria,
-    variants: [
-      { key: "pla-branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 18990 },
-      { key: "pla-ocre", name: "Ocre", material: "PLA", colorHex: "#d89a2b", priceCents: 19990 },
-    ],
-  },
-  {
-    slug: "cachepo-geometrico",
-    name: "Cachepô Geométrico",
-    description:
-      "Cachepô facetado para vasos de até 12 cm. Tem furo de drenagem e pratinho encaixado, então pode ir direto na estante.",
-    dimensions: "14 × 14 × 13 cm",
-    productionDays: 4,
+      "Saboneteira com dreno para a água não empoçar, mais dois ganchos de apoio ao lado. Fixação adesiva, sem parafuso.",
+    dimensions: "16 × 9 × 6 cm",
+    productionDays: 2,
     readyToShip: true,
-    draw: draws.cachepo,
-    variants: [
-      { key: "pla-terracota", name: "Terracota", material: "PLA", colorHex: "#b8613f", priceCents: 6990 },
-      { key: "pla-grafite", name: "Grafite", material: "PLA", colorHex: "#3d4240", priceCents: 6990 },
-      { key: "silk-cobre", name: "Cobre acetinado", material: "PLA Silk", colorHex: "#b87333", priceCents: 8490 },
+    category: "organizacao",
+    images: [
+      { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/8.jpg", alt: "Kit saboneteira de parede com 2 ganchos" },
+      { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg", alt: "Ganchos e saboneteira de parede instalados no banheiro" },
+      { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/5.jpg", alt: "Detalhe da saboneteira de parede com água escoando" },
     ],
+    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 2790 }],
   },
   {
-    slug: "porta-incenso-folha",
-    name: "Porta-incenso Folha",
+    slug: "kit-porta-copos-cafe",
+    name: "Kit Suporte Porta-copos Descartáveis",
     description:
-      "Folha rasinha que segura a vareta e apara as cinzas. Pequena o bastante para o criado-mudo, bonita o bastante para ficar à vista.",
-    dimensions: "18 × 7 × 2 cm",
-    productionDays: 3,
+      "Organizador de copos descartáveis para o cantinho do café ou da água. Mantém a bancada livre e os copos sempre à mão.",
+    dimensions: "9 × 9 × 23 cm",
+    productionDays: 2,
     readyToShip: true,
-    draw: draws.incenso,
+    category: "organizacao",
+    images: [
+      { url: "/produtos/kit_suporte_porta_copos_descartaveis_para_cantinho/main_images/cinza.jpg", alt: "Suporte porta-copos descartáveis no cantinho do café" },
+    ],
     variants: [
-      { key: "pla-verde", name: "Verde-folha", material: "PLA", colorHex: "#5f8f5a", priceCents: 3490 },
-      { key: "pla-preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 3490 },
+      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 2990 },
+      { key: "cinza", name: "Cinza", material: "Plástico", colorHex: "#8c8c87", priceCents: 2990 },
+      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 2990 },
     ],
   },
   {
-    slug: "organizador-colmeia",
-    name: "Organizador Colmeia",
-    description:
-      "Três alvéolos hexagonais para canetas, pincéis e tesoura. Dá para encaixar mais de um e montar a sua própria colmeia na mesa.",
-    dimensions: "16 × 13 × 10 cm",
-    productionDays: 6,
-    readyToShip: false,
-    draw: draws.colmeia,
+    slug: "letreiro-feliz-natal",
+    name: "Letreiro Feliz Natal Decorativo",
+    description: "Letreiro \"Feliz Natal\" com floco de neve, pronto para a mesa, a estante ou o centro da sala nessa época do ano.",
+    dimensions: "32 × 9 × 2 cm",
+    productionDays: 2,
+    readyToShip: true,
+    category: "decoracao-sazonal",
+    images: [
+      { url: "/produtos/letreiro_feliz_natal_vermelho_decorativo_para_mesa/main_images/dourado.jpg", alt: "Letreiro Feliz Natal nas 4 cores disponíveis" },
+      { url: "/produtos/letreiro_feliz_natal_vermelho_decorativo_para_mesa/main_images/6.jpg", alt: "Letreiro Feliz Natal branco sobre a mesa" },
+      { url: "/produtos/letreiro_feliz_natal_vermelho_decorativo_para_mesa/main_images/vermelho.jpg", alt: "Letreiro Feliz Natal vermelho junto à árvore" },
+    ],
     variants: [
-      { key: "pla-branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 7990 },
-      { key: "petg-petroleo", name: "Azul-petróleo", material: "PETG", colorHex: "#1f4e5a", priceCents: 9490 },
+      { key: "branco", name: "Branco", material: "MDF", colorHex: "#f2f1ec", priceCents: 3990 },
+      { key: "dourado", name: "Dourado", material: "MDF", colorHex: "#c6a469", priceCents: 3990 },
+      { key: "verde", name: "Verde", material: "MDF", colorHex: "#3f6b4a", priceCents: 3990 },
+      { key: "vermelho", name: "Vermelho", material: "MDF", colorHex: "#b3261e", priceCents: 3990 },
     ],
   },
   {
-    slug: "prateleira-nuvem",
-    name: "Prateleira Nuvem",
+    slug: "saboneteira-autodrenagem",
+    name: "Saboneteira Minimalista com Autodrenagem",
+    description: "Saboneteira com autodrenagem: a água escoa sozinha e o sabonete fica seco por mais tempo. Pia sempre organizada.",
+    dimensions: "13 × 9 × 3 cm",
+    productionDays: 2,
+    readyToShip: true,
+    category: "organizacao",
+    images: [
+      { url: "/produtos/saboneteira_minimalista_com_autodrenagem_para_pia_/main_images/7.jpg", alt: "Saboneteira minimalista na pia do banheiro" },
+      { url: "/produtos/saboneteira_minimalista_com_autodrenagem_para_pia_/main_images/branco.jpg", alt: "Saboneteira minimalista ao lado da torneira" },
+      { url: "/produtos/saboneteira_minimalista_com_autodrenagem_para_pia_/main_images/8.jpg", alt: "Mão segurando o sabonete sobre a saboneteira" },
+    ],
+    variants: [{ key: "branco", name: "Branco", material: "Silicone", colorHex: "#f2f1ec", priceCents: 2290 }],
+  },
+  {
+    slug: "suporte-lavadora-alta-pressao",
+    name: "Suporte de Parede para Lavadora de Alta Pressão",
     description:
-      "Prateleira de parede em forma de nuvem, para plantinhas e miniaturas. Vai com buchas e parafusos; aguenta até 2 kg.",
-    dimensions: "30 × 10 × 14 cm",
-    productionDays: 8,
-    readyToShip: false,
-    draw: draws.nuvem,
+      "Suporte de parede para guardar a lavadora de alta pressão (compatível com Electrolux, WAP e Vonder) fora do chão da área de serviço.",
+    dimensions: "22 × 16 × 11 cm",
+    productionDays: 2,
+    readyToShip: true,
+    category: "organizacao",
+    images: [
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/6.jpg", alt: "Lavadora de alta pressão pendurada no suporte de parede" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/5.jpg", alt: "Medidas do suporte de parede para lavadora" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/7.jpg", alt: "Lavadora de alta pressão guardada perto da máquina de lavar" },
+    ],
+    variants: [{ key: "unico", name: "Padrão", material: "Aço e plástico", colorHex: "#4a4a48", priceCents: 4990 }],
+  },
+  {
+    slug: "suporte-saboneteira-autoadesiva",
+    name: "Suporte Saboneteira de Parede Autoadesiva",
+    description: "Suporte com dreno para porta-sabão, direto na parede do banheiro, cozinha ou lavanderia. Fixação adesiva, sem parafuso.",
+    dimensions: "11 × 8 × 5 cm",
+    productionDays: 2,
+    readyToShip: true,
+    category: "organizacao",
+    images: [
+      { url: "/produtos/suporte_saboneteira_parede_autoadesiva_porta_sabao/main_images/5.jpg", alt: "Suporte saboneteira instalado no box do chuveiro" },
+      { url: "/produtos/suporte_saboneteira_parede_autoadesiva_porta_sabao/main_images/6.jpg", alt: "Suporte saboneteira na parede do banheiro" },
+      { url: "/produtos/suporte_saboneteira_parede_autoadesiva_porta_sabao/main_images/preto.jpg", alt: "Suporte saboneteira preto ao lado da pia" },
+    ],
     variants: [
-      { key: "pla-branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 11990 },
-      { key: "pla-rosa", name: "Rosa", material: "PLA", colorHex: "#e8a5a5", priceCents: 11990 },
-      { key: "pla-madeira", name: "Madeira", material: "PLA Wood", colorHex: "#a9784f", priceCents: 13990 },
+      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 1790 },
+      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 1790 },
     ],
   },
 ];
 
 async function main() {
-  const outDir = join(process.cwd(), "public", "produtos");
-  mkdirSync(outDir, { recursive: true });
+  // remove o catálogo fictício anterior (produtos e categorias que não existem mais na lista acima)
+  await prisma.product.deleteMany({ where: { slug: { notIn: products.map((p) => p.slug) } } });
+  await prisma.category.deleteMany({ where: { slug: { notIn: categories.map((c) => c.slug) } } });
+
+  const categoryIds = new Map<string, string>();
+  for (const [index, c] of categories.entries()) {
+    const category = await prisma.category.upsert({
+      where: { slug: c.slug },
+      update: { name: c.name, position: index },
+      create: { ...c, position: index },
+    });
+    categoryIds.set(c.slug, category.id);
+  }
 
   for (const [index, p] of products.entries()) {
-    const color = p.variants[0].colorHex;
-    const files = [
-      { file: `${p.slug}-1.svg`, svg: viewFront(p, color), alt: `${p.name}, vista frontal` },
-      { file: `${p.slug}-2.svg`, svg: viewRoom(p, color), alt: `${p.name} em ambiente` },
-      { file: `${p.slug}-3.svg`, svg: viewDetail(p, color), alt: `${p.name}, detalhe das camadas` },
-    ];
-    for (const f of files) writeFileSync(join(outDir, f.file), f.svg, "utf8");
-
     const data = {
       name: p.name,
       description: p.description,
@@ -270,6 +171,7 @@ async function main() {
       productionDays: p.productionDays,
       readyToShip: p.readyToShip,
       position: index,
+      categoryId: categoryIds.get(p.category),
     };
     const product = await prisma.product.upsert({
       where: { slug: p.slug },
@@ -279,7 +181,7 @@ async function main() {
 
     await prisma.productImage.deleteMany({ where: { productId: product.id } });
     await prisma.productImage.createMany({
-      data: files.map((f, i) => ({ productId: product.id, url: `/produtos/${f.file}`, alt: f.alt, position: i })),
+      data: p.images.map((img, i) => ({ productId: product.id, url: img.url, alt: img.alt, position: i })),
     });
 
     // IDs determinísticos: carrinhos salvos no navegador continuam válidos após novo seed
@@ -295,7 +197,7 @@ async function main() {
   }
 
   const count = await prisma.product.count();
-  console.log(`Seed concluído: ${count} produtos, imagens em public/produtos.`);
+  console.log(`Seed concluído: ${count} produtos.`);
 }
 
 main()

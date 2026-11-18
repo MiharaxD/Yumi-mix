@@ -20,13 +20,13 @@ export function AdminNav({ unread }: { unread: number }) {
             key={l.href}
             href={l.href}
             aria-current={active ? "page" : undefined}
-            className={`inline-flex items-center gap-2 px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition-colors ${
-              active ? "bg-nevoa text-tinta" : "text-papel hover:bg-tinta-suave"
+            className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition-colors ${
+              active ? "bg-nevoa text-tinta" : "text-papel hover:bg-branco/10"
             }`}
           >
             {l.label}
             {l.href === "/admin/notificacoes" && unread > 0 && (
-              <span className="grid min-w-5 place-items-center bg-branco px-1 text-xs leading-5 text-tinta">{unread}</span>
+              <span className="grid min-w-5 place-items-center rounded-full bg-dourado px-1.5 text-xs leading-5 text-tinta">{unread}</span>
             )}
           </Link>
         );

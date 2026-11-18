@@ -22,7 +22,7 @@ Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · Reac
 - Fora de escopo (não adicionar sem pedido): SDK de pagamento real, email/Telegram, login de cliente, cupons, avaliações, dark mode, i18n.
 - Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest. Qualquer outra: perguntar antes.
 - Segredos em `.env.local` (admin) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
-- Visual: seguir `DESIGN.md` (mundo "A Galeria": preto e branco, linhas de 1px, cantos retos). Produto/público em `PRODUCT.md`.
+- Visual: seguir `DESIGN.md` (loja clara e arredondada: cartões brancos com sombra macia, botões em pílula, sem linhas divisórias, dourado só em detalhes). Produto/público em `PRODUCT.md`.
 
 ## Estilo
 - Interface e mensagens de erro em pt-BR, tratando por "você"; código e identificadores em inglês, comentários em pt-BR curtos.

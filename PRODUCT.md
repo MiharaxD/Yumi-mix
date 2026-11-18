@@ -8,20 +8,20 @@ web
 
 ## Stack
 
-Definido no briefing: Next.js (App Router) + TypeScript + Tailwind, SQLite via Prisma, uploads em disco local (`./uploads`). Dependências limitadas a next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest.
+Definido no briefing: Next.js (App Router) + TypeScript + Tailwind, Postgres hospedado (Neon) via Prisma, uploads em disco local (`./uploads`), deploy de teste na Vercel. Dependências limitadas a next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest.
 
 ## Users
 
-- **Cliente final** (Brasil, quase sempre no celular): compra peças de decoração e casa impressas em 3D para si ou para presentear; também pede peças sob medida mandando foto e descrição.
-- **Dona/dono da loja** (admin): acompanha pedidos pagos, move o status da produção, orça pedidos personalizados.
+- **Cliente final** (Brasil, quase sempre no celular): compra peças de decoração e organização para a casa, todas em pronta entrega; também pede peças sob medida mandando foto e descrição.
+- **Dona/dono da loja** (admin): acompanha pedidos pagos, move o status do envio, orça pedidos personalizados.
 
 ## Product Purpose
 
-Yumi Mix é uma loja online autoral de impressão 3D. Esta etapa é uma versão de TESTE 100% local que valida o fluxo completo — catálogo → carrinho → checkout → pagamento simulado → admin — e o fluxo de pedido personalizado, sem nenhuma conta ou serviço externo. Sucesso = o fluxo inteiro roda localmente sem editar código.
+Yumi Mix é uma loja online de decoração e organização para casa (catálogo de revenda, não mais peças autorais impressas em 3D). Esta etapa é uma versão de TESTE que valida o fluxo completo — catálogo → carrinho → checkout → pagamento simulado → admin — e o fluxo de pedido personalizado. O único serviço externo é o banco Postgres (Neon), compartilhado entre dev e produção; pagamento continua simulado. Sucesso = o fluxo inteiro roda sem editar código.
 
 ## Positioning
 
-Ateliê pequeno de impressão 3D: peças de decoração produzidas sob encomenda (com prazo de produção explícito) ou à pronta entrega, além de pedidos sob medida a partir de foto + texto.
+Loja pequena de decoração e organização: peças em pronta entrega, organizadas por categoria (Organização, Decoração sazonal), além de pedidos sob medida a partir de foto + texto. Catálogo comprado de fornecedor — o site não menciona impressão 3D, "feito à mão" ou produção própria em nenhum lugar, nem no pedido personalizado.
 
 ## Operating Context
 
@@ -33,7 +33,8 @@ Ateliê pequeno de impressão 3D: peças de decoração produzidas sob encomenda
 
 ## Capabilities and Constraints
 
-- Produtos mostrados só com fotos (sem visualizador 3D). Imagens do seed são SVGs placeholder.
+- Produtos mostrados só com fotos. Imagens do seed vêm de `public/produtos/` (material de fornecedor), filtradas para excluir banners com texto de marketing.
+- O site não menciona "impressão 3D", "feito à mão" ou processo de produção — nem no pedido personalizado.
 - Sem login de cliente, cupons, avaliações, dark mode, i18n.
 - Sem rede externa, SDK de pagamento, email ou mensageria nesta etapa.
 - Admin protegido por senha única (`ADMIN_PASSWORD`).
@@ -41,6 +42,7 @@ Ateliê pequeno de impressão 3D: peças de decoração produzidas sob encomenda
 ## Brand Commitments
 
 - Nome: **Yumi Mix**.
+- Visual: loja moderna clara e acolhedora, no padrão das boas lojas de produto (régua de capricho: Apple Store, Allbirds); cantos arredondados, nada de grade de linhas.
 - Voz: próxima e caprichosa — ateliê pequeno, feito por gente; trata por "você", mostra o processo. Português do Brasil, valores em BRL.
 
 ## Evidence on Hand

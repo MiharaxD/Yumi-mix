@@ -23,7 +23,7 @@ export default async function PagamentoPage(props: PageProps<"/pedido/[id]/pagam
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-10 pb-16 sm:px-6 sm:pt-14 sm:pb-24">
-      <h1 className="titulo mb-8 text-[2.75rem] leading-[0.95] sm:mb-10 sm:text-[4rem]">
+      <h1 className="titulo mb-8 text-[2.25rem] leading-[1.02] sm:mb-10 sm:text-[3.25rem]">
         {pending
           ? `Pagamento do pedido #${order.number}`
           : order.status === "cancelado"
@@ -31,7 +31,7 @@ export default async function PagamentoPage(props: PageProps<"/pedido/[id]/pagam
             : `Pedido #${order.number} pago`}
       </h1>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
         {pending && pix ? (
           <PaymentTabs
             orderId={order.id}
@@ -47,24 +47,24 @@ export default async function PagamentoPage(props: PageProps<"/pedido/[id]/pagam
             }}
           />
         ) : order.status === "cancelado" ? (
-          <div className="painel p-6 sm:p-8">
+          <div className="painel p-7 sm:p-9">
             <p className="text-lg font-semibold">Este pedido foi cancelado e não aceita pagamento.</p>
             <Link href="/" className="mt-4 inline-flex items-center gap-2 font-semibold underline">
               Voltar para a vitrine <IconeSeta className="size-4" />
             </Link>
           </div>
         ) : (
-          <div className="painel p-6 sm:p-8">
-              <span className="grid size-14 place-items-center bg-tinta text-branco">
-                <IconeCheck className="size-8" />
+          <div className="painel p-7 sm:p-9">
+              <span className="grid size-14 place-items-center rounded-full bg-tinta text-branco">
+                <IconeCheck className="check-desenha size-7" />
               </span>
-              <p className="titulo mt-5 text-[2rem] leading-none">Recebemos seu pagamento.</p>
+              <p className="titulo mt-5 text-[1.75rem] leading-tight">Recebemos seu pagamento.</p>
               <p className="mt-2 max-w-prose text-tinta-suave">
-                O pedido #{order.number} já está na fila do ateliê. Em até {diasUteis(order.leadTimeDays)} fica tudo
+                O pedido #{order.number} já está com a gente. Em até {diasUteis(order.leadTimeDays)} fica tudo
                 pronto e chamamos você no WhatsApp para combinar{" "}
                 {order.deliveryMethod === "retirada" ? "a retirada" : "a entrega"}.
               </p>
-              <p className="mt-4 inline-flex bg-tinta px-3 py-1 text-sm font-semibold text-branco">
+              <p className="mt-4 inline-flex rounded-full bg-dourado-claro px-3.5 py-1.5 text-sm font-semibold">
                 Status: {statusLabel}
               </p>
               <div className="mt-6">
@@ -75,9 +75,9 @@ export default async function PagamentoPage(props: PageProps<"/pedido/[id]/pagam
           </div>
         )}
 
-        <aside className="bg-branco p-5 border border-tinta sm:p-6" aria-label="Resumo do pedido">
+        <aside className="painel p-5 sm:p-7" aria-label="Resumo do pedido">
           <h2 className="text-lg font-bold">Resumo</h2>
-          <ul className="mt-3 flex flex-col gap-2 border-b border-tinta/15 pb-4 text-sm">
+          <ul className="mt-3 flex flex-col gap-2.5 pb-2 text-sm">
             {order.items.map((it) => (
               <li key={it.id} className="flex justify-between gap-3">
                 <span>
@@ -93,8 +93,10 @@ export default async function PagamentoPage(props: PageProps<"/pedido/[id]/pagam
             <dd className="text-right">{formatBRL(order.subtotalCents)}</dd>
             <dt>{order.deliveryMethod === "entrega" ? "Entrega" : "Retirada"}</dt>
             <dd className="text-right">{order.shippingCents === 0 ? "Grátis" : formatBRL(order.shippingCents)}</dd>
-            <dt className="border-t border-tinta/15 pt-3 text-base font-bold">Total</dt>
-            <dd className="border-t border-tinta/15 pt-3 titulo text-right text-[1.75rem] leading-none">{formatBRL(order.totalCents)}</dd>
+            <div className="col-span-2 mt-2 flex items-center justify-between gap-4 rounded-2xl bg-papel px-4 py-3.5">
+              <dt className="text-base font-bold">Total</dt>
+              <dd className="titulo text-[1.75rem] leading-none">{formatBRL(order.totalCents)}</dd>
+            </div>
           </dl>
           <p className="mt-4 text-sm text-tinta-suave">
             {order.customerName} · {order.email}

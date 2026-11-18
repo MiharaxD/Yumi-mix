@@ -1,11 +1,11 @@
-// Ícones da Yumi Mix: traço fino (1.5), pontas retas, como as linhas da grade.
+// Ícones da Yumi Mix: traço 1.75 com pontas e cantos arredondados.
 type P = { className?: string };
 const base = {
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 1.5,
-  strokeLinecap: "square" as const,
-  strokeLinejoin: "miter" as const,
+  strokeWidth: 1.75,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
   "aria-hidden": true,
 };
 
@@ -83,21 +83,29 @@ export function IconeUpload({ className = "size-6" }: P) {
   );
 }
 
-/** Marca: moldura quadrada atravessada por camadas diagonais (impressão camada por camada). */
-export function Marca({ className = "size-7" }: P) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
-      <rect x="0.75" y="0.75" width="30.5" height="30.5" />
-      <path d="M0.75 9.5 9.5 0.75M0.75 18.5 18.5 0.75M0.75 27.5 27.5 0.75M4.5 31.25 31.25 4.5M13.5 31.25 31.25 13.5M22.5 31.25 31.25 22.5" />
-    </svg>
-  );
-}
-
 export function IconeBusca({ className = "size-5" }: P) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <circle cx="11" cy="11" r="6.5" />
       <path d="m16 16 4 4" />
+    </svg>
+  );
+}
+
+export function IconeCaminhao({ className = "size-5" }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M3 6.5h10.5v9.5H3zM13.5 10h4l3 3v3h-7" />
+      <circle cx="7" cy="17.5" r="1.75" />
+      <circle cx="17" cy="17.5" r="1.75" />
+    </svg>
+  );
+}
+
+export function IconeLoja({ className = "size-5" }: P) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M4 9.5 5.5 4.5h13L20 9.5M4 9.5h16M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M5.5 12v7.5h13V12M10 19.5V15h4v4.5" />
     </svg>
   );
 }

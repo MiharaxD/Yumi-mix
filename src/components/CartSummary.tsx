@@ -25,8 +25,10 @@ export function CartTotals({
       <dd className="text-right font-semibold">
         {shippingCents === null ? "—" : shippingCents === 0 ? "Grátis" : formatBRL(shippingCents)}
       </dd>
-      <dt className="border-t border-tinta pt-3 text-base font-bold">Total</dt>
-      <dd className="border-t border-tinta pt-3 titulo text-right text-[1.75rem] leading-none">{formatBRL(totalCents)}</dd>
+      <div className="col-span-2 mt-2 flex items-center justify-between gap-4 rounded-2xl bg-papel px-4 py-3.5">
+        <dt className="text-base font-bold">Total</dt>
+        <dd className="titulo text-[1.75rem] leading-none">{formatBRL(totalCents)}</dd>
+      </div>
       <dt className="col-span-2 mt-1 text-tinta-suave">
         Fica tudo pronto em até <strong className="text-tinta">{diasUteis(leadTimeDays)}</strong>; enviamos as peças
         juntas.
