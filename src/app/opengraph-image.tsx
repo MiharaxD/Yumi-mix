@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/og";
-import { OG_CORES as C, OG_SIZE, publicDataUri } from "@/lib/og";
+import { OG_CORES as C, OG_SIZE, comoJpeg, publicDataUri } from "@/lib/og";
 
 export const alt = "Yumi Mix — decoração e organização para a sua casa";
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = "image/jpeg";
 
 // cartão de preview do site (vale para todas as páginas sem preview próprio)
 export default async function Image() {
@@ -12,7 +12,8 @@ export default async function Image() {
     publicDataUri("/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg"),
   ]);
 
-  return new ImageResponse(
+  return comoJpeg(
+    new ImageResponse(
     (
       <div style={{ display: "flex", width: "100%", height: "100%", background: C.papel, padding: 40, gap: 40 }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1, padding: "28px 8px 28px 28px" }}>
@@ -40,5 +41,6 @@ export default async function Image() {
       </div>
     ),
     size,
+    ),
   );
 }

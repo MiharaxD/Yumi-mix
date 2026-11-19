@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
 import { getProductBySlug } from "@/lib/catalog";
 import { formatBRL } from "@/lib/money";
-import { OG_CORES as C, OG_SIZE, publicDataUri } from "@/lib/og";
+import { OG_CORES as C, OG_SIZE, comoJpeg, publicDataUri } from "@/lib/og";
 
 export const alt = "Peça da loja Yumi Mix";
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = "image/jpeg";
 
 // preview do link de uma peça: foto + nome + preço
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
@@ -17,7 +17,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const preco = product?.variants.length ? Math.min(...product.variants.map((v) => v.priceCents)) : null;
   const nome = product?.name ?? "Yumi Mix";
 
-  return new ImageResponse(
+  return comoJpeg(
+    new ImageResponse(
     (
       <div style={{ display: "flex", width: "100%", height: "100%", background: C.papel, padding: 40, gap: 44 }}>
         <div style={{ display: "flex", width: 550, height: 550, borderRadius: 36, overflow: "hidden", background: C.branco, boxShadow: "0 18px 40px rgba(23,24,28,0.14)" }}>
@@ -47,5 +48,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
       </div>
     ),
     size,
+    ),
   );
 }

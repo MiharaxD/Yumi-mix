@@ -32,3 +32,13 @@ export function siteUrl(): URL | undefined {
     return undefined;
   }
 }
+
+/** Converte o PNG do ImageResponse em JPEG leve: o WhatsApp ignora previews muito pesados (~600 KB). */
+export async function comoJpeg(png: Response): Promise<Response> {
+  // import dinâmico: o layout usa siteUrl e não precisa carregar o sharp
+  const { default: sharp } = await import("sharp");
+  const jpeg = await sharp(Buffer.from(await png.arrayBuffer())).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+  return new Response(new Uint8Array(jpeg), {
+    headers: { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=3600, s-maxage=86400" },
+  });
+}
