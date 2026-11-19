@@ -1,4 +1,6 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { createReadStream } from "node:fs";
+import { Readable } from "node:stream";
 import { randomUUID } from "node:crypto";
 import { join, normalize, sep } from "node:path";
 import { CUSTOM_MAX_IMAGE_BYTES } from "@/config";
@@ -74,4 +76,83 @@ export async function readUpload(relativePath: string): Promise<Buffer | null> {
   } catch {
     return null;
   }
+}
+
+/** Vídeo: MP4/MOV (caixa "ftyp") ou WEBM (EBML). */
+export function detectVideoType(bytes: Uint8Array): { mime: string; ext: string } | null {
+  const ascii = (from: number, to: number) => String.fromCharCode(...bytes.slice(from, to));
+  if (bytes.length >= 12 && ascii(4, 8) === "ftyp") {
+    return ascii(8, 10) === "qt" ? { mime: "video/quicktime", ext: "mov" } : { mime: "video/mp4", ext: "mp4" };
+  }
+  if (bytes.length >= 4 && bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3) {
+    return { mime: "video/webm", ext: "webm" };
+  }
+  return null;
+}
+
+/** .3mf é um ZIP: começa com "PK". */
+export function isZip(bytes: Uint8Array): boolean {
+  return bytes.length >= 4 && bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04;
+}
+
+/** Grava bytes em ./uploads/<pasta>/<uuid>.<ext> e devolve o caminho relativo. */
+export async function saveUpload(folder: string, ext: string, bytes: Uint8Array): Promise<string> {
+  const safeFolder = folder.replace(/[^a-zA-Z0-9_-]/g, "");
+  const safeExt = ext.replace(/[^a-z0-9]/g, "");
+  const dir = join(UPLOAD_ROOT, safeFolder);
+  await mkdir(dir, { recursive: true });
+  const fileName = `${randomUUID()}.${safeExt}`;
+  await writeFile(join(dir, fileName), bytes);
+  return `${safeFolder}/${fileName}`;
+}
+
+function resolveInside(relativePath: string): string | null {
+  const full = normalize(join(UPLOAD_ROOT, relativePath));
+  return full.startsWith(UPLOAD_ROOT + sep) ? full : null;
+}
+
+/** Apaga um upload (ignora se já não existe). */
+export async function deleteUpload(relativePath: string | null | undefined): Promise<void> {
+  if (!relativePath) return;
+  const full = resolveInside(relativePath);
+  if (full) await rm(full, { force: true });
+}
+
+/**
+ * Resposta HTTP em streaming para um upload, com suporte a Range
+ * (o Safari exige isso para tocar vídeo).
+ */
+export async function streamUpload(
+  relativePath: string,
+  request: Request,
+  headers: Record<string, string>,
+): Promise<Response> {
+  const full = resolveInside(relativePath);
+  if (!full) return new Response("Não encontrado.", { status: 404 });
+  let size: number;
+  try {
+    size = (await stat(full)).size;
+  } catch {
+    return new Response("Não encontrado.", { status: 404 });
+  }
+
+  const base = { ...headers, "Accept-Ranges": "bytes", "X-Content-Type-Options": "nosniff" };
+  const range = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get("range") ?? "");
+  if (range && (range[1] || range[2])) {
+    let start = range[1] ? Number(range[1]) : size - Number(range[2]);
+    let end = range[1] && range[2] ? Number(range[2]) : size - 1;
+    start = Math.max(0, start);
+    end = Math.min(size - 1, end);
+    if (start > end) {
+      return new Response(null, { status: 416, headers: { "Content-Range": `bytes */${size}` } });
+    }
+    const body = Readable.toWeb(createReadStream(full, { start, end })) as ReadableStream;
+    return new Response(body, {
+      status: 206,
+      headers: { ...base, "Content-Range": `bytes ${start}-${end}/${size}`, "Content-Length": String(end - start + 1) },
+    });
+  }
+
+  const body = Readable.toWeb(createReadStream(full)) as ReadableStream;
+  return new Response(body, { headers: { ...base, "Content-Length": String(size) } });
 }

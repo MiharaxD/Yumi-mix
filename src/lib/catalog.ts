@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 
 export async function listProducts() {
   return prisma.product.findMany({
+    where: { archived: false },
     orderBy: { position: "asc" },
     include: {
       images: { orderBy: { position: "asc" } },
@@ -13,7 +14,7 @@ export async function listProducts() {
 
 export async function getProductBySlug(slug: string) {
   return prisma.product.findUnique({
-    where: { slug },
+    where: { slug, archived: false },
     include: {
       images: { orderBy: { position: "asc" } },
       variants: { orderBy: { position: "asc" } },
@@ -26,6 +27,7 @@ export async function listCategories() {
     orderBy: { position: "asc" },
     include: {
       products: {
+        where: { archived: false },
         orderBy: { position: "asc" },
         include: { images: { orderBy: { position: "asc" } }, variants: { orderBy: { position: "asc" } } },
       },
@@ -38,6 +40,7 @@ export async function getCategoryBySlug(slug: string) {
     where: { slug },
     include: {
       products: {
+        where: { archived: false },
         orderBy: { position: "asc" },
         include: { images: { orderBy: { position: "asc" } }, variants: { orderBy: { position: "asc" } } },
       },

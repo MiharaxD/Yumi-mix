@@ -25,6 +25,8 @@ describe("status do pedido", () => {
   it("cancela antes do envio, nunca depois", () => {
     expect(canTransitionOrder("pendente", "cancelado")).toBe(true);
     expect(canTransitionOrder("pago", "cancelado")).toBe(true);
+    // peça pronta pode ir direto para enviado com o rastreio
+    expect(canTransitionOrder("pago", "enviado")).toBe(true);
     expect(canTransitionOrder("em_producao", "cancelado")).toBe(true);
     expect(canTransitionOrder("enviado", "cancelado")).toBe(false);
     expect(canTransitionOrder("entregue", "cancelado")).toBe(false);

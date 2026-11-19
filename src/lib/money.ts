@@ -13,3 +13,8 @@ export function parseBRLToCents(input: string): number | null {
   if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return null;
   return Math.round(Number(normalized) * 100);
 }
+
+/** Centavos para o valor de um campo de formulário: 3990 → "39,90". */
+export function centsToInput(cents: number): string {
+  return (cents / 100).toFixed(2).replace(".", ",");
+}

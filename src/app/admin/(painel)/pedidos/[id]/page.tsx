@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/db";
 import { formatBRL } from "@/lib/money";
 import { ORDER_STATUS_LABEL, nextOrderStatuses } from "@/lib/status";
 import { diasUteis } from "@/components/Prazo";
-import { IconeVoltar } from "@/components/Icones";
+import { IconeCubo, IconeDownload, IconeVoltar } from "@/components/Icones";
+import { bambuStudioLink, printFilePath } from "@/lib/print-files";
+import { trackingUrl } from "@/lib/email";
+import { TrackingForm } from "./TrackingForm";
 import { OrderStatusPill, formatDate } from "../../ui";
 import { OrderStatusForm } from "../../StatusForms";
 
@@ -17,10 +21,37 @@ function formatPhone(d: string) {
 
 export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[id]">) {
   const { id } = await props.params;
-  const order = await prisma.order.findUnique({ where: { id }, include: { items: true } });
+  const order = await prisma.order.findUnique({
+    where: { id },
+    include: { items: { include: { variant: { select: { productId: true } } } } },
+  });
   if (!order) notFound();
 
-  const options = nextOrderStatuses(order.status).map((s) => ({ value: s, label: ORDER_STATUS_LABEL[s] }));
+  // "enviado" só pelo formulário de rastreio
+  const options = nextOrderStatuses(order.status)
+    .filter((s) => s !== "enviado")
+    .map((s) => ({ value: s, label: ORDER_STATUS_LABEL[s] }));
+  const canShip = nextOrderStatuses(order.status).includes("enviado");
+
+  // arquivo 3D de cada item (pelo produto gravado no item ou pela variante)
+  const productIds = [
+    ...new Set(order.items.map((it) => it.productId ?? it.variant?.productId).filter((x): x is string => Boolean(x))),
+  ];
+  const products = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+    select: { id: true, printFileName: true, printFilePath: true },
+  });
+  const h = await headers();
+  const origin = `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
+  const printLinks = new Map(
+    products
+      .filter((p) => p.printFilePath && p.printFileName)
+      .map((p) => {
+        const path = printFilePath(p.id, p.printFileName!);
+        return [p.id, { download: path, bambu: bambuStudioLink(`${origin}${path}`) }] as const;
+      }),
+  );
+  const fmtSent = order.trackingEmailSentAt ? formatDate(order.trackingEmailSentAt) : null;
 
   return (
     <>
@@ -41,30 +72,81 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
             <OrderStatusForm orderId={order.id} options={options} />
           </section>
 
-          <section className="painel p-5 sm:p-6" aria-labelledby="t-itens">
-            <h2 id="t-itens" className="mb-3 font-bold">
-              Itens
+          <section className="painel p-5 sm:p-6" aria-labelledby="t-envio">
+            <h2 id="t-envio" className="mb-3 font-bold">
+              Envio e rastreio
             </h2>
-            <ul className="divide-y divide-linha text-sm">
-              {order.items.map((it) => (
-                <li key={it.id} className="flex justify-between gap-4 py-2.5">
-                  <span>
-                    <span className="font-semibold">
-                      {it.quantity} × {it.productName}
-                    </span>
-                    <span className="block text-tinta-suave">
-                      {it.variantName} · {formatBRL(it.unitPriceCents)} cada
-                    </span>
-                  </span>
-                  <span className="font-semibold">{formatBRL(it.unitPriceCents * it.quantity)}</span>
-                </li>
-              ))}
+            <TrackingForm
+              orderId={order.id}
+              current={order.trackingCode ?? ""}
+              emailSentAt={fmtSent}
+              shipped={order.status === "enviado" || order.status === "entregue"}
+              canShip={canShip}
+              trackingHref={order.trackingCode ? trackingUrl(order.trackingCode) : null}
+            />
+          </section>
+
+          <section className="painel p-5 sm:p-6" aria-labelledby="t-itens">
+            <h2 id="t-itens" className="mb-1 font-bold">
+              Itens para imprimir
+            </h2>
+            <p className="mb-3 text-sm text-tinta-suave">
+              &quot;Abrir no Bambu Studio&quot; baixa o .3mf direto no programa. Se o navegador perguntar, permita abrir o
+              Bambu Studio.
+            </p>
+            <ul className="flex flex-col gap-3 text-sm">
+              {order.items.map((it) => {
+                const pid = it.productId ?? it.variant?.productId ?? "";
+                const link = printLinks.get(pid);
+                return (
+                  <li key={it.id} className="rounded-foto bg-papel p-4">
+                    <div className="flex justify-between gap-4">
+                      <span>
+                        <span className="font-semibold">
+                          {it.quantity} × {it.productName}
+                        </span>
+                        <span className="block text-tinta-suave">
+                          {it.variantName} · {formatBRL(it.unitPriceCents)} cada
+                        </span>
+                      </span>
+                      <span className="font-semibold">{formatBRL(it.unitPriceCents * it.quantity)}</span>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {link ? (
+                        <>
+                          <a href={link.bambu} className="botao-principal px-4 py-2.5 text-sm">
+                            <IconeCubo className="size-4" /> Abrir no Bambu Studio
+                          </a>
+                          <a href={link.download} className="botao-contorno px-4 py-2.5 text-sm">
+                            <IconeDownload className="size-4" /> Baixar .3mf
+                          </a>
+                        </>
+                      ) : (
+                        <span className="text-tinta-suave">
+                          Sem arquivo 3D.{" "}
+                          {pid && (
+                            <Link href={`/admin/produtos/${pid}`} className="font-semibold text-tinta underline">
+                              Adicionar no produto
+                            </Link>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
             <dl className="mt-3 grid grid-cols-[1fr_auto] gap-y-1.5 border-t border-linha pt-3 text-sm">
               <dt>Subtotal</dt>
               <dd className="text-right">{formatBRL(order.subtotalCents)}</dd>
-              <dt>{order.deliveryMethod === "entrega" ? "Entrega" : "Retirada"}</dt>
+              <dt>Frete cobrado{order.shippingServiceName ? ` (${order.shippingServiceName})` : ""}</dt>
               <dd className="text-right">{order.shippingCents === 0 ? "Grátis" : formatBRL(order.shippingCents)}</dd>
+              {order.shippingRealCents !== null && (
+                <>
+                  <dt className="text-tinta-suave">Frete real cotado</dt>
+                  <dd className="text-right text-tinta-suave">{formatBRL(order.shippingRealCents)}</dd>
+                </>
+              )}
               <dt className="font-bold">Total</dt>
               <dd className="text-right font-bold">{formatBRL(order.totalCents)}</dd>
             </dl>
@@ -82,10 +164,17 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
                 {order.email}
               </a>
             </p>
-            <p className="mt-1">WhatsApp {formatPhone(order.whatsapp)}</p>
+            <p className="mt-1">Telefone {formatPhone(order.whatsapp)}</p>
             <p className="mt-3 text-tinta-suave">
               {order.street}, {order.streetNumber}
+              {order.complement && ` · ${order.complement}`}
               <br />
+              {order.neighborhood && (
+                <>
+                  {order.neighborhood}
+                  <br />
+                </>
+              )}
               {order.city}/{order.uf} · CEP {order.cep.slice(0, 5)}-{order.cep.slice(5)}
             </p>
           </section>
@@ -101,7 +190,13 @@ export default async function AdminPedidoPage(props: PageProps<"/admin/pedidos/[
               <dt className="text-tinta-suave">Prazo</dt>
               <dd>{diasUteis(order.leadTimeDays)}</dd>
               <dt className="text-tinta-suave">Recebimento</dt>
-              <dd>{order.deliveryMethod === "entrega" ? "Entrega" : "Retirada no ateliê"}</dd>
+              <dd>
+                {order.deliveryMethod === "retirada"
+                  ? "Retirada no ateliê"
+                  : `${order.shippingServiceName ?? "Entrega"}${order.shippingDays ? ` · ${diasUteis(order.shippingDays)}` : ""}`}
+              </dd>
+              <dt className="text-tinta-suave">Enviado</dt>
+              <dd>{order.shippedAt ? formatDate(order.shippedAt) : "—"}</dd>
             </dl>
           </section>
         </aside>

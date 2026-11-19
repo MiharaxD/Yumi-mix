@@ -1,15 +1,17 @@
 import Link from "next/link";
-import { STORE_NAME, SOCIAL_LINKS, FREE_SHIPPING_THRESHOLD_CENTS } from "@/config";
+import { STORE_NAME, SOCIAL_LINKS } from "@/config";
 import { CartLink } from "@/components/CartLink";
 import { CategoryNav } from "@/components/CategoryNav";
 import { LogoYumiMix } from "@/components/Logo";
 import { listCategories } from "@/lib/catalog";
 import { formatBRL } from "@/lib/money";
+import { getStoreSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
 export default async function LojaLayout({ children }: LayoutProps<"/">) {
-  const categorias = await listCategories();
+  const [categorias, settings] = await Promise.all([listCategories(), getStoreSettings()]);
+  const freeAbove = settings.freeShippingThresholdCents;
 
   return (
     <>
@@ -25,11 +27,11 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
         <p className="mx-auto flex max-w-7xl items-center justify-center gap-x-3 px-4 py-2 text-center text-xs font-medium sm:px-6 sm:text-[0.8125rem]">
           <span>Pronta entrega</span>
           <span aria-hidden className="size-1 rounded-full bg-dourado" />
-          <span>Retirada grátis</span>
-          {FREE_SHIPPING_THRESHOLD_CENTS !== null && (
+          <span>Entrega para todo o Brasil</span>
+          {freeAbove !== null && (
             <>
               <span aria-hidden className="hidden size-1 rounded-full bg-dourado sm:block" />
-              <span className="hidden sm:inline">Entrega grátis acima de {formatBRL(FREE_SHIPPING_THRESHOLD_CENTS)}</span>
+              <span className="hidden sm:inline">Frete grátis acima de {formatBRL(freeAbove)}</span>
             </>
           )}
         </p>

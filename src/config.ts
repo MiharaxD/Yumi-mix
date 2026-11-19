@@ -2,11 +2,7 @@
 
 export const STORE_NAME = "Yumi Mix";
 
-/** Valor fixo da opção "Entrega". */
-export const SHIPPING_FEE_CENTS = 2000; // R$ 20,00
-
-/** Pedidos com subtotal a partir deste valor têm entrega grátis. `null` desliga. */
-export const FREE_SHIPPING_THRESHOLD_CENTS: number | null = 20000; // R$ 200,00
+// Frete: valores editáveis no admin (/admin/frete), tabela StoreSettings.
 
 /** Prazo (dias úteis) para peças marcadas como pronta entrega. */
 export const READY_TO_SHIP_DAYS = 1;
@@ -14,12 +10,18 @@ export const READY_TO_SHIP_DAYS = 1;
 /** Limite de unidades por item do carrinho. */
 export const MAX_QUANTITY_PER_ITEM = 20;
 
-/** Texto exibido para a retirada local. */
-export const PICKUP_NOTE = "Combinamos dia e horário pelo WhatsApp depois do pagamento.";
-
 /** Pedido personalizado: limites de upload. */
 export const CUSTOM_MAX_IMAGES = 4;
 export const CUSTOM_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+/** Admin de produtos: limites de upload. */
+export const PRODUCT_MAX_IMAGES = 12;
+export const PRODUCT_MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+export const PRODUCT_MAX_VIDEO_BYTES = 60 * 1024 * 1024;
+export const PRINT_FILE_MAX_BYTES = 200 * 1024 * 1024;
+
+/** Validade do link assinado que o Bambu Studio usa para baixar o .3mf. */
+export const PRINT_LINK_HOURS = 6;
 
 /** Numeração inicial visível dos pedidos (#1001…). */
 export const FIRST_ORDER_NUMBER = 1001;

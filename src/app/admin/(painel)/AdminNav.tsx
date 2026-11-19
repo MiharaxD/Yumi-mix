@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "/admin", label: "Pedidos", match: (p: string) => p === "/admin" || p.startsWith("/admin/pedidos") },
+  { href: "/admin/produtos", label: "Produtos", match: (p: string) => p.startsWith("/admin/produtos") },
+  { href: "/admin/frete", label: "Frete", match: (p: string) => p.startsWith("/admin/frete") },
   { href: "/admin/personalizados", label: "Sob medida", match: (p: string) => p.startsWith("/admin/personalizados") },
   { href: "/admin/notificacoes", label: "Avisos", match: (p: string) => p.startsWith("/admin/notificacoes") },
 ];

@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
-import type { CardCheckout, OrderForPayment, PaymentEvent, PaymentProvider, PixCharge } from "./provider";
+import type { OrderForPayment, PaymentEvent, PaymentProvider, PixCharge, WebhookResult } from "./provider";
 
 const webhookSchema = z.object({
   orderId: z.string().min(1).max(100),
@@ -45,19 +45,31 @@ export class FakeProvider implements PaymentProvider {
     };
   }
 
-  async createCardCheckout(): Promise<CardCheckout> {
-    return { method: "cartao", checkoutUrl: null };
+  /** Não há página hospedada na simulação: a própria loja mostra os botões de teste. */
+  async createCheckout(): Promise<{ url: string }> {
+    throw new Error("O provedor simulado não tem checkout hospedado.");
   }
 
-  async parseWebhook(request: Request): Promise<PaymentEvent | null> {
+  async getPaymentEvent(): Promise<PaymentEvent | null> {
+    return null;
+  }
+
+  async findApprovedPayment(): Promise<PaymentEvent | null> {
+    return null;
+  }
+
+  async parseWebhook(request: Request): Promise<WebhookResult> {
     const json = await request.json().catch(() => null);
     const parsed = webhookSchema.safeParse(json);
-    if (!parsed.success) return null;
+    if (!parsed.success) return { kind: "invalid" };
     return {
-      orderId: parsed.data.orderId,
-      outcome: parsed.data.outcome,
-      providerPaymentId: `fake_${Date.now()}`,
-      reason: parsed.data.outcome === "rejected" ? "Recusado pelo emissor (simulação)." : undefined,
+      kind: "event",
+      event: {
+        orderId: parsed.data.orderId,
+        outcome: parsed.data.outcome,
+        providerPaymentId: `fake_${Date.now()}`,
+        reason: parsed.data.outcome === "rejected" ? "Recusado pelo emissor (simulação)." : undefined,
+      },
     };
   }
 }

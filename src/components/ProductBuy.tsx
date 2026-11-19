@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FreteCep } from "@/components/FreteCep";
 import { useRef, useState } from "react";
 import { addToCart } from "@/lib/cart-store";
 import { ImagemPeca } from "@/components/ImagemPeca";
@@ -225,6 +226,8 @@ export function ProductBuy({
           </p>
         )}
       </div>
+
+      <FreteCep items={[{ variantId: variant.id, quantity }]} className="mt-2" />
     </div>
   );
 }

@@ -15,9 +15,17 @@ export const OG_CORES = {
 
 const TIPOS: Record<string, string> = { ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml" };
 
-/** Lê um arquivo de `public/` e devolve como data URI (o ImageResponse não busca URLs relativas). */
+/**
+ * Lê um arquivo de `public/` (ou uma foto enviada pelo admin, servida em /media/…)
+ * e devolve como data URI (o ImageResponse não busca URLs relativas).
+ */
 export async function publicDataUri(publicPath: string): Promise<string> {
-  const file = path.join(process.cwd(), "public", publicPath.replace(/^\/+/, ""));
+  const rel = publicPath.replace(/^\/+/, "");
+  const isMedia = rel.startsWith("media/");
+  // raiz fixa por chamada: evita que o build rastreie o projeto inteiro
+  const root = path.join(/* turbopackIgnore: true */ process.cwd(), isMedia ? "uploads" : "public");
+  const file = path.join(root, isMedia ? rel.slice("media/".length) : rel);
+  if (!file.startsWith(root + path.sep)) throw new Error("Caminho inválido.");
   const bytes = await readFile(file);
   const tipo = TIPOS[path.extname(file).toLowerCase()] ?? "application/octet-stream";
   return `data:${tipo};base64,${bytes.toString("base64")}`;

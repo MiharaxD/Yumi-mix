@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# Yumi Mix — loja de impressão 3D (versão de TESTE, deploy na Vercel)
+# Yumi Mix — loja de impressão 3D (versão de TESTE, deploy no Railway)
 
-Loja autoral de decoração impressa em 3D: catálogo → carrinho → checkout → pagamento **simulado** → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção; fora isso, nenhum serviço externo (pagamento continua simulado).
+Loja autoral de decoração impressa em 3D: catálogo → carrinho → checkout → pagamento via **Mercado Pago Checkout Pro** (ou simulado no dev sem credenciais) → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção; fora isso, só a API do Mercado Pago.
 Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · React 19.3 · TypeScript 5 · Tailwind 4.3 · Prisma **6.19** + Postgres (Neon) · zod 4 · vitest 5. Node 20.19+ (testado no 24).
 
 ## Comandos
@@ -15,13 +15,13 @@ Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · Reac
 
 ## Invariantes
 - Preço é SEMPRE recalculado no servidor a partir do banco (`src/lib/cart-server.ts`); o navegador só manda `variantId` + quantidade.
-- Pagamento só via interface `PaymentProvider`; aprovação idempotente (Notification com `key` única). Rota `/api/pagamentos/simular` só fora de produção.
-- Uploads em `./uploads` (fora de `public/`), servidos só por `/api/admin/uploads/[id]` com sessão de admin; tipo validado pelos bytes.
+- Pagamento só via interface `PaymentProvider`; aprovação idempotente (Notification com `key` única) e status sempre confirmado na API do MP. Rota `/api/pagamentos/simular` só fora de produção e sem MP.
+- Uploads em `./uploads` (fora de `public/`), tipo validado pelos bytes: sob medida só por `/api/admin/uploads/[id]` com sessão de admin; fotos/vídeo de produto por `/media/produtos/<uuid>`; `.3mf` nunca público, só pelo link assinado de `/api/arquivo-3d`.
 - Transições de status só pelas funções de `src/lib/status.ts`.
 - Dinheiro em centavos (Int). Endereço sempre obrigatório no checkout.
-- Fora de escopo (não adicionar sem pedido): SDK de pagamento real, email/Telegram, login de cliente, cupons, avaliações, dark mode, i18n.
-- Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest. Qualquer outra: perguntar antes.
-- Segredos em `.env.local` (admin) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
+- Fora de escopo (não adicionar sem pedido): avisos para a dona por email/Telegram (só existe o email de rastreio ao cliente, via Resend), login de cliente, cupons, avaliações, dark mode, i18n.
+- Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest, mercadopago, sharp (só para gerar o preview de link em JPEG). Qualquer outra: perguntar antes.
+- Segredos em `.env.local` (admin, `MP_*`, `APP_URL`) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
 - Visual: seguir `DESIGN.md` (loja clara e arredondada: cartões brancos com sombra macia, botões em pílula, sem linhas divisórias, dourado só em detalhes). Produto/público em `PRODUCT.md`.
 
 ## Estilo

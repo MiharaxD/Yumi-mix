@@ -11,20 +11,33 @@ datasource db {
 }
 
 model Product {
-  id             String         @id @default(cuid())
-  slug           String         @unique
-  name           String
-  description    String
-  dimensions     String
-  productionDays Int
-  readyToShip    Boolean        @default(false)
-  videoUrl       String?
-  position       Int            @default(0)
-  createdAt      DateTime       @default(now())
-  categoryId     String?
-  category       Category?      @relation(fields: [categoryId], references: [id])
-  images         ProductImage[]
-  variants       Variant[]
+  id                  String         @id @default(cuid())
+  slug                String         @unique
+  name                String
+  description         String
+  dimensions          String
+  productionDays      Int
+  readyToShip         Boolean        @default(false)
+  videoUrl            String?
+  position            Int            @default(0)
+  // arquivado: some da loja, continua no admin e nos pedidos antigos
+  archived            Boolean        @default(false)
+  // frete embutido no preço (por unidade): abatido do frete real
+  shippingCreditCents Int            @default(0)
+  // pacote para cotação no Melhor Envio
+  weightGrams         Int            @default(300)
+  boxHeightCm         Int            @default(10)
+  boxWidthCm          Int            @default(15)
+  boxLengthCm         Int            @default(20)
+  // arquivo da impressora (.3mf), só no admin; caminho relativo em ./uploads
+  printFilePath       String?
+  printFileName       String?
+  printFileBytes      Int?
+  createdAt           DateTime       @default(now())
+  categoryId          String?
+  category            Category?      @relation(fields: [categoryId], references: [id])
+  images              ProductImage[]
+  variants            Variant[]
 }
 
 model Category {
@@ -57,28 +70,39 @@ model Variant {
 }
 
 model Order {
-  id             String      @id @default(cuid())
-  number         Int         @unique
+  id                  String      @id @default(cuid())
+  number              Int         @unique
   // pendente | pago | em_producao | enviado | entregue | cancelado
-  status         String      @default("pendente")
-  customerName   String
-  email          String
-  whatsapp       String
-  cep            String
-  street         String
-  streetNumber   String
-  city           String
-  uf             String
-  // retirada | entrega
-  deliveryMethod String
-  subtotalCents  Int
-  shippingCents  Int
-  totalCents     Int
-  leadTimeDays   Int
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  paidAt         DateTime?
-  items          OrderItem[]
+  status              String      @default("pendente")
+  customerName        String
+  email               String
+  whatsapp            String
+  cep                 String
+  street              String
+  streetNumber        String
+  complement          String      @default("")
+  neighborhood        String      @default("")
+  city                String
+  uf                  String
+  // sempre "entrega" (retirada foi removida; coluna mantida para pedidos antigos)
+  deliveryMethod      String      @default("entrega")
+  subtotalCents       Int
+  // frete cobrado do cliente (já com o frete embutido abatido)
+  shippingCents       Int
+  // frete real cotado e serviço escolhido (interno)
+  shippingRealCents   Int?
+  shippingServiceId   String?
+  shippingServiceName String?
+  shippingDays        Int?
+  trackingCode        String?
+  shippedAt           DateTime?
+  trackingEmailSentAt DateTime?
+  totalCents          Int
+  leadTimeDays        Int
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  paidAt              DateTime?
+  items               OrderItem[]
 }
 
 model OrderItem {
@@ -87,6 +111,8 @@ model OrderItem {
   order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   variantId      String?
   variant        Variant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  // referência ao produto (sem FK), para achar o arquivo 3D mesmo se a variante sumir
+  productId      String?
   productName    String
   variantName    String
   unitPriceCents Int
@@ -128,4 +154,16 @@ model CustomRequestImage {
   filePath  String
   mimeType  String
   sizeBytes Int
+}
+
+// Configuração da loja: uma linha só (id = 1).
+model StoreSettings {
+  id                         Int    @id @default(1)
+  // CEP de onde saem os envios
+  originCep                  String @default("")
+  // frete grátis (opção mais barata) a partir deste subtotal; null desliga
+  freeShippingThresholdCents Int?   @default(20000)
+  // valor usado quando o Melhor Envio não está configurado ou falha
+  fallbackShippingCents      Int    @default(2000)
+  fallbackShippingDays       Int    @default(7)
 }

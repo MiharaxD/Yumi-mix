@@ -3,9 +3,10 @@ import Link from "next/link";
 import { listProducts, listCategories, hasPriceRange, minPriceCents } from "@/lib/catalog";
 import { ProductTile } from "@/components/ProductTile";
 import { Destaques, type PecaResumo } from "@/components/Vitrine";
-import { IconeCaminhao, IconeLoja, IconeRelogio, IconeSeta } from "@/components/Icones";
+import { IconeCaminhao, IconeRelogio, IconeSeta } from "@/components/Icones";
 import { diasUteis } from "@/components/Prazo";
-import { FREE_SHIPPING_THRESHOLD_CENTS, READY_TO_SHIP_DAYS, SHIPPING_FEE_CENTS } from "@/config";
+import { READY_TO_SHIP_DAYS } from "@/config";
+import { getStoreSettings } from "@/lib/settings";
 import { formatBRL } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
@@ -42,7 +43,8 @@ function paraPeca(p: {
 }
 
 export default async function HomePage() {
-  const [products, categorias] = await Promise.all([listProducts(), listCategories()]);
+  const [products, categorias, settings] = await Promise.all([listProducts(), listCategories(), getStoreSettings()]);
+  const freeAbove = settings.freeShippingThresholdCents;
 
   const pecas: PecaResumo[] = products.map(paraPeca);
 
@@ -50,14 +52,13 @@ export default async function HomePage() {
 
   const garantias = [
     { icone: IconeRelogio, titulo: "Pronta entrega", texto: `Sai em até ${diasUteis(READY_TO_SHIP_DAYS)} depois do pagamento.` },
-    { icone: IconeLoja, titulo: "Retirada grátis", texto: "Combinamos dia e horário pelo WhatsApp." },
     {
       icone: IconeCaminhao,
-      titulo: "Entrega",
+      titulo: "Entrega para todo o Brasil",
       texto:
-        FREE_SHIPPING_THRESHOLD_CENTS !== null
-          ? `${formatBRL(SHIPPING_FEE_CENTS)}, ou grátis acima de ${formatBRL(FREE_SHIPPING_THRESHOLD_CENTS)}.`
-          : `${formatBRL(SHIPPING_FEE_CENTS)} por pedido.`,
+        freeAbove !== null
+          ? `Frete calculado pelo CEP, grátis acima de ${formatBRL(freeAbove)}.`
+          : "Frete calculado pelo CEP, com rastreio no seu email.",
     },
   ];
 
@@ -96,7 +97,7 @@ export default async function HomePage() {
                 <span className="text-branco/75">a sua casa.</span>
               </h1>
               <p className="surgir mt-4 max-w-sm text-base leading-relaxed text-pretty text-branco/85 [--atraso:100ms] sm:text-lg">
-                Organização e decoração em pronta entrega: sai em até {diasUteis(READY_TO_SHIP_DAYS)}, com retirada grátis.
+                Organização e decoração em pronta entrega: sai em até {diasUteis(READY_TO_SHIP_DAYS)}, com entrega para todo o Brasil.
               </p>
               <div className="surgir mt-7 flex flex-wrap gap-3 [--atraso:200ms]">
                 <Link href="#pecas" className={botaoClaro}>

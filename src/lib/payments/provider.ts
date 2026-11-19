@@ -1,15 +1,21 @@
 // Contrato de pagamento. A loja só conversa com esta interface;
-// trocar o FakeProvider por um provedor real (ex.: Mercado Pago) é
-// implementar estes métodos e mudar a linha em ./index.ts.
+// o provedor ativo é escolhido em ./index.ts (Mercado Pago ou simulação).
 
-export type PaymentMethod = "pix" | "cartao";
+export type OrderItemForPayment = {
+  productName: string;
+  variantName: string;
+  unitPriceCents: number;
+  quantity: number;
+};
 
 export type OrderForPayment = {
   id: string;
   number: number;
   totalCents: number;
+  shippingCents: number;
   customerName: string;
   email: string;
+  items: OrderItemForPayment[];
 };
 
 export type PixCharge = {
@@ -21,29 +27,38 @@ export type PixCharge = {
   expiresAt: Date;
 };
 
-export type CardCheckout = {
-  method: "cartao";
-  /** URL do checkout hospedado pelo provedor. A loja nunca coleta dados de cartão. */
-  checkoutUrl: string | null;
-};
-
-/** Evento normalizado vindo do webhook do provedor. */
+/** Evento normalizado: o que o provedor diz sobre o pagamento de um pedido. */
 export type PaymentEvent = {
   orderId: string;
   outcome: "approved" | "rejected";
   providerPaymentId: string;
+  /** Valor confirmado pelo provedor, quando ele informa. Conferido contra o pedido. */
+  amountCents?: number;
   reason?: string;
 };
+
+/** Resultado da leitura de um webhook. */
+export type WebhookResult =
+  | { kind: "invalid" } // assinatura ou formato inválidos → 401/400
+  | { kind: "ignored" } // válido, mas não muda nada (ex.: pagamento ainda pendente)
+  | { kind: "event"; event: PaymentEvent };
 
 export interface PaymentProvider {
   readonly id: string;
   /** true quando nenhum dinheiro real circula (habilita os botões de simulação). */
   readonly isSimulated: boolean;
-  createPixCharge(order: OrderForPayment): Promise<PixCharge>;
-  createCardCheckout(order: OrderForPayment): Promise<CardCheckout>;
   /**
-   * Lê e valida a requisição do webhook (assinatura, formato) e devolve o
-   * evento normalizado, ou null se a requisição não for válida.
+   * Cria o checkout hospedado pelo provedor e devolve a URL para onde o
+   * cliente vai pagar. A loja nunca coleta dados de cartão.
    */
-  parseWebhook(request: Request): Promise<PaymentEvent | null>;
+  createCheckout(order: OrderForPayment, baseUrl: string): Promise<{ url: string }>;
+  /** Consulta um pagamento no provedor (usado na volta do checkout). */
+  getPaymentEvent(paymentId: string): Promise<PaymentEvent | null>;
+  /**
+   * Procura no provedor um pagamento aprovado do pedido. Rede de segurança para
+   * quando o cliente não volta pelo link e o webhook não chega (ex.: localhost).
+   */
+  findApprovedPayment(orderId: string): Promise<PaymentEvent | null>;
+  /** Valida a requisição do webhook (assinatura, formato) e normaliza o evento. */
+  parseWebhook(request: Request): Promise<WebhookResult>;
 }

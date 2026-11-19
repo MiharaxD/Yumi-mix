@@ -157,56 +157,47 @@ function videoDaPasta(fotoUrl: string | undefined): string | null {
 }
 
 async function main() {
-  // remove o catálogo fictício anterior (produtos e categorias que não existem mais na lista acima)
-  await prisma.product.deleteMany({ where: { slug: { notIn: products.map((p) => p.slug) } } });
-  await prisma.category.deleteMany({ where: { slug: { notIn: categories.map((c) => c.slug) } } });
-
+  // o catálogo agora é editado no admin: o seed só cria o que falta, nunca apaga nem sobrescreve
   const categoryIds = new Map<string, string>();
   for (const [index, c] of categories.entries()) {
-    const category = await prisma.category.upsert({
-      where: { slug: c.slug },
-      update: { name: c.name, position: index },
-      create: { ...c, position: index },
-    });
+    const found = await prisma.category.findUnique({ where: { slug: c.slug } });
+    const category = found ?? (await prisma.category.create({ data: { ...c, position: index } }));
     categoryIds.set(c.slug, category.id);
   }
 
+  let created = 0;
   for (const [index, p] of products.entries()) {
-    const data = {
-      name: p.name,
-      description: p.description,
-      dimensions: p.dimensions,
-      productionDays: p.productionDays,
-      readyToShip: p.readyToShip,
-      videoUrl: videoDaPasta(p.images[0]?.url),
-      position: index,
-      categoryId: categoryIds.get(p.category),
-    };
-    const product = await prisma.product.upsert({
-      where: { slug: p.slug },
-      update: data,
-      create: { slug: p.slug, ...data },
+    if (await prisma.product.findUnique({ where: { slug: p.slug }, select: { id: true } })) continue;
+    // IDs determinísticos nas variantes: carrinhos salvos no navegador continuam válidos
+    await prisma.product.create({
+      data: {
+        slug: p.slug,
+        name: p.name,
+        description: p.description,
+        dimensions: p.dimensions,
+        productionDays: p.productionDays,
+        readyToShip: p.readyToShip,
+        videoUrl: videoDaPasta(p.images[0]?.url),
+        position: index,
+        categoryId: categoryIds.get(p.category),
+        images: { create: p.images.map((img, i) => ({ url: img.url, alt: img.alt, position: i })) },
+        variants: {
+          create: p.variants.map((v, vi) => ({
+            id: `${p.slug}--${v.key}`,
+            name: v.name,
+            material: v.material,
+            colorHex: v.colorHex,
+            priceCents: v.priceCents,
+            position: vi,
+          })),
+        },
+      },
     });
-
-    await prisma.productImage.deleteMany({ where: { productId: product.id } });
-    await prisma.productImage.createMany({
-      data: p.images.map((img, i) => ({ productId: product.id, url: img.url, alt: img.alt, position: i })),
-    });
-
-    // IDs determinísticos: carrinhos salvos no navegador continuam válidos após novo seed
-    for (const [vi, v] of p.variants.entries()) {
-      const id = `${p.slug}--${v.key}`;
-      const vData = { name: v.name, material: v.material, colorHex: v.colorHex, priceCents: v.priceCents, position: vi };
-      await prisma.variant.upsert({
-        where: { id },
-        update: vData,
-        create: { id, productId: product.id, ...vData },
-      });
-    }
+    created++;
   }
 
   const count = await prisma.product.count();
-  console.log(`Seed concluído: ${count} produtos.`);
+  console.log(`Seed concluído: ${created} criados, ${count} produtos no total.`);
 }
 
 main()

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import type { CartItem } from "@/lib/cart-store";
-import type { DeliveryMethod } from "@/lib/pricing";
 
 export type Quote = {
   lines: {
@@ -21,16 +20,14 @@ export type Quote = {
   }[];
   unavailable: string[];
   subtotalCents: number;
-  shippingCents: number;
-  totalCents: number;
   leadTimeDays: number;
 };
 
 type State = { key: string; quote: Quote | null; error: string | null };
 
 /** Pede ao servidor a cotação do carrinho (preços vêm do banco). */
-export function useQuote(items: CartItem[], deliveryMethod: DeliveryMethod) {
-  const key = JSON.stringify({ items, deliveryMethod });
+export function useQuote(items: CartItem[]) {
+  const key = JSON.stringify({ items });
   const [state, setState] = useState<State>({ key: "", quote: null, error: null });
 
   useEffect(() => {
@@ -39,7 +36,7 @@ export function useQuote(items: CartItem[], deliveryMethod: DeliveryMethod) {
     fetch("/api/carrinho/cotacao", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, deliveryMethod }),
+      body: JSON.stringify({ items }),
       signal: controller.signal,
     })
       .then(async (res) => {
@@ -52,7 +49,7 @@ export function useQuote(items: CartItem[], deliveryMethod: DeliveryMethod) {
         setState({ key, quote: null, error: "Não deu para calcular o carrinho agora. Recarregue a página." });
       });
     return () => controller.abort();
-    // `key` resume items e deliveryMethod
+    // `key` resume os itens
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 

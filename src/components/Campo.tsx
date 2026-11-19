@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { InputHTMLAttributes, ReactNode, Ref, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 export const inputClass =
   "w-full min-w-0 rounded-campo border-0 bg-papel px-4 py-3.5 text-base text-tinta shadow-[inset_0_0_0_1.5px_transparent] transition-[box-shadow,background-color] placeholder:text-tinta-suave hover:bg-nevoa focus:bg-branco focus:shadow-[inset_0_0_0_2px_var(--color-tinta)] focus:outline-none aria-invalid:bg-erro-fundo aria-invalid:shadow-[inset_0_0_0_1.5px_var(--color-erro)]";
@@ -30,7 +30,14 @@ function describedBy(name: string, error?: string, hint?: ReactNode) {
   return error ? `${name}-erro` : hint ? `${name}-dica` : undefined;
 }
 
-export function Campo({ label, name, error, hint, className, ...rest }: Base & InputHTMLAttributes<HTMLInputElement>) {
+export function Campo({
+  label,
+  name,
+  error,
+  hint,
+  className,
+  ...rest
+}: Base & InputHTMLAttributes<HTMLInputElement> & { ref?: Ref<HTMLInputElement> }) {
   return (
     <Wrapper label={label} name={name} error={error} hint={hint} className={className}>
       <input

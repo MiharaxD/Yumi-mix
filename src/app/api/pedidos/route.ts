@@ -1,5 +1,5 @@
 import { checkoutSchema } from "@/lib/schemas";
-import { CartUnavailableError, createOrder } from "@/lib/orders";
+import { CartUnavailableError, createOrder, ShippingOptionError } from "@/lib/orders";
 
 export async function POST(request: Request) {
   const json = await request.json().catch(() => null);
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const order = await createOrder(parsed.data);
     return Response.json({ id: order.id, number: order.number }, { status: 201 });
   } catch (e) {
-    if (e instanceof CartUnavailableError) {
+    if (e instanceof CartUnavailableError || e instanceof ShippingOptionError) {
       return Response.json({ error: e.message }, { status: 409 });
     }
     console.error(e);

@@ -6,8 +6,9 @@ import { useEffect } from "react";
 import { removeFromCart, removeManyFromCart, setCartQuantity, useCart, useHydrated } from "@/lib/cart-store";
 import { useQuote } from "@/lib/use-quote";
 import { formatBRL } from "@/lib/money";
-import { missingForFreeShipping } from "@/lib/pricing";
-import { FREE_SHIPPING_THRESHOLD_CENTS, MAX_QUANTITY_PER_ITEM, SHIPPING_FEE_CENTS } from "@/config";
+import { MAX_QUANTITY_PER_ITEM } from "@/config";
+import { useSavedCep, useShipping } from "@/lib/use-shipping";
+import { FreteCep } from "@/components/FreteCep";
 import { QuantityStepper } from "@/components/QuantityStepper";
 import { CartTotals } from "@/components/CartSummary";
 import { SeloPrazo } from "@/components/Prazo";
@@ -16,7 +17,11 @@ import { IconeLixeira, IconeSeta } from "@/components/Icones";
 export function CartView() {
   const hydrated = useHydrated();
   const items = useCart();
-  const { quote, loading, error } = useQuote(items, "entrega");
+  const { quote, loading, error } = useQuote(items);
+  // mesma cotação do quadro de frete: total com a opção mais barata
+  const cep = useSavedCep();
+  const frete = useShipping(items, cep);
+  const cheapest = frete.quote?.options[0] ?? null;
 
   // peça que saiu do catálogo some do carrinho
   useEffect(() => {
@@ -48,7 +53,7 @@ export function CartView() {
     return <p className="rounded-2xl bg-erro-fundo px-4 py-3 text-erro">{error}</p>;
   }
 
-  const missing = missingForFreeShipping(quote.subtotalCents);
+  const missing = frete.quote?.missingForFree ?? null;
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
@@ -102,22 +107,20 @@ export function CartView() {
         <h2 className="titulo text-[1.5rem] leading-none">Resumo</h2>
         <div className="mt-4">
           <CartTotals
-            muted={loading}
+            muted={loading || frete.loading}
             subtotalCents={quote.subtotalCents}
-            shippingCents={quote.shippingCents}
-            totalCents={quote.totalCents}
+            shippingCents={cheapest ? cheapest.priceCents : null}
+            shippingDays={cheapest ? cheapest.days : null}
             leadTimeDays={quote.leadTimeDays}
-            shippingLabel="Entrega"
+            shippingLabel={cheapest ? "Frete (mais barato)" : "Frete"}
           />
         </div>
-        <p className="mt-4 rounded-2xl bg-dourado-claro px-4 py-3 text-sm">
-          {FREE_SHIPPING_THRESHOLD_CENTS !== null && missing === 0
-            ? "Entrega grátis neste pedido."
-            : FREE_SHIPPING_THRESHOLD_CENTS !== null && missing !== null
-              ? `Faltam ${formatBRL(missing)} para a entrega grátis.`
-              : `Entrega: ${formatBRL(SHIPPING_FEE_CENTS)}.`}{" "}
-          Retirada no ateliê é sempre grátis.
-        </p>
+        <FreteCep items={items} className="mt-5" />
+        {cheapest && cheapest.priceCents > 0 && missing !== null && missing > 0 && (
+          <p className="mt-3 rounded-2xl bg-dourado-claro px-4 py-3 text-sm">
+            Faltam {formatBRL(missing)} para o frete grátis.
+          </p>
+        )}
         <Link
           href="/checkout"
           className="botao-principal mt-5 flex w-full items-center justify-center gap-2 px-6 py-3.5 font-bold"

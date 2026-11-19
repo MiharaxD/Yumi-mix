@@ -79,7 +79,7 @@ export default async function AdminPedidosPage(props: PageProps<"/admin">) {
                     <span className="block text-xs text-tinta-suave">{o._count.items} {o._count.items === 1 ? "item" : "itens"}</span>
                   </td>
                   <td className="col-span-2 text-tinta-suave sm:px-5 sm:py-3.5">{formatDate(o.createdAt)}</td>
-                  <td className="hidden sm:table-cell sm:px-5 sm:py-3.5">{o.deliveryMethod === "entrega" ? "Entrega" : "Retirada"}</td>
+                  <td className="hidden sm:table-cell sm:px-5 sm:py-3.5">{o.deliveryMethod === "retirada" ? "Retirada" : (o.shippingServiceName ?? "Entrega")}</td>
                   <td className="col-start-2 row-start-1 text-right font-semibold sm:px-5 sm:py-3.5">{formatBRL(o.totalCents)}</td>
                   <td className="col-span-2 sm:px-5 sm:py-3.5">
                     <OrderStatusPill status={o.status} />

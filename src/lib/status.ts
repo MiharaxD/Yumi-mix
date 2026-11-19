@@ -12,7 +12,7 @@ export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 const ORDER_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
   pendente: ["pago", "cancelado"],
-  pago: ["em_producao", "cancelado"],
+  pago: ["em_producao", "enviado", "cancelado"],
   em_producao: ["enviado", "cancelado"],
   enviado: ["entregue"],
   entregue: [],
