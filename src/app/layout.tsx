@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 import { STORE_NAME } from "@/config";
+import { siteUrl } from "@/lib/og";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -11,6 +12,9 @@ const figtree = Figtree({
 export const metadata: Metadata = {
   title: { default: `${STORE_NAME} — decoração e organização para a sua casa`, template: `%s · ${STORE_NAME}` },
   description: "Peças de decoração e organização para a casa, com pronta entrega pela loja Yumi Mix.",
+  metadataBase: siteUrl(),
+  openGraph: { type: "website", locale: "pt_BR", siteName: STORE_NAME },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {

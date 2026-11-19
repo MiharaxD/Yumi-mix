@@ -11,7 +11,13 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(props: PageProps<"/produto/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
-  return { title: product?.name ?? "Peça não encontrada" };
+  if (!product) return { title: "Peça não encontrada" };
+  const description = product.description.length > 160 ? `${product.description.slice(0, 157).trimEnd()}…` : product.description;
+  return {
+    title: product.name,
+    description,
+    openGraph: { type: "website", locale: "pt_BR", siteName: "Yumi Mix", title: product.name, description },
+  };
 }
 
 export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
