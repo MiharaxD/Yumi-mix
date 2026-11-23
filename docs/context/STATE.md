@@ -10,12 +10,12 @@
 - Deploy no Railway (projeto `yumi-mix`, serviço `loja`, https://yumimix.com.br e https://yumimix.up.railway.app): builda a `main` do GitHub (`MiharaxD/Yumi-mix`), mas o push nem sempre dispara o deploy sozinho — se não aparecer deploy novo, reconectar a fonte do serviço (`connect-service-source`) dispara o build; volume `uploads` montado em `/app/uploads`. O deploy antigo da Vercel (`vercel.com/mihara1/yumi-mix`) pode ser desligado.
 
 ## Pendências (prioridade)
-0. Vitrine com links Shopee/ML: migração já aplicada no Neon; falta commit + push e cadastrar os links de cada peça em `/admin/produtos` (o formulário do admin só foi coberto por teste, não testado no navegador).
+0. Vitrine no ar: falta cadastrar os links Shopee/ML de cada peça em `/admin/produtos` (o formulário do admin só foi coberto por teste, não testado no navegador).
 1. Limpeza do que sobrou da venda direta (decidir com a usuária): aba Pedidos/Frete/rastreio do admin, campos de frete embutido/peso/caixa do produto, `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`, dependência `mercadopago`, variáveis `MP_*`/`MELHOR_ENVIO_*`/`RESEND_*`.
 2. Preços e dimensões dos 7 produtos são valores de teste — ajustar no admin (devem bater com os anúncios).
 3. Links de redes sociais no rodapé (`SOCIAL_LINKS` em `src/config.ts`) são placeholder; definir os reais.
 4. A capa do suporte de lavadora ainda é o diagrama de medidas: trocar a ordem das fotos no admin. As fotos do Kit 3 Ganchos têm etiqueta do fornecedor embutida.
-5. Push pendente dos commits anteriores (admin de produtos etc.); subir os .3mf de cada produto e testar "Abrir no Bambu Studio".
+5. Subir os .3mf de cada produto e testar "Abrir no Bambu Studio".
 
 ## Limitações conhecidas
 - Sem controle de estoque; numeração de pedido calculada por `max+1` em transação (ok para uso local).
