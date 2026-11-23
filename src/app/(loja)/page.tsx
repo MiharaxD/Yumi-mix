@@ -6,8 +6,6 @@ import { Destaques, type PecaResumo } from "@/components/Vitrine";
 import { IconeCaminhao, IconeRelogio, IconeSeta } from "@/components/Icones";
 import { diasUteis } from "@/components/Prazo";
 import { READY_TO_SHIP_DAYS } from "@/config";
-import { getStoreSettings } from "@/lib/settings";
-import { formatBRL } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +41,7 @@ function paraPeca(p: {
 }
 
 export default async function HomePage() {
-  const [products, categorias, settings] = await Promise.all([listProducts(), listCategories(), getStoreSettings()]);
-  const freeAbove = settings.freeShippingThresholdCents;
+  const [products, categorias] = await Promise.all([listProducts(), listCategories()]);
 
   const pecas: PecaResumo[] = products.map(paraPeca);
 
@@ -55,10 +52,7 @@ export default async function HomePage() {
     {
       icone: IconeCaminhao,
       titulo: "Entrega para todo o Brasil",
-      texto:
-        freeAbove !== null
-          ? `Frete calculado pelo CEP, grátis acima de ${formatBRL(freeAbove)}.`
-          : "Frete calculado pelo CEP, com rastreio no seu email.",
+      texto: "Você compra pela Shopee ou pelo Mercado Livre, com pagamento, frete e rastreio por lá.",
     },
   ];
 

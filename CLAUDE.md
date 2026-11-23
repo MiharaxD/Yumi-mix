@@ -2,7 +2,7 @@
 
 # Yumi Mix — loja de impressão 3D (versão de TESTE, deploy no Railway)
 
-Loja autoral de decoração impressa em 3D: catálogo → carrinho → checkout → pagamento via **Mercado Pago Checkout Pro** (ou simulado no dev sem credenciais) → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção; fora isso, só a API do Mercado Pago.
+Loja autoral de decoração impressa em 3D, **só vitrine**: catálogo → página da peça com botões para o anúncio na **Shopee** e no **Mercado Livre** (a compra, o pagamento e o frete acontecem lá) → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção.
 Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · React 19.3 · TypeScript 5 · Tailwind 4.3 · Prisma **6.19** + Postgres (Neon) · zod 4 · vitest 5. Node 20.19+ (testado no 24).
 
 ## Comandos
@@ -14,14 +14,13 @@ Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · Reac
 - Só com pedido explícito: `npx prisma migrate reset` (apaga o banco), qualquer comando que acesse rede além de `npm install`.
 
 ## Invariantes
-- Preço é SEMPRE recalculado no servidor a partir do banco (`src/lib/cart-server.ts`); o navegador só manda `variantId` + quantidade.
-- Pagamento só via interface `PaymentProvider`; aprovação idempotente (Notification com `key` única) e status sempre confirmado na API do MP. Rota `/api/pagamentos/simular` só fora de produção e sem MP.
+- A loja não vende direto: sem carrinho, checkout ou pagamento. Cada produto tem `shopeeUrl`/`mercadoLivreUrl` (validados por domínio em `src/lib/product-admin.ts`); sem nenhum, a peça aparece como "em breve". Não automatizar compra nos marketplaces (sem API de comprador; robô viola os termos).
 - Uploads em `./uploads` (fora de `public/`), tipo validado pelos bytes: sob medida só por `/api/admin/uploads/[id]` com sessão de admin; fotos/vídeo de produto por `/media/produtos/<uuid>`; `.3mf` nunca público, só pelo link assinado de `/api/arquivo-3d`.
 - Transições de status só pelas funções de `src/lib/status.ts`.
-- Dinheiro em centavos (Int). Endereço sempre obrigatório no checkout.
+- Dinheiro em centavos (Int).
 - Fora de escopo (não adicionar sem pedido): avisos para a dona por email/Telegram (só existe o email de rastreio ao cliente, via Resend), login de cliente, cupons, avaliações, dark mode, i18n.
-- Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest, mercadopago, sharp (só para gerar o preview de link em JPEG). Qualquer outra: perguntar antes.
-- Segredos em `.env.local` (admin, `MP_*`, `APP_URL`) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
+- Dependências travadas: next, react, typescript, tailwindcss, eslint, prisma/@prisma/client, zod, vitest, sharp (só para gerar o preview de link em JPEG). Qualquer outra: perguntar antes.
+- Segredos em `.env.local` (admin, `APP_URL`) e `.env` (`DATABASE_URL`/`DATABASE_URL_UNPOOLED` — o Prisma CLI só lê `.env`); nomes em `.env.example`. Nunca commitar `.env`, `.env.local`, `uploads/`.
 - Visual: seguir `DESIGN.md` (loja clara e arredondada: cartões brancos com sombra macia, botões em pílula, sem linhas divisórias, dourado só em detalhes). Produto/público em `PRODUCT.md`.
 
 ## Estilo

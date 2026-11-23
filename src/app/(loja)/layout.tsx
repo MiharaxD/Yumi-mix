@@ -1,17 +1,13 @@
 import Link from "next/link";
 import { STORE_NAME, SOCIAL_LINKS } from "@/config";
-import { CartLink } from "@/components/CartLink";
 import { CategoryNav } from "@/components/CategoryNav";
 import { LogoYumiMix } from "@/components/Logo";
 import { listCategories } from "@/lib/catalog";
-import { formatBRL } from "@/lib/money";
-import { getStoreSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
 export default async function LojaLayout({ children }: LayoutProps<"/">) {
-  const [categorias, settings] = await Promise.all([listCategories(), getStoreSettings()]);
-  const freeAbove = settings.freeShippingThresholdCents;
+  const categorias = await listCategories();
 
   return (
     <>
@@ -28,18 +24,14 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
           <span>Pronta entrega</span>
           <span aria-hidden className="size-1 rounded-full bg-dourado" />
           <span>Entrega para todo o Brasil</span>
-          {freeAbove !== null && (
-            <>
-              <span aria-hidden className="hidden size-1 rounded-full bg-dourado sm:block" />
-              <span className="hidden sm:inline">Frete grátis acima de {formatBRL(freeAbove)}</span>
-            </>
-          )}
+          <span aria-hidden className="hidden size-1 rounded-full bg-dourado sm:block" />
+          <span className="hidden sm:inline">Compra pela Shopee ou Mercado Livre</span>
         </p>
       </div>
 
       <header className="sticky top-0 z-40 bg-papel/80 backdrop-blur-xl backdrop-saturate-150">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-[4.5rem] sm:px-6">
-          <Link href="/" className="flex min-w-0 flex-1 items-center md:flex-none" aria-label={`${STORE_NAME}, página inicial`}>
+          <Link href="/" className="flex min-w-0 flex-1 items-center" aria-label={`${STORE_NAME}, página inicial`}>
             <LogoYumiMix className="h-9 w-auto shrink-0 sm:h-10" />
           </Link>
 
@@ -55,7 +47,8 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
             </Link>
           </nav>
 
-          <CartLink />
+          {/* sem carrinho: equilibra o logo para o menu ficar centralizado */}
+          <span aria-hidden className="hidden flex-1 md:block" />
         </div>
       </header>
 
@@ -81,9 +74,6 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
             <Link href="/personalizado" className="link-linha self-start">
               Peça sob medida
             </Link>
-            <Link href="/carrinho" className="link-linha self-start">
-              Carrinho
-            </Link>
           </nav>
           <nav aria-label="Redes sociais" className="flex flex-col gap-3 text-sm">
             <p className="font-semibold text-branco/45">Redes</p>
@@ -95,8 +85,10 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
             </a>
           </nav>
           <div className="rounded-cartao bg-branco/[0.06] p-5 text-sm">
-            <p className="font-semibold">Loja em modo de teste</p>
-            <p className="mt-1.5 leading-relaxed text-branco/65">Nenhum pagamento é real e nada é enviado.</p>
+            <p className="font-semibold">Onde comprar</p>
+            <p className="mt-1.5 leading-relaxed text-branco/65">
+              Escolha a peça aqui e finalize na Shopee ou no Mercado Livre, com pagamento e entrega por lá.
+            </p>
           </div>
         </div>
       </footer>

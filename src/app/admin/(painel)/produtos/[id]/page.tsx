@@ -75,6 +75,8 @@ export default async function EditarProdutoPage(props: PageProps<"/admin/produto
             categoryId: product.categoryId ?? "",
             readyToShip: product.readyToShip,
             productionDays: product.productionDays,
+            shopeeUrl: product.shopeeUrl ?? "",
+            mercadoLivreUrl: product.mercadoLivreUrl ?? "",
             shippingCredit: centsToInput(product.shippingCreditCents),
             weightGrams: product.weightGrams,
             boxHeightCm: product.boxHeightCm,

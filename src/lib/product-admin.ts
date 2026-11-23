@@ -42,6 +42,34 @@ const int = (min: number, max: number, msg: string) =>
     return n;
   });
 
+/** Domínios aceitos por loja (inclui links curtos de compartilhar). */
+export const MARKETPLACE_HOSTS = {
+  shopee: ["shopee.com.br", "shope.ee"],
+  mercadoLivre: ["mercadolivre.com.br", "mercadolivre.com", "meli.la"],
+} as const;
+
+/** Link https de um anúncio da loja, ou vazio (= null). */
+export function marketplaceUrl(hosts: readonly string[], msg: string) {
+  return z.string().transform((v, ctx) => {
+    const text = v.trim();
+    if (text === "") return null;
+    let url: URL;
+    try {
+      url = new URL(/^https?:\/\//i.test(text) ? text : `https://${text}`);
+    } catch {
+      ctx.addIssue({ code: "custom", message: msg });
+      return z.NEVER;
+    }
+    const host = url.hostname.toLowerCase();
+    if (!hosts.some((h) => host === h || host.endsWith(`.${h}`))) {
+      ctx.addIssue({ code: "custom", message: msg });
+      return z.NEVER;
+    }
+    url.protocol = "https:";
+    return url.toString();
+  });
+}
+
 export const variantInputSchema = z.object({
   // id existente (edição) ou vazio (nova)
   id: z.string().max(100).default(""),
@@ -67,6 +95,8 @@ export const productInputSchema = z
     newCategory: z.string().trim().max(60).default(""),
     readyToShip: z.boolean(),
     productionDays: int(1, 60, "Dias de produção: de 1 a 60."),
+    shopeeUrl: marketplaceUrl(MARKETPLACE_HOSTS.shopee, "Cole o link do anúncio na Shopee (shopee.com.br)."),
+    mercadoLivreUrl: marketplaceUrl(MARKETPLACE_HOSTS.mercadoLivre, "Cole o link do anúncio no Mercado Livre (mercadolivre.com.br)."),
     shippingCredit: money("Frete embutido inválido, ex.: 10,00."),
     weightGrams: int(1, 30000, "Peso em gramas: de 1 a 30.000."),
     boxHeightCm: int(1, 100, "Altura: de 1 a 100 cm."),

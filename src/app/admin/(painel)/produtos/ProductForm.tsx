@@ -13,6 +13,8 @@ export type ProductFormValues = {
   categoryId: string;
   readyToShip: boolean;
   productionDays: number;
+  shopeeUrl: string;
+  mercadoLivreUrl: string;
   shippingCredit: string;
   weightGrams: number;
   boxHeightCm: number;
@@ -34,6 +36,8 @@ export const EMPTY_PRODUCT: ProductFormValues = {
   categoryId: "",
   readyToShip: true,
   productionDays: 3,
+  shopeeUrl: "",
+  mercadoLivreUrl: "",
   shippingCredit: "0,00",
   weightGrams: 300,
   boxHeightCm: 10,
@@ -214,6 +218,32 @@ export function ProductForm({
         >
           <IconeMais className="size-4" /> Adicionar variação
         </button>
+      </Secao>
+
+      <Secao
+        titulo="Onde comprar"
+        descricao="A compra acontece no marketplace: o botão da página da peça leva para estes anúncios. Sem nenhum link, a peça aparece como “em breve”."
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Campo
+            label="Link na Shopee"
+            name="shopeeUrl"
+            type="url"
+            inputMode="url"
+            defaultValue={initial.shopeeUrl}
+            placeholder="https://shopee.com.br/…"
+            error={e.shopeeUrl}
+          />
+          <Campo
+            label="Link no Mercado Livre"
+            name="mercadoLivreUrl"
+            type="url"
+            inputMode="url"
+            defaultValue={initial.mercadoLivreUrl}
+            placeholder="https://produto.mercadolivre.com.br/…"
+            error={e.mercadoLivreUrl}
+          />
+        </div>
       </Secao>
 
       <Secao titulo="Prazo">

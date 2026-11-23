@@ -19,6 +19,9 @@ model Product {
   productionDays      Int
   readyToShip         Boolean        @default(false)
   videoUrl            String?
+  // a venda acontece no marketplace: links dos anúncios
+  shopeeUrl           String?
+  mercadoLivreUrl     String?
   position            Int            @default(0)
   // arquivado: some da loja, continua no admin e nos pedidos antigos
   archived            Boolean        @default(false)

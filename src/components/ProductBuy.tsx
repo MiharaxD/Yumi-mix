@@ -1,15 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { FreteCep } from "@/components/FreteCep";
 import { useRef, useState } from "react";
-import { addToCart } from "@/lib/cart-store";
 import { ImagemPeca } from "@/components/ImagemPeca";
 import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
-import { MAX_QUANTITY_PER_ITEM } from "@/config";
-import { QuantityStepper } from "@/components/QuantityStepper";
-import { IconeCheck, IconePlay, IconeSeta } from "@/components/Icones";
+import { IconePlay, IconeSeta } from "@/components/Icones";
 import { SeloPrazo } from "@/components/Prazo";
 
 type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number };
@@ -124,26 +119,26 @@ export function ProductGallery({ images, name, video }: { images: Img[]; name: s
 
 export function ProductBuy({
   variants,
-  productName,
   readyToShip,
   productionDays,
+  shopeeUrl,
+  mercadoLivreUrl,
 }: {
   variants: Variant[];
-  productName: string;
   readyToShip: boolean;
   productionDays: number;
+  shopeeUrl: string | null;
+  mercadoLivreUrl: string | null;
 }) {
   const [variantId, setVariantId] = useState(variants[0]?.id ?? "");
-  const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState<string | null>(null);
   const variant = variants.find((v) => v.id === variantId) ?? variants[0];
 
-  if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes à venda no momento.</p>;
+  if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
-  function onAdd() {
-    addToCart(variant.id, quantity);
-    setAdded(`${quantity} × ${productName} (${variant.name}) no carrinho.`);
-  }
+  const lojas = [
+    { nome: "Mercado Livre", url: mercadoLivreUrl, cor: "#ffe600" },
+    { nome: "Shopee", url: shopeeUrl, cor: "#ee4d2d" },
+  ].filter((l): l is { nome: string; url: string; cor: string } => Boolean(l.url));
 
   return (
     <div>
@@ -155,79 +150,74 @@ export function ProductBuy({
         <SeloPrazo readyToShip={readyToShip} productionDays={productionDays} />
       </div>
 
-      <fieldset className="mt-6">
-        <legend className="rotulo">
-          Cor e material:{" "}
-          <span className="font-normal text-tinta-suave">
-            {variant.name}, {variant.material}
-          </span>
-        </legend>
-        <div role="radiogroup" aria-label="Variante" className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {variants.map((v) => {
-            const checked = v.id === variant.id;
-            return (
-              <button
-                key={v.id}
-                type="button"
-                role="radio"
-                aria-checked={checked}
-                onClick={() => {
-                  setVariantId(v.id);
-                  setAdded(null);
-                }}
-                className={`chip-variante flex items-center gap-3 px-3.5 py-3 text-left text-sm ${checked ? "font-semibold" : ""}`}
-              >
-                <span
-                  className="size-7 shrink-0 rounded-full ring-1 ring-tinta/15 ring-inset"
-                  style={{ backgroundColor: v.colorHex }}
-                  aria-hidden
-                />
-                <span className="leading-tight">
-                  {v.name}
-                  <span className="block text-xs font-normal text-tinta-suave">
-                    {v.material} · {formatBRL(v.priceCents)}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </fieldset>
-
-      <div className="mt-7 flex flex-wrap items-center gap-3">
-        <QuantityStepper
-          value={quantity}
-          max={MAX_QUANTITY_PER_ITEM}
-          label="Quantidade"
-          onChange={(n) => {
-            setQuantity(Math.max(1, Math.min(MAX_QUANTITY_PER_ITEM, n)));
-            setAdded(null);
-          }}
-        />
-        <button
-          type="button"
-          onClick={onAdd}
-          className="botao-principal flex-1 self-stretch px-6 py-3.5 whitespace-nowrap"
-        >
-          Adicionar ao carrinho <IconeSeta className="size-4" />
-        </button>
-      </div>
-
-      <div aria-live="polite" className="min-h-14">
-        {added && (
-          <p className="surgir mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-dourado-claro px-4 py-3 text-sm">
-            <span className="grid size-7 place-items-center rounded-full bg-tinta text-branco">
-              <IconeCheck className="check-desenha size-4" />
+      {variants.length > 1 && (
+        <fieldset className="mt-6 min-w-0">
+          <legend className="rotulo">
+            Cor e material:{" "}
+            <span className="font-normal text-tinta-suave">
+              {variant.name}, {variant.material}
             </span>
-            <span>{added}</span>
-            <Link href="/carrinho" className="ml-auto inline-flex items-center gap-1 font-semibold underline">
-              Ver carrinho <IconeSeta className="size-4" />
-            </Link>
+          </legend>
+          <div role="radiogroup" aria-label="Variante" className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {variants.map((v) => {
+              const checked = v.id === variant.id;
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={checked}
+                  onClick={() => setVariantId(v.id)}
+                  className={`chip-variante flex items-center gap-3 px-3.5 py-3 text-left text-sm ${checked ? "font-semibold" : ""}`}
+                >
+                  <span
+                    className="size-7 shrink-0 rounded-full ring-1 ring-tinta/15 ring-inset"
+                    style={{ backgroundColor: v.colorHex }}
+                    aria-hidden
+                  />
+                  <span className="leading-tight">
+                    {v.name}
+                    <span className="block text-xs font-normal text-tinta-suave">
+                      {v.material} · {formatBRL(v.priceCents)}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+      )}
+
+      <div className="mt-7 mb-7">
+        {lojas.length > 0 ? (
+          <>
+            <p className="rotulo mb-3">Comprar em</p>
+            <div className={`grid grid-cols-1 gap-2.5 ${lojas.length > 1 ? "sm:grid-cols-2" : ""}`}>
+              {lojas.map((l, i) => (
+                <a
+                  key={l.nome}
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${i === 0 ? "botao-principal" : "botao-contorno"} px-6 py-3.5 whitespace-nowrap`}
+                >
+                  <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: l.cor }} aria-hidden />
+                  {l.nome}
+                  <IconeSeta className="size-4" />
+                  <span className="sr-only"> (abre em nova aba)</span>
+                </a>
+              ))}
+            </div>
+            <p className="mt-3 text-sm text-tinta-suave">
+              Você finaliza a compra, o pagamento e o frete na loja escolhida, com a proteção dela.
+            </p>
+          </>
+        ) : (
+          <p className="rounded-2xl bg-dourado-claro px-4 py-3 text-sm">
+            Em breve na Shopee e no Mercado Livre.
           </p>
         )}
       </div>
-
-      <FreteCep items={[{ variantId: variant.id, quantity }]} className="mt-2" />
     </div>
   );
 }

@@ -68,6 +68,8 @@ describe("formulário de produto", () => {
     newCategory: "",
     readyToShip: true,
     productionDays: "3",
+    shopeeUrl: "",
+    mercadoLivreUrl: "",
     shippingCredit: "10,00",
     weightGrams: "250",
     boxHeightCm: "10",
@@ -87,6 +89,25 @@ describe("formulário de produto", () => {
   });
   it("nova categoria precisa de nome", () => {
     expect(productInputSchema.safeParse({ ...base, categoryId: "__nova__" }).success).toBe(false);
+  });
+  it("links das lojas: vazio vira null, sem https ganha https", () => {
+    const r = productInputSchema.parse({
+      ...base,
+      shopeeUrl: "shopee.com.br/Gancho-i.123.456",
+      mercadoLivreUrl: "https://produto.mercadolivre.com.br/MLB-123-gancho",
+    });
+    expect(r.shopeeUrl).toBe("https://shopee.com.br/Gancho-i.123.456");
+    expect(r.mercadoLivreUrl).toBe("https://produto.mercadolivre.com.br/MLB-123-gancho");
+    expect(productInputSchema.parse(base).shopeeUrl).toBeNull();
+  });
+  it("recusa link de outro site no campo da loja", () => {
+    const r = productInputSchema.safeParse({ ...base, shopeeUrl: "https://shopee.com.br.golpe.com/x", mercadoLivreUrl: "https://shopee.com.br/x" });
+    expect(r.success).toBe(false);
+    if (!r.success) {
+      const errs = productFieldErrors(r.error);
+      expect(errs).toHaveProperty("shopeeUrl");
+      expect(errs).toHaveProperty("mercadoLivreUrl");
+    }
   });
   it("slug sem acento", () => {
     expect(slugify("Saboneteira Dupla Ônix")).toBe("saboneteira-dupla-onix");
