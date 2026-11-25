@@ -4,9 +4,14 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatBRL } from "@/lib/money";
 import { IconeSeta, IconeVoltar } from "@/components/Icones";
-import { CamadasFotos, IndicadorFotos, useCicloFotos } from "@/components/FotosPeca";
+import {
+  CamadasFotos,
+  IndicadorFotos,
+  useCicloFotos,
+} from "@/components/FotosPeca";
 
-import type { LojasInput } from "@/lib/lojas";
+import { lojasDaPeca, type LojasInput } from "@/lib/lojas";
+import { BotaoLoja } from "@/components/BotaoLoja";
 export type PecaResumo = {
   slug: string;
   name: string;
@@ -42,8 +47,13 @@ export function Destaques({ pecas }: { pecas: PecaResumo[] }) {
     const el = trilho.current;
     const card = el?.firstElementChild as HTMLElement | null;
     if (!el || !card) return;
-    const reduzir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    el.scrollBy({ left: direcao * (card.offsetWidth + 12), behavior: reduzir ? "auto" : "smooth" });
+    const reduzir = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    el.scrollBy({
+      left: direcao * (card.offsetWidth + 12),
+      behavior: reduzir ? "auto" : "smooth",
+    });
   }
 
   return (
@@ -62,17 +72,32 @@ export function Destaques({ pecas }: { pecas: PecaResumo[] }) {
       </ul>
 
       <div className="flex items-center gap-4 px-5 pb-5 sm:px-7 sm:pb-7">
-        <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-nevoa" aria-hidden>
+        <div
+          className="relative h-1 flex-1 overflow-hidden rounded-full bg-nevoa"
+          aria-hidden
+        >
           <div
             className="absolute inset-y-0 left-0 rounded-full bg-tinta transition-[width] duration-300"
             style={{ width: `${Math.max(14, progresso * 100)}%` }}
           />
         </div>
         <div className="flex gap-2">
-          <button type="button" onClick={() => passar(-1)} disabled={limites.inicio} aria-label="Destaques anteriores" className="botao-redondo">
+          <button
+            type="button"
+            onClick={() => passar(-1)}
+            disabled={limites.inicio}
+            aria-label="Destaques anteriores"
+            className="botao-redondo"
+          >
             <IconeVoltar className="size-[1.1rem]" />
           </button>
-          <button type="button" onClick={() => passar(1)} disabled={limites.fim} aria-label="Próximos destaques" className="botao-redondo">
+          <button
+            type="button"
+            onClick={() => passar(1)}
+            disabled={limites.fim}
+            aria-label="Próximos destaques"
+            className="botao-redondo"
+          >
             <IconeSeta className="size-[1.1rem]" />
           </button>
         </div>
@@ -84,38 +109,57 @@ export function Destaques({ pecas }: { pecas: PecaResumo[] }) {
 /** Cartão de um destaque: sob o mouse, as fotos da peça passam por dissolve. */
 function CartaoDestaque({ p }: { p: PecaResumo }) {
   const ciclo = useCicloFotos(p.images.length);
+  const lojas = lojasDaPeca(p);
 
+  // botões das lojas fora do link da peça (link dentro de link não vale)
   return (
-    <Link
-      href={`/produto/${p.slug}`}
+    <div
       onPointerEnter={(e) => e.pointerType === "mouse" && ciclo.entrar()}
       onPointerLeave={ciclo.sair}
       className="group flex h-full flex-col rounded-[1.5rem] bg-papel p-2 transition-colors duration-300 hover:bg-nevoa"
     >
-      <span className="moldura block aspect-square lg:aspect-[4/5]">
-        <span className="foto-viva absolute inset-0 block">
-          <CamadasFotos
-            fotos={p.images}
-            sizes="(min-width: 640px) 240px, 64vw"
+      <Link
+        href={`/produto/${p.slug}`}
+        className="flex flex-1 flex-col rounded-[1.25rem]"
+      >
+        <span className="moldura block aspect-square lg:aspect-[4/5]">
+          <span className="foto-viva absolute inset-0 block">
+            <CamadasFotos
+              fotos={p.images}
+              sizes="(min-width: 640px) 240px, 64vw"
+              atual={ciclo.atual}
+              anterior={ciclo.anterior}
+              montadas={ciclo.montadas}
+              onCarregada={ciclo.marcarCarregada}
+            />
+          </span>
+          <IndicadorFotos
+            total={p.images.length}
             atual={ciclo.atual}
-            anterior={ciclo.anterior}
-            montadas={ciclo.montadas}
-            onCarregada={ciclo.marcarCarregada}
+            className="absolute inset-x-5 bottom-2.5 z-[3] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           />
         </span>
-        <IndicadorFotos
-          total={p.images.length}
-          atual={ciclo.atual}
-          className="absolute inset-x-5 bottom-2.5 z-[3] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        />
-      </span>
-      <span className="flex flex-1 flex-col gap-1 px-1.5 pt-3 pb-1">
-        <span className="text-sm leading-snug font-semibold text-balance">{p.name}</span>
-        <span className="mt-auto pt-1 text-sm tabular-nums">
-          {p.priceRange && <span className="text-tinta-suave">a partir de </span>}
-          <span className="font-bold">{formatBRL(p.fromPriceCents)}</span>
+        <span className="flex flex-1 flex-col gap-1 px-1.5 pt-3 pb-1">
+          <span className="text-sm leading-snug font-semibold text-balance">
+            {p.name}
+          </span>
+          <span className="mt-auto pt-1 text-sm tabular-nums">
+            {p.priceRange && (
+              <span className="text-tinta-suave">a partir de </span>
+            )}
+            <span className="font-bold">{formatBRL(p.fromPriceCents)}</span>
+          </span>
         </span>
-      </span>
-    </Link>
+      </Link>
+      {lojas.length > 0 && (
+        <div
+          className={`grid gap-1.5 px-0.5 pb-0.5 ${lojas.length > 1 ? "grid-cols-2" : "grid-cols-1"} ${lojas.some((l) => l.promocao) ? "pt-3.5" : "pt-2.5"}`}
+        >
+          {lojas.map((l) => (
+            <BotaoLoja key={l.chave} loja={l} compacto />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
