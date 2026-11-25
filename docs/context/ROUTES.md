@@ -12,7 +12,7 @@
 - **Cuidados:** `params`/`searchParams` são Promises (`PageProps<"/rota">`). Antes de usar API do Next, confira `node_modules/next/dist/docs/` (ver AGENTS.md).
 
 ## Compra pelos marketplaces
-- **Ir direto para:** `src/components/ProductBuy.tsx` (`ProductBuy`: preço, escolha de variação e `BotaoLoja` "Comprar no Mercado Livre"/"na Shopee" em nova aba; sem links mostra "Em breve") → campos `shopeeUrl`/`mercadoLivreUrl` do `Product` → zod `marketplaceUrl`/`MARKETPLACE_HOSTS` em `src/lib/product-admin.ts` → seção "Onde comprar" em `src/app/admin/(painel)/produtos/ProductForm.tsx`.
+- **Ir direto para:** `src/components/ProductBuy.tsx` (`ProductBuy`: preço, escolha de variação e `BotaoLoja` "Comprar no Mercado Livre"/"na Shopee" em nova aba, na cor e com o logo da marca (`MARCAS`, logos em `public/marcas/`, estilo `.botao-loja` no `globals.css`); sem links mostra "Em breve") → campos `shopeeUrl`/`mercadoLivreUrl` do `Product` → zod `marketplaceUrl`/`MARKETPLACE_HOSTS` em `src/lib/product-admin.ts` → seção "Onde comprar" em `src/app/admin/(painel)/produtos/ProductForm.tsx`.
 - **Testes:** `tests/admin-envio.test.ts` (links das lojas).
 - **Links atuais:** `prisma/links-lojas.json` (por slug; o seed usa em produto novo, `node prisma/links-lojas.mts` preenche só campos vazios no banco). Vários links do mesmo anúncio no mesmo campo, separados por espaço: o botão alterna a cada clique (vez guardada no `localStorage`, começa sorteada).
 - **Cuidados:** links só https e só dos domínios aceitos (inclui links curtos `shope.ee`/`meli.la`). Carrinho, checkout, frete do cliente e Mercado Pago foram removidos da loja; ainda sobram no admin (pedidos antigos, `/admin/frete`, rastreio) e em `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`.

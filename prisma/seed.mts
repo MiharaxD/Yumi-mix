@@ -47,7 +47,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/kit_3_ganchos_adesivos_para_parede_tolhas_cabide_m/main_images/6.jpg", alt: "Ganchos adesivos no banheiro e na cozinha, com toalhas" },
       { url: "/produtos/kit_3_ganchos_adesivos_para_parede_tolhas_cabide_m/main_images/7.jpg", alt: "Ganchos adesivos na entrada, com boné e bolsa" },
     ],
-    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 1990 }],
+    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 1862 }],
   },
   {
     slug: "kit-saboneteira-parede-2-ganchos",
@@ -88,9 +88,9 @@ const products: ProductSeed[] = [
       { url: "/produtos/kit_suporte_porta_copos_descartaveis_para_cantinho/main_images/cinza.jpg", alt: "Suporte porta-copos descartáveis no cantinho do café" },
     ],
     variants: [
-      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 2990 },
-      { key: "cinza", name: "Cinza", material: "Plástico", colorHex: "#8c8c87", priceCents: 2990 },
-      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 2990 },
+      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 2972 },
+      { key: "cinza", name: "Cinza", material: "Plástico", colorHex: "#8c8c87", priceCents: 2972 },
+      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 2972 },
     ],
   },
   {
@@ -107,10 +107,10 @@ const products: ProductSeed[] = [
       { url: "/produtos/letreiro_feliz_natal_vermelho_decorativo_para_mesa/main_images/vermelho.jpg", alt: "Letreiro Feliz Natal vermelho junto à árvore" },
     ],
     variants: [
-      { key: "branco", name: "Branco", material: "MDF", colorHex: "#f2f1ec", priceCents: 3990 },
-      { key: "dourado", name: "Dourado", material: "MDF", colorHex: "#c6a469", priceCents: 3990 },
-      { key: "verde", name: "Verde", material: "MDF", colorHex: "#3f6b4a", priceCents: 3990 },
-      { key: "vermelho", name: "Vermelho", material: "MDF", colorHex: "#b3261e", priceCents: 3990 },
+      { key: "branco", name: "Branco", material: "MDF", colorHex: "#f2f1ec", priceCents: 1989 },
+      { key: "dourado", name: "Dourado", material: "MDF", colorHex: "#c6a469", priceCents: 1989 },
+      { key: "verde", name: "Verde", material: "MDF", colorHex: "#3f6b4a", priceCents: 1989 },
+      { key: "vermelho", name: "Vermelho", material: "MDF", colorHex: "#b3261e", priceCents: 1989 },
     ],
   },
   {
@@ -126,7 +126,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/saboneteira_minimalista_com_autodrenagem_para_pia_/main_images/branco.jpg", alt: "Saboneteira minimalista ao lado da torneira" },
       { url: "/produtos/saboneteira_minimalista_com_autodrenagem_para_pia_/main_images/8.jpg", alt: "Mão segurando o sabonete sobre a saboneteira" },
     ],
-    variants: [{ key: "branco", name: "Branco", material: "Silicone", colorHex: "#f2f1ec", priceCents: 2290 }],
+    variants: [{ key: "branco", name: "Branco", material: "Silicone", colorHex: "#f2f1ec", priceCents: 1515 }],
   },
   {
     slug: "suporte-lavadora-alta-pressao",
@@ -143,7 +143,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-3.webp", alt: "Como medir a abertura da alça da lavadora: a partir de 11 cm" },
       { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-4.webp", alt: "Duas formas de pendurar a lavadora no suporte" },
     ],
-    variants: [{ key: "unico", name: "Padrão", material: "Aço e plástico", colorHex: "#4a4a48", priceCents: 4990 }],
+    variants: [{ key: "unico", name: "Padrão", material: "Aço e plástico", colorHex: "#4a4a48", priceCents: 4090 }],
   },
   {
     slug: "suporte-saboneteira-autoadesiva",
@@ -159,8 +159,8 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_saboneteira_parede_autoadesiva_porta_sabao/main_images/preto.jpg", alt: "Suporte saboneteira preto ao lado da pia" },
     ],
     variants: [
-      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 1790 },
-      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 1790 },
+      { key: "branco", name: "Branco", material: "Plástico", colorHex: "#f2f1ec", priceCents: 1630 },
+      { key: "preto", name: "Preto", material: "Plástico", colorHex: "#2a2a2a", priceCents: 1630 },
     ],
   },
   {
@@ -180,7 +180,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_gancho_bananas_multiuso_preto/main_images/3.jpg", alt: "Suporte para bananas junto à janela da cozinha" },
       { url: "/produtos/suporte_gancho_bananas_multiuso_preto/main_images/medidas.jpg", alt: "Medidas do suporte: 23 cm de altura e base de 15 cm" },
     ],
-    variants: [{ key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 3990 }],
+    variants: [{ key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2970 }],
   },
   {
     slug: "suporte-bancada-parafusadeira",
@@ -198,7 +198,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_organizador_bancada_parafusadeira/main_images/2.jpg", alt: "Pessoa guardando a parafusadeira no suporte da bancada" },
       { url: "/produtos/suporte_organizador_bancada_parafusadeira/main_images/medidas.jpg", alt: "Medidas do suporte: 14 × 8 × 8 cm" },
     ],
-    variants: [{ key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2990 }],
+    variants: [{ key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2490 }],
   },
   {
     slug: "suporte-escova-dente-pasta-adesivo",
@@ -220,8 +220,8 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/medidas.jpg", alt: "Medidas do suporte: 14 cm de largura, 2,5 cm de altura e profundidade" },
     ],
     variants: [
-      { key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2490, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/preto.jpg" },
-      { key: "branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 2490, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/branco.jpg" },
+      { key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 1496, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/preto.jpg" },
+      { key: "branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 1496, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/branco.jpg" },
     ],
   },
 ];

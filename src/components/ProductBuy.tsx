@@ -160,7 +160,13 @@ function separarLinks(valor: string | null): string[] {
 }
 
 // mesmo anúncio em vários links: cada clique abre o próximo (vez guardada no navegador)
-function BotaoLoja({ nome, urls, cor, principal }: { nome: string; urls: string[]; cor: string; principal: boolean }) {
+type Marca = { fundo: string; texto: string; logo: string; logoLargura: number };
+const MARCAS: Record<"ml" | "shopee", Marca> = {
+  ml: { fundo: "#ffe600", texto: "#2d3277", logo: "/marcas/mercado-livre.png", logoLargura: 43 },
+  shopee: { fundo: "#ed4c2d", texto: "#ffffff", logo: "/marcas/shopee.png", logoLargura: 26 },
+};
+
+function BotaoLoja({ nome, urls, marca }: { nome: string; urls: string[]; marca: Marca }) {
   const chave = `yumi-link:${urls[0]}`;
   const [vez, setVez] = useState(0);
   const href = urls[vez % urls.length];
@@ -195,9 +201,12 @@ function BotaoLoja({ nome, urls, cor, principal }: { nome: string; urls: string[
       rel="noopener noreferrer"
       onClick={avancar}
       onAuxClick={avancar}
-      className={`${principal ? "botao-principal" : "botao-contorno"} min-w-0 px-5 py-3.5 text-center`}
+      className="botao-loja min-w-0 px-5 py-3 text-center"
+      style={{ backgroundColor: marca.fundo, color: marca.texto }}
     >
-      <span className="size-2.5 shrink-0 rounded-full ring-2 ring-branco/70" style={{ backgroundColor: cor }} aria-hidden />
+      {/* logo recortado com o próprio fundo da marca, por isso some no botão */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- logo pequeno, sem otimização */}
+      <img src={marca.logo} alt="" width={marca.logoLargura} height={28} className="h-7 w-auto shrink-0" />
       Comprar {nome}
       <IconeSeta className="size-4 shrink-0" />
       <span className="sr-only"> (abre em nova aba)</span>
@@ -226,8 +235,8 @@ export function ProductBuy({
   if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
   const lojas = [
-    { nome: "no Mercado Livre", urls: separarLinks(mercadoLivreUrl), cor: "#ffe600" },
-    { nome: "na Shopee", urls: separarLinks(shopeeUrl), cor: "#ee4d2d" },
+    { nome: "no Mercado Livre", urls: separarLinks(mercadoLivreUrl), marca: MARCAS.ml },
+    { nome: "na Shopee", urls: separarLinks(shopeeUrl), marca: MARCAS.shopee },
   ].filter((l) => l.urls.length > 0);
 
   return (
@@ -288,8 +297,8 @@ export function ProductBuy({
           <>
             <p className="rotulo mb-3">Onde comprar</p>
             <div className={`grid grid-cols-1 gap-2.5 ${lojas.length > 1 ? "sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" : ""}`}>
-              {lojas.map((l, i) => (
-                <BotaoLoja key={l.nome} nome={l.nome} urls={l.urls} cor={l.cor} principal={i === 0} />
+              {lojas.map((l) => (
+                <BotaoLoja key={l.nome} nome={l.nome} urls={l.urls} marca={l.marca} />
               ))}
             </div>
             <p className="mt-3 text-sm text-tinta-suave">

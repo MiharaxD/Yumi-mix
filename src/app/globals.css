@@ -236,6 +236,36 @@ a {
     box-shadow: none;
   }
 
+  /* Botão de marketplace: pílula na cor da marca (cor vem inline). */
+  .botao-loja {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    box-shadow: 0 8px 20px -10px rgb(23 24 28 / 0.45);
+    transition:
+      filter 200ms,
+      transform 200ms,
+      box-shadow 200ms;
+  }
+  .botao-loja svg {
+    transition: transform 300ms var(--ease-galeria);
+  }
+  .botao-loja:hover {
+    filter: brightness(0.96);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px -12px rgb(23 24 28 / 0.5);
+  }
+  .botao-loja:hover svg {
+    transform: translateX(3px);
+  }
+  .botao-loja:active {
+    transform: translateY(0) scale(0.98);
+  }
+
   /* Ação secundária: pílula branca com contorno suave. */
   .botao-contorno {
     display: inline-flex;
