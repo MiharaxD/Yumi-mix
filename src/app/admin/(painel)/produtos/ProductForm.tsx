@@ -222,13 +222,12 @@ export function ProductForm({
 
       <Secao
         titulo="Onde comprar"
-        descricao="A compra acontece no marketplace: o botão da página da peça leva para estes anúncios. Sem nenhum link, a peça aparece como “em breve”."
+        descricao="A compra acontece no marketplace: o botão da página da peça leva para estes anúncios. Mesmo anúncio em mais de um link? Cole todos separados por espaço: o botão alterna entre eles. Sem nenhum link, a peça aparece como “em breve”."
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Campo
             label="Link na Shopee"
             name="shopeeUrl"
-            type="url"
             inputMode="url"
             defaultValue={initial.shopeeUrl}
             placeholder="https://shopee.com.br/…"
@@ -237,7 +236,6 @@ export function ProductForm({
           <Campo
             label="Link no Mercado Livre"
             name="mercadoLivreUrl"
-            type="url"
             inputMode="url"
             defaultValue={initial.mercadoLivreUrl}
             placeholder="https://produto.mercadolivre.com.br/…"

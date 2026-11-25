@@ -109,6 +109,11 @@ describe("formulário de produto", () => {
       expect(errs).toHaveProperty("mercadoLivreUrl");
     }
   });
+  it("aceita vários links do mesmo anúncio e recusa se um for de outro site", () => {
+    const r = productInputSchema.parse({ ...base, mercadoLivreUrl: " https://produto.mercadolivre.com.br/MLB-1\n produto.mercadolivre.com.br/MLB-2 " });
+    expect(r.mercadoLivreUrl).toBe("https://produto.mercadolivre.com.br/MLB-1 https://produto.mercadolivre.com.br/MLB-2");
+    expect(productInputSchema.safeParse({ ...base, mercadoLivreUrl: "https://produto.mercadolivre.com.br/MLB-1 https://golpe.com/x" }).success).toBe(false);
+  });
   it("slug sem acento", () => {
     expect(slugify("Saboneteira Dupla Ônix")).toBe("saboneteira-dupla-onix");
   });

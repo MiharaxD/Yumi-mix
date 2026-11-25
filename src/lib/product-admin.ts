@@ -48,25 +48,34 @@ export const MARKETPLACE_HOSTS = {
   mercadoLivre: ["mercadolivre.com.br", "mercadolivre.com", "meli.la"],
 } as const;
 
-/** Link https de um anúncio da loja, ou vazio (= null). */
+/** Separa o campo de links (um ou mais anúncios, separados por espaço ou linha). */
+export function splitMarketplaceUrls(value: string | null | undefined): string[] {
+  return (value ?? "").split(/\s+/).filter(Boolean);
+}
+
+/** Link(s) https de anúncios da loja, ou vazio (= null). Vários links: a página alterna entre eles. */
 export function marketplaceUrl(hosts: readonly string[], msg: string) {
   return z.string().transform((v, ctx) => {
-    const text = v.trim();
-    if (text === "") return null;
-    let url: URL;
-    try {
-      url = new URL(/^https?:\/\//i.test(text) ? text : `https://${text}`);
-    } catch {
-      ctx.addIssue({ code: "custom", message: msg });
-      return z.NEVER;
+    const parts = splitMarketplaceUrls(v);
+    if (parts.length === 0) return null;
+    const urls: string[] = [];
+    for (const text of parts) {
+      let url: URL;
+      try {
+        url = new URL(/^https?:\/\//i.test(text) ? text : `https://${text}`);
+      } catch {
+        ctx.addIssue({ code: "custom", message: msg });
+        return z.NEVER;
+      }
+      const host = url.hostname.toLowerCase();
+      if (!hosts.some((h) => host === h || host.endsWith(`.${h}`))) {
+        ctx.addIssue({ code: "custom", message: msg });
+        return z.NEVER;
+      }
+      url.protocol = "https:";
+      urls.push(url.toString());
     }
-    const host = url.hostname.toLowerCase();
-    if (!hosts.some((h) => host === h || host.endsWith(`.${h}`))) {
-      ctx.addIssue({ code: "custom", message: msg });
-      return z.NEVER;
-    }
-    url.protocol = "https:";
-    return url.toString();
+    return urls.join(" ");
   });
 }
 

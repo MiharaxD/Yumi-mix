@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { ImagemPeca } from "@/components/ImagemPeca";
 import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
@@ -155,6 +155,56 @@ export function ProductGallery({
   );
 }
 
+function separarLinks(valor: string | null): string[] {
+  return (valor ?? "").split(/\s+/).filter(Boolean);
+}
+
+// mesmo anúncio em vários links: cada clique abre o próximo (vez guardada no navegador)
+function BotaoLoja({ nome, urls, cor, principal }: { nome: string; urls: string[]; cor: string; principal: boolean }) {
+  const chave = `yumi-link:${urls[0]}`;
+  const [vez, setVez] = useState(0);
+  const href = urls[vez % urls.length];
+
+  useEffect(() => {
+    if (urls.length < 2) return;
+    let salva: number;
+    try {
+      salva = Number(localStorage.getItem(chave));
+    } catch {
+      salva = NaN;
+    }
+    // primeira visita: começa num link sorteado para dividir os acessos
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- só lê o navegador depois da hidratação
+    setVez(Number.isInteger(salva) && salva >= 0 ? salva : Math.floor(Math.random() * urls.length));
+  }, [chave, urls.length]);
+
+  function avancar() {
+    if (urls.length < 2) return;
+    const prox = (vez + 1) % urls.length;
+    try {
+      localStorage.setItem(chave, String(prox));
+    } catch {}
+    // troca depois do clique para o navegador abrir o link atual
+    setTimeout(() => setVez(prox), 0);
+  }
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={avancar}
+      onAuxClick={avancar}
+      className={`${principal ? "botao-principal" : "botao-contorno"} min-w-0 px-5 py-3.5 text-center`}
+    >
+      <span className="size-2.5 shrink-0 rounded-full ring-2 ring-branco/70" style={{ backgroundColor: cor }} aria-hidden />
+      Comprar {nome}
+      <IconeSeta className="size-4 shrink-0" />
+      <span className="sr-only"> (abre em nova aba)</span>
+    </a>
+  );
+}
+
 export function ProductBuy({
   variants,
   readyToShip,
@@ -176,9 +226,9 @@ export function ProductBuy({
   if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
   const lojas = [
-    { nome: "Mercado Livre", url: mercadoLivreUrl, cor: "#ffe600" },
-    { nome: "Shopee", url: shopeeUrl, cor: "#ee4d2d" },
-  ].filter((l): l is { nome: string; url: string; cor: string } => Boolean(l.url));
+    { nome: "no Mercado Livre", urls: separarLinks(mercadoLivreUrl), cor: "#ffe600" },
+    { nome: "na Shopee", urls: separarLinks(shopeeUrl), cor: "#ee4d2d" },
+  ].filter((l) => l.urls.length > 0);
 
   return (
     <div>
@@ -236,21 +286,10 @@ export function ProductBuy({
       <div className="mt-7 mb-7">
         {lojas.length > 0 ? (
           <>
-            <p className="rotulo mb-3">Comprar em</p>
-            <div className={`grid grid-cols-1 gap-2.5 ${lojas.length > 1 ? "sm:grid-cols-2" : ""}`}>
+            <p className="rotulo mb-3">Onde comprar</p>
+            <div className={`grid grid-cols-1 gap-2.5 ${lojas.length > 1 ? "sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" : ""}`}>
               {lojas.map((l, i) => (
-                <a
-                  key={l.nome}
-                  href={l.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${i === 0 ? "botao-principal" : "botao-contorno"} px-6 py-3.5 whitespace-nowrap`}
-                >
-                  <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: l.cor }} aria-hidden />
-                  {l.nome}
-                  <IconeSeta className="size-4" />
-                  <span className="sr-only"> (abre em nova aba)</span>
-                </a>
+                <BotaoLoja key={l.nome} nome={l.nome} urls={l.urls} cor={l.cor} principal={i === 0} />
               ))}
             </div>
             <p className="mt-3 text-sm text-tinta-suave">
