@@ -53,6 +53,8 @@ export default async function CategoryPage(props: PageProps<"/categoria/[slug]">
                 readyToShip={p.readyToShip}
                 productionDays={p.productionDays}
                 colors={p.variants.map((v) => v.colorHex)}
+                shopeeUrl={p.shopeeUrl}
+                mercadoLivreUrl={p.mercadoLivreUrl}
                 priority={i < 2}
               />
             </li>

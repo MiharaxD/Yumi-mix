@@ -15,6 +15,8 @@ export type PecaResumo = {
   readyToShip: boolean;
   productionDays: number;
   colors: string[];
+  shopeeUrl?: string | null;
+  mercadoLivreUrl?: string | null;
 };
 
 /** Trilho de destaques com setas redondas e barra de progresso. */

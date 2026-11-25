@@ -1,10 +1,11 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useRef, useState, type ReactNode } from "react";
 import { ImagemPeca } from "@/components/ImagemPeca";
 import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
-import { IconePlay, IconeSeta } from "@/components/Icones";
+import { IconePlay } from "@/components/Icones";
+import { BotaoLoja, lojasDaPeca } from "@/components/BotaoLoja";
 import { SeloPrazo } from "@/components/Prazo";
 
 type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number; imageUrl?: string | null };
@@ -155,65 +156,6 @@ export function ProductGallery({
   );
 }
 
-function separarLinks(valor: string | null): string[] {
-  return (valor ?? "").split(/\s+/).filter(Boolean);
-}
-
-// mesmo anúncio em vários links: cada clique abre o próximo (vez guardada no navegador)
-type Marca = { fundo: string; texto: string; logo: string; logoLargura: number };
-const MARCAS: Record<"ml" | "shopee", Marca> = {
-  ml: { fundo: "#ffe600", texto: "#2d3277", logo: "/marcas/mercado-livre.png", logoLargura: 43 },
-  shopee: { fundo: "#ed4c2d", texto: "#ffffff", logo: "/marcas/shopee.png", logoLargura: 26 },
-};
-
-function BotaoLoja({ nome, urls, marca }: { nome: string; urls: string[]; marca: Marca }) {
-  const chave = `yumi-link:${urls[0]}`;
-  const [vez, setVez] = useState(0);
-  const href = urls[vez % urls.length];
-
-  useEffect(() => {
-    if (urls.length < 2) return;
-    let salva: number;
-    try {
-      salva = Number(localStorage.getItem(chave));
-    } catch {
-      salva = NaN;
-    }
-    // primeira visita: começa num link sorteado para dividir os acessos
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- só lê o navegador depois da hidratação
-    setVez(Number.isInteger(salva) && salva >= 0 ? salva : Math.floor(Math.random() * urls.length));
-  }, [chave, urls.length]);
-
-  function avancar() {
-    if (urls.length < 2) return;
-    const prox = (vez + 1) % urls.length;
-    try {
-      localStorage.setItem(chave, String(prox));
-    } catch {}
-    // troca depois do clique para o navegador abrir o link atual
-    setTimeout(() => setVez(prox), 0);
-  }
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={avancar}
-      onAuxClick={avancar}
-      className="botao-loja min-w-0 px-5 py-3 text-center"
-      style={{ backgroundColor: marca.fundo, color: marca.texto }}
-    >
-      {/* logo recortado com o próprio fundo da marca, por isso some no botão */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- logo pequeno, sem otimização */}
-      <img src={marca.logo} alt="" width={marca.logoLargura} height={28} className="h-7 w-auto shrink-0" />
-      Comprar {nome}
-      <IconeSeta className="size-4 shrink-0" />
-      <span className="sr-only"> (abre em nova aba)</span>
-    </a>
-  );
-}
-
 export function ProductBuy({
   variants,
   readyToShip,
@@ -234,10 +176,7 @@ export function ProductBuy({
 
   if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
-  const lojas = [
-    { nome: "no Mercado Livre", urls: separarLinks(mercadoLivreUrl), marca: MARCAS.ml },
-    { nome: "na Shopee", urls: separarLinks(shopeeUrl), marca: MARCAS.shopee },
-  ].filter((l) => l.urls.length > 0);
+  const lojas = lojasDaPeca(shopeeUrl, mercadoLivreUrl);
 
   return (
     <div>
@@ -298,7 +237,7 @@ export function ProductBuy({
             <p className="rotulo mb-3">Onde comprar</p>
             <div className={`grid grid-cols-1 gap-2.5 ${lojas.length > 1 ? "sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" : ""}`}>
               {lojas.map((l) => (
-                <BotaoLoja key={l.nome} nome={l.nome} urls={l.urls} marca={l.marca} />
+                <BotaoLoja key={l.chave} loja={l} />
               ))}
             </div>
             <p className="mt-3 text-sm text-tinta-suave">

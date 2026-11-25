@@ -25,6 +25,8 @@ function paraPeca(p: {
   variants: { priceCents: number; colorHex: string }[];
   readyToShip: boolean;
   productionDays: number;
+  shopeeUrl: string | null;
+  mercadoLivreUrl: string | null;
 }): PecaResumo {
   return {
     slug: p.slug,
@@ -35,6 +37,8 @@ function paraPeca(p: {
     readyToShip: p.readyToShip,
     productionDays: p.productionDays,
     colors: p.variants.map((v) => v.colorHex),
+    shopeeUrl: p.shopeeUrl,
+    mercadoLivreUrl: p.mercadoLivreUrl,
   };
 }
 
@@ -118,9 +122,9 @@ export default async function HomePage() {
         </div>
 
         {/* garantias: prazo e frete visíveis antes de escolher */}
-        <ul className="painel mt-4 grid gap-5 px-5 py-6 sm:mt-5 md:grid-cols-3 md:gap-6 sm:px-8 sm:py-7" aria-label="Como funciona a compra">
+        <ul className="painel mt-4 grid gap-5 px-5 py-6 sm:mt-5 md:grid-cols-2 md:gap-6 sm:px-8 sm:py-7" aria-label="Como funciona a compra">
           {garantias.map(({ icone: Icone, titulo, texto }) => (
-            <li key={titulo} className="flex items-start gap-4">
+            <li key={titulo} className="flex items-start gap-4 md:justify-center">
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-dourado-claro text-tinta">
                 <Icone className="size-5" />
               </span>
