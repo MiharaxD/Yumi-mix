@@ -67,6 +67,7 @@ model Variant {
   name       String
   material   String
   colorHex   String
+  imageUrl   String?
   priceCents Int
   position   Int         @default(0)
   orderItems OrderItem[]

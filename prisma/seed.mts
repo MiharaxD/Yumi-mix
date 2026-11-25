@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-type VariantSeed = { key: string; name: string; material: string; colorHex: string; priceCents: number };
+type VariantSeed = { key: string; name: string; material: string; colorHex: string; priceCents: number; imageUrl?: string };
 type ImageSeed = { url: string; alt: string };
 type ProductSeed = {
   slug: string;
@@ -58,7 +58,17 @@ const products: ProductSeed[] = [
       { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg", alt: "Ganchos e saboneteira de parede instalados no banheiro" },
       { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/5.jpg", alt: "Detalhe da saboneteira de parede com água escoando" },
     ],
-    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 2790 }],
+    variants: [
+      { key: "unico", name: "Preto", material: "Plástico ABS", colorHex: "#2a2a2a", priceCents: 2790 },
+      {
+        key: "branco",
+        name: "Branco",
+        material: "Plástico ABS",
+        colorHex: "#f2f1ec",
+        priceCents: 2790,
+        imageUrl: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/branco.png",
+      },
+    ],
   },
   {
     slug: "kit-porta-copos-cafe",
@@ -226,6 +236,7 @@ async function main() {
             material: v.material,
             colorHex: v.colorHex,
             priceCents: v.priceCents,
+            imageUrl: v.imageUrl,
             position: vi,
           })),
         },

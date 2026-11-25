@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/catalog";
-import { ProductBuy, ProductGallery } from "@/components/ProductBuy";
+import { FotoVarianteProvider, ProductBuy, ProductGallery } from "@/components/ProductBuy";
 import { diasUteis } from "@/components/Prazo";
 import { READY_TO_SHIP_DAYS } from "@/config";
 
@@ -49,6 +49,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
         </ol>
       </nav>
 
+      <FotoVarianteProvider>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.1fr_1fr] lg:gap-6">
         {/* no desktop a foto acompanha a rolagem enquanto você lê a ficha */}
         <div className="painel p-2.5 lg:sticky lg:top-24 lg:self-start">
@@ -56,6 +57,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
             name={product.name}
             images={product.images.map((i) => ({ id: i.id, url: i.url, alt: i.alt }))}
             video={product.videoUrl}
+            fotosVariantes={product.variants.flatMap((v) => (v.imageUrl ? [{ url: v.imageUrl, alt: `${product.name}, cor ${v.name}` }] : []))}
           />
         </div>
 
@@ -75,6 +77,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
                 material: v.material,
                 colorHex: v.colorHex,
                 priceCents: v.priceCents,
+                imageUrl: v.imageUrl,
               }))}
             />
           </div>
@@ -98,6 +101,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
           </dl>
         </div>
       </div>
+      </FotoVarianteProvider>
     </div>
   );
 }

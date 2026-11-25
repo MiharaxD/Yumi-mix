@@ -1,17 +1,44 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { createContext, useContext, useRef, useState, type ReactNode } from "react";
 import { ImagemPeca } from "@/components/ImagemPeca";
 import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
 import { IconePlay, IconeSeta } from "@/components/Icones";
 import { SeloPrazo } from "@/components/Prazo";
 
-type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number };
+type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number; imageUrl?: string | null };
 type Img = { id: string; url: string; alt: string };
 
-export function ProductGallery({ images, name, video }: { images: Img[]; name: string; video?: string | null }) {
+// foto da variação escolhida (clique) ou sob o mouse, mostrada por cima da galeria
+type FotoVariante = { url: string; alt: string } | null;
+const FotoVarianteCtx = createContext<{
+  fixada: FotoVariante;
+  hover: FotoVariante | undefined; // undefined = mouse fora das cores
+  fixar: (f: FotoVariante) => void;
+  pairar: (f: FotoVariante | undefined) => void;
+} | null>(null);
+
+export function FotoVarianteProvider({ children }: { children: ReactNode }) {
+  const [fixada, fixar] = useState<FotoVariante>(null);
+  const [hover, pairar] = useState<FotoVariante | undefined>(undefined);
+  return <FotoVarianteCtx.Provider value={{ fixada, hover, fixar, pairar }}>{children}</FotoVarianteCtx.Provider>;
+}
+
+export function ProductGallery({
+  images,
+  name,
+  video,
+  fotosVariantes = [],
+}: {
+  images: Img[];
+  name: string;
+  video?: string | null;
+  fotosVariantes?: { url: string; alt: string }[];
+}) {
   const { atual, anterior, ir } = useFotoAtiva();
+  const ctx = useContext(FotoVarianteCtx);
+  const fotoVariante = ctx ? (ctx.hover !== undefined ? ctx.hover : ctx.fixada) : null;
   const toque = useRef<number | null>(null);
   const [vendoVideo, setVendoVideo] = useState(false);
   const total = images.length;
@@ -20,6 +47,7 @@ export function ProductGallery({ images, name, video }: { images: Img[]; name: s
   const selecionado = vendoVideo ? total : atual;
 
   function escolher(i: number) {
+    ctx?.fixar(null); // miniatura clicada volta para as fotos da galeria
     if (video && i === total) return setVendoVideo(true);
     setVendoVideo(false);
     ir(i);
@@ -46,10 +74,20 @@ export function ProductGallery({ images, name, video }: { images: Img[]; name: s
         onPointerCancel={() => (toque.current = null)}
       >
         <CamadasFotos fotos={images} sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, 100vw" atual={atual} anterior={anterior} priority />
+        {/* fotos das cores ficam montadas por cima e só ganham opacidade (sem piscar) */}
+        {fotosVariantes.map((f) => (
+          <span
+            key={f.url}
+            className={`absolute inset-0 z-[3] transition-opacity duration-300 ${fotoVariante?.url === f.url && !vendoVideo ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            aria-hidden={fotoVariante?.url !== f.url}
+          >
+            <ImagemPeca src={f.url} alt={f.alt} sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, 100vw" inteira={false} />
+          </span>
+        ))}
         {video && vendoVideo && (
           <video
             src={video}
-            className="surgir absolute inset-0 z-[2] size-full bg-tinta object-contain"
+            className="surgir absolute inset-0 z-[4] size-full bg-tinta object-contain"
             controls
             autoPlay
             muted
@@ -59,7 +97,7 @@ export function ProductGallery({ images, name, video }: { images: Img[]; name: s
           />
         )}
         {itens > 1 && (
-          <span className="pointer-events-none absolute top-3 right-3 z-[3] rounded-full bg-branco/95 px-2.5 py-1 text-xs font-semibold tabular-nums shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] lg:hidden" aria-hidden>
+          <span className="pointer-events-none absolute top-3 right-3 z-[5] rounded-full bg-branco/95 px-2.5 py-1 text-xs font-semibold tabular-nums shadow-[0_2px_8px_-2px_rgb(23_24_28/0.18)] lg:hidden" aria-hidden>
             {selecionado + 1} / {itens}
           </span>
         )}
@@ -132,6 +170,8 @@ export function ProductBuy({
 }) {
   const [variantId, setVariantId] = useState(variants[0]?.id ?? "");
   const variant = variants.find((v) => v.id === variantId) ?? variants[0];
+  const ctx = useContext(FotoVarianteCtx);
+  const fotoDe = (v: Variant): FotoVariante => (v.imageUrl ? { url: v.imageUrl, alt: `Cor ${v.name}` } : null);
 
   if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
@@ -167,7 +207,12 @@ export function ProductBuy({
                   type="button"
                   role="radio"
                   aria-checked={checked}
-                  onClick={() => setVariantId(v.id)}
+                  onClick={() => {
+                    setVariantId(v.id);
+                    ctx?.fixar(fotoDe(v));
+                  }}
+                  onMouseEnter={() => ctx?.pairar(fotoDe(v))}
+                  onMouseLeave={() => ctx?.pairar(undefined)}
                   className={`chip-variante flex items-center gap-3 px-3.5 py-3 text-left text-sm ${checked ? "font-semibold" : ""}`}
                 >
                   <span
