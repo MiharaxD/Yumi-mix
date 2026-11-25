@@ -220,8 +220,8 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/medidas.jpg", alt: "Medidas do suporte: 14 cm de largura, 2,5 cm de altura e profundidade" },
     ],
     variants: [
-      { key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2490 },
-      { key: "branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 2490 },
+      { key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2490, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/preto.jpg" },
+      { key: "branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 2490, imageUrl: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/branco.jpg" },
     ],
   },
 ];
