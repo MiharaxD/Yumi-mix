@@ -14,7 +14,7 @@
 1. Limpeza do que sobrou da venda direta (decidir com a usuária): aba Pedidos/Frete/rastreio do admin, campos de frete embutido/peso/caixa do produto, `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`, dependência `mercadopago`, variáveis `MP_*`/`MELHOR_ENVIO_*`/`RESEND_*`.
 2. Preços e dimensões dos 7 produtos são valores de teste — ajustar no admin (devem bater com os anúncios).
 3. Links de redes sociais no rodapé (`SOCIAL_LINKS` em `src/config.ts`) são placeholder; definir os reais.
-4. A capa do suporte de lavadora ainda é o diagrama de medidas: trocar a ordem das fotos no admin. As fotos do Kit 3 Ganchos têm etiqueta do fornecedor embutida.
+4. As fotos do Kit 3 Ganchos têm etiqueta do fornecedor embutida.
 5. Subir os .3mf de cada produto e testar "Abrir no Bambu Studio".
 
 ## Limitações conhecidas

@@ -123,9 +123,10 @@ const products: ProductSeed[] = [
     readyToShip: true,
     category: "organizacao",
     images: [
-      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/6.jpg", alt: "Lavadora de alta pressão pendurada no suporte de parede" },
-      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/5.jpg", alt: "Medidas do suporte de parede para lavadora" },
-      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/7.jpg", alt: "Lavadora de alta pressão guardada perto da máquina de lavar" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-1.webp", alt: "Suporte de parede segurando a lavadora de alta pressão" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-2.webp", alt: "Suporte de parede para lavadora instalado na garagem" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-3.webp", alt: "Como medir a abertura da alça da lavadora: a partir de 11 cm" },
+      { url: "/produtos/suporte_parede_lavadora_alta_pressao_organizador_c/main_images/anuncio-4.webp", alt: "Duas formas de pendurar a lavadora no suporte" },
     ],
     variants: [{ key: "unico", name: "Padrão", material: "Aço e plástico", colorHex: "#4a4a48", priceCents: 4990 }],
   },

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 const CENA_HERO = "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg";
 
 // arte da campanha do topo (texto já embutido na imagem, no canto superior direito)
-const BANNER_TOPO = "/banners/natal.webp";
+const BANNER_TOPO = "/banners/natal-organizada.webp";
 
 const PASSOS = ["Você manda foto e medidas", "A gente responde com orçamento", "Buscamos e preparamos a peça pra você"];
 
@@ -63,7 +63,7 @@ export default async function HomePage() {
         <div className="relative isolate aspect-[16/9] overflow-hidden rounded-[2rem] bg-tinta">
           <Image
             src={BANNER_TOPO}
-            alt="Sua casa mais organizada e charmosa, com um toque de Natal"
+            alt="Sua casa mais organizada para o Natal"
             fill
             priority
             sizes="(min-width: 1280px) 1232px, 100vw"
