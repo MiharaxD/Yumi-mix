@@ -39,7 +39,6 @@ O banco é Postgres (Neon), compartilhado entre o `npm run dev` local e o deploy
 1. Home → produto → escolher variante e quantidade → **Adicionar ao carrinho**.
 2. `/carrinho` → **Finalizar compra** → preencher `/checkout` → **Ir para o pagamento** (pedido nasce `pendente`).
 3. Em `/pedido/<id>/pagamento`: com Mercado Pago, **Pagar com Mercado Pago** (ver seção abaixo); sem ele, aba Pix ou Cartão → **Simular pagamento aprovado** (pedido vira `pago`, grava a notificação "Novo pedido pago #…" e loga no terminal) ou **recusado** (continua `pendente`).
-4. `/personalizado` → enviar descrição + 1 a 4 fotos (JPG/PNG/WEBP, até 5 MB) → aparece em `/admin/personalizados` com as imagens.
 
 Regras importantes:
 - O servidor sempre recalcula preços pelo banco; o navegador só manda `variantId` e quantidade.

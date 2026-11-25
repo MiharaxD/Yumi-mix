@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { STORE_NAME, SOCIAL_LINKS } from "@/config";
+import { STORE_NAME, STORE_LINKS } from "@/config";
 import { CategoryNav } from "@/components/CategoryNav";
 import { LogoYumiMix } from "@/components/Logo";
 import { listCategories } from "@/lib/catalog";
@@ -42,9 +42,6 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
             <Link href="/#colecoes" className="pilula">
               Coleções
             </Link>
-            <Link href="/personalizado" className="pilula">
-              Sob medida
-            </Link>
           </nav>
 
           {/* sem carrinho: equilibra o logo para o menu ficar centralizado */}
@@ -71,17 +68,14 @@ export default async function LojaLayout({ children }: LayoutProps<"/">) {
             <Link href="/#pecas" className="link-linha self-start">
               Todas as peças
             </Link>
-            <Link href="/personalizado" className="link-linha self-start">
-              Peça sob medida
-            </Link>
           </nav>
-          <nav aria-label="Redes sociais" className="flex flex-col gap-3 text-sm">
-            <p className="font-semibold text-branco/45">Redes</p>
-            <a href={SOCIAL_LINKS.instagram} className="link-linha self-start" target="_blank" rel="noreferrer">
-              Instagram
+          <nav aria-label="Nossas lojas" className="flex flex-col gap-3 text-sm">
+            <p className="font-semibold text-branco/45">Nossas lojas</p>
+            <a href={STORE_LINKS.shopee} className="link-linha self-start" target="_blank" rel="noreferrer">
+              Shopee
             </a>
-            <a href={SOCIAL_LINKS.whatsapp} className="link-linha self-start" target="_blank" rel="noreferrer">
-              WhatsApp
+            <a href={STORE_LINKS.mercadoLivre} className="link-linha self-start" target="_blank" rel="noreferrer">
+              Mercado Livre
             </a>
           </nav>
           <div className="rounded-cartao bg-branco/[0.06] p-5 text-sm">

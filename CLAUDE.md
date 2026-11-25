@@ -2,7 +2,7 @@
 
 # Yumi Mix — loja de impressão 3D (versão de TESTE, deploy no Railway)
 
-Loja autoral de decoração impressa em 3D, **só vitrine**: catálogo → página da peça com botões para o anúncio na **Shopee** e no **Mercado Livre** (a compra, o pagamento e o frete acontecem lá) → painel admin, mais pedido personalizado com upload de fotos. Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção.
+Loja autoral de decoração impressa em 3D, **só vitrine**: catálogo → página da peça com botões para o anúncio na **Shopee** e no **Mercado Livre** (a compra, o pagamento e o frete acontecem lá) → painel admin. Sem pedido sob medida na loja (removido). Banco em Postgres hospedado (Neon), compartilhado entre dev local e produção.
 Stack: Next.js 16.4 (App Router, Turbopack, `cacheComponents` desligado) · React 19.3 · TypeScript 5 · Tailwind 4.3 · Prisma **6.19** + Postgres (Neon) · zod 4 · vitest 5. Node 20.19+ (testado no 24).
 
 ## Comandos

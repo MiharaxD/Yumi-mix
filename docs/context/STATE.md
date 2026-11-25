@@ -3,7 +3,7 @@
 ## Entregue (versão de teste local)
 - Loja só vitrine: catálogo real (10 produtos, 2 categorias: Organização e Decoração sazonal), com trilho de categorias, seções por categoria e banda de coleções na home; página de produto com preço, variações e botões para o anúncio na Shopee/Mercado Livre (os 10 já com link; editáveis no admin, "Em breve" sem link). Carrinho, checkout, frete do cliente e Mercado Pago removidos da loja. Nos cards de peça, passar o mouse passa as fotos por dissolve; na página de produto, galeria com dissolve, swipe no celular e miniaturas em coluna no desktop. Página 404 própria.
 - Logo nova (`LogoYumiMix`) no cabeçalho/rodapé/admin; favicon (`src/app/icon.svg`); preview de link (Open Graph) gerado para o site e para cada peça.
-- Pedido personalizado com 1–4 imagens (validação por bytes, ≤5 MB, honeypot) → status `nova`.
+- Pedido sob medida removido da loja (sem página, link nem API pública); a aba Sob medida do admin ficou só para ver as solicitações antigas. Rodapé com links das lojas na Shopee e no Mercado Livre (`STORE_LINKS` em `src/config.ts`); sem redes sociais por enquanto.
 - Admin com senha + cookie assinado: pedidos (filtro/status, rastreio, botão "Abrir no Bambu Studio"/baixar .3mf por item), produtos (criar/editar/arquivar/excluir, variações e preço, fotos e vídeo com ordem e capa, .3mf interno, frete embutido, peso e caixa), frete (CEP de origem, frete grátis acima de, frete fixo de reserva), sob medida, avisos.
 - Testes vitest de frete, Melhor Envio, link do .3mf, rastreio, formulário de produto (incluindo links das lojas), checkout e status. Visual claro e arredondado (cartões com sombra, pílulas, Figtree) aplicado na loja; admin herda os tokens.
 - Banco em Postgres hospedado (Neon), o mesmo em dev local e no deploy.
@@ -11,11 +11,10 @@
 
 ## Pendências (prioridade)
 0. Vitrine no ar com links nas 10 peças. O formulário do admin (links, inclusive vários separados por espaço) só foi coberto por teste, não testado no navegador.
-1. Limpeza do que sobrou da venda direta (decidir com a usuária): aba Pedidos/Frete/rastreio do admin, campos de frete embutido/peso/caixa do produto, `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`, dependência `mercadopago`, variáveis `MP_*`/`MELHOR_ENVIO_*`/`RESEND_*`.
+1. Limpeza do que sobrou da venda direta e do sob medida (decidir com a usuária): aba Sob medida do admin, `uploads.ts` do sob medida, aba Pedidos/Frete/rastreio do admin, campos de frete embutido/peso/caixa do produto, `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`, dependência `mercadopago`, variáveis `MP_*`/`MELHOR_ENVIO_*`/`RESEND_*`.
 2. Preços e dimensões dos 9 produtos são valores de teste — ajustar no admin (devem bater com os anúncios).
-3. Links de redes sociais no rodapé (`SOCIAL_LINKS` em `src/config.ts`) são placeholder; definir os reais.
-4. As fotos do Kit 3 Ganchos têm etiqueta do fornecedor embutida.
-5. Subir os .3mf de cada produto e testar "Abrir no Bambu Studio".
+3. As fotos do Kit 3 Ganchos têm etiqueta do fornecedor embutida.
+4. Subir os .3mf de cada produto e testar "Abrir no Bambu Studio".
 
 ## Limitações conhecidas
 - Sem controle de estoque; numeração de pedido calculada por `max+1` em transação (ok para uso local).

@@ -17,8 +17,8 @@
 - **Links atuais:** `prisma/links-lojas.json` (por slug; o seed usa em produto novo, `node prisma/links-lojas.mts` preenche só campos vazios no banco). Vários links do mesmo anúncio no mesmo campo, separados por espaço: o botão alterna a cada clique (vez guardada no `localStorage`, começa sorteada).
 - **Cuidados:** links só https e só dos domínios aceitos (inclui links curtos `shope.ee`/`meli.la`). Carrinho, checkout, frete do cliente e Mercado Pago foram removidos da loja; ainda sobram no admin (pedidos antigos, `/admin/frete`, rastreio) e em `src/lib/{orders,cart-server,pricing,melhor-envio,schemas,settings}.ts`.
 
-## Pedido personalizado / uploads
-- **Ir direto para:** `src/app/api/personalizado/route.ts` → `src/lib/uploads.ts` (assinatura de bytes, gravação, leitura segura) → `src/lib/custom-requests.ts` (zod + criação) → `src/app/(loja)/personalizado/CustomRequestForm.tsx`.
+## Uploads / sob medida (só admin)
+- **Ir direto para:** `src/lib/uploads.ts` (assinatura de bytes, gravação, leitura segura) · solicitações antigas em `src/app/admin/(painel)/personalizados`. A página pública e a API `/api/personalizado` foram removidas.
 - **Cuidados:** honeypot `site`; limites em `src/config.ts`; imagens só servidas por `src/app/api/admin/uploads/[id]/route.ts`.
 - **Mídia de produto (admin):** upload em `src/app/api/admin/produtos/[id]/midia/route.ts` (`kind` foto/video/arquivo3d) → `uploads/produtos/` servido publicamente só por `src/app/media/[...path]/route.ts` (uuid, com Range); `.3mf` em `uploads/arquivos-3d/`, nunca público: só por `src/app/api/arquivo-3d/[productId]/[token]/[name]/route.ts` com token HMAC (`src/lib/print-files.ts`, vale `PRINT_LINK_HOURS`), porque o Bambu Studio baixa sem cookie.
 

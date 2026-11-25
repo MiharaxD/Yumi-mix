@@ -15,8 +15,6 @@ const CENA_HERO = "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/
 // arte da campanha do topo (texto já embutido na imagem, no canto superior direito)
 const BANNER_TOPO = "/banners/natal-organizada.webp";
 
-const PASSOS = ["Você manda foto e medidas", "A gente responde com orçamento", "Buscamos e preparamos a peça pra você"];
-
 const botaoClaro =
   "inline-flex items-center justify-center gap-2 rounded-full bg-branco px-6 py-3.5 text-[0.9375rem] font-semibold text-tinta shadow-[0_8px_24px_-10px_rgb(0_0_0/0.5)] transition-colors hover:bg-dourado-claro";
 
@@ -96,12 +94,6 @@ export default async function HomePage() {
               <div className="surgir mt-7 flex flex-wrap gap-3 [--atraso:200ms]">
                 <Link href="#pecas" className={botaoClaro}>
                   Ver as peças <IconeSeta className="size-4" />
-                </Link>
-                <Link
-                  href="/personalizado"
-                  className="inline-flex items-center justify-center rounded-full bg-branco/15 px-6 py-3.5 text-[0.9375rem] font-semibold text-branco backdrop-blur-md transition-colors hover:bg-branco/25"
-                >
-                  Sob medida
                 </Link>
               </div>
             </div>
@@ -205,33 +197,6 @@ export default async function HomePage() {
           </ul>
         </section>
       )}
-
-      <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 sm:pt-24" aria-labelledby="titulo-sob-medida">
-        <div className="grid gap-10 overflow-hidden rounded-[2rem] bg-tinta px-6 py-10 text-branco sm:px-12 sm:py-14 md:grid-cols-[1.15fr_1fr] md:gap-14">
-          <div>
-            <h2 id="titulo-sob-medida" className="titulo text-[2.25rem] leading-[1.02] sm:text-[3.25rem]">
-              Não achou a peça <span className="italico">que imaginou?</span>
-            </h2>
-            <p className="mt-5 max-w-prose text-base leading-relaxed text-branco/70 sm:text-lg">
-              Manda uma foto ou um rabisco, conta as medidas e a cor. A gente estuda o pedido e responde com o orçamento
-              e o prazo.
-            </p>
-            <Link href="/personalizado" className={`${botaoClaro} mt-8`}>
-              Pedir uma peça sob medida <IconeSeta className="size-4" />
-            </Link>
-          </div>
-          <ol className="flex flex-col gap-3 self-center">
-            {PASSOS.map((passo, i) => (
-              <li key={passo} className="flex items-center gap-4 rounded-[1.25rem] bg-branco/[0.07] px-4 py-4 sm:px-5">
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-dourado text-sm font-bold text-tinta">
-                  {i + 1}
-                </span>
-                <span className="font-semibold">{passo}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
     </>
   );
 }

@@ -28,7 +28,8 @@ export const FIRST_ORDER_NUMBER = 1001;
 export const FIRST_CUSTOM_REQUEST_NUMBER = 1;
 
 /** Links de rede social no rodapé. Placeholder até a loja ter perfis de verdade. */
-export const SOCIAL_LINKS = {
-  instagram: "https://instagram.com/yumimix",
-  whatsapp: "https://wa.me/5500000000000",
+/** Lojas da Yumi Mix nos marketplaces (rodapé). */
+export const STORE_LINKS = {
+  shopee: "https://shopee.com.br/shop/1795481518",
+  mercadoLivre: "https://lista.mercadolivre.com.br/_CustId_3264697547",
 };

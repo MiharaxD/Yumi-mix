@@ -27,7 +27,7 @@ export default async function Image() {
             <div style={{ display: "flex", fontSize: 28, color: C.tintaSuave }}>Decoração e organização para a casa</div>
           </div>
           <div style={{ display: "flex", gap: 12 }}>
-            {["Pronta entrega", "Peças sob medida"].map((t) => (
+            {["Pronta entrega", "Entrega para todo o Brasil"].map((t) => (
               <div key={t} style={{ display: "flex", background: C.branco, color: C.tinta, fontSize: 22, padding: "10px 22px", borderRadius: 999, flexShrink: 0, whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(23,24,28,0.08)" }}>
                 {t}
               </div>
