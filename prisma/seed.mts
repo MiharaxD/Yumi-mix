@@ -1,4 +1,4 @@
-// Seed da Yumi Mix: 2 categorias e 10 produtos reais (fotos em public/produtos/<pasta>/main_images).
+// Seed da Yumi Mix: 2 categorias e 9 produtos reais (fotos em public/produtos/<pasta>/main_images).
 // Rodar: npm run db:seed  (idempotente: pode rodar de novo sem duplicar)
 
 import { existsSync } from "node:fs";
@@ -58,17 +58,7 @@ const products: ProductSeed[] = [
       { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/2.jpg", alt: "Ganchos e saboneteira de parede instalados no banheiro" },
       { url: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/5.jpg", alt: "Detalhe da saboneteira de parede com água escoando" },
     ],
-    variants: [
-      { key: "unico", name: "Preto", material: "Plástico ABS", colorHex: "#2a2a2a", priceCents: 2790 },
-      {
-        key: "branco",
-        name: "Branco",
-        material: "Plástico ABS",
-        colorHex: "#f2f1ec",
-        priceCents: 2790,
-        imageUrl: "/produtos/kit_saboneteira_de_parede_2_ganchos_adesivo_sem_fu/main_images/branco.png",
-      },
-    ],
+    variants: [{ key: "unico", name: "Padrão", material: "Plástico ABS", colorHex: "#f2f1ec", priceCents: 2790 }],
   },
   {
     slug: "kit-porta-copos-cafe",
@@ -194,30 +184,6 @@ const products: ProductSeed[] = [
       { url: "/produtos/suporte_organizador_bancada_parafusadeira/main_images/medidas.jpg", alt: "Medidas do suporte: 14 × 8 × 8 cm" },
     ],
     variants: [{ key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2990 }],
-  },
-  {
-    slug: "suporte-escova-dente-pasta-adesivo",
-    name: "Suporte para Escova de Dente e Pasta Adesivo Sem Furar",
-    description:
-      "Organiza a pasta e até quatro escovas de dente na parede, longe da bancada molhada da pia. " +
-      "As escovas ficam em pé, separadas umas das outras, e secam mais rápido. " +
-      "Instalação sem furos com fita dupla face: é só limpar o azulejo, colar e usar. Funciona no banheiro ou dentro do box. " +
-      "Peça compacta e discreta, disponível em preto ou branco.",
-    dimensions: "14 × 2,5 × 2,5 cm",
-    productionDays: 2,
-    readyToShip: true,
-    category: "organizacao",
-    images: [
-      { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/preto.jpg", alt: "Suporte preto na parede com pasta de dente e quatro escovas" },
-      { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/1.jpg", alt: "Suporte branco com pasta e escovas na parede do box" },
-      { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/2.jpg", alt: "Suporte branco com escovas no azulejo do banheiro" },
-      { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/branco.jpg", alt: "Suporte branco com pasta de dente e quatro escovas" },
-      { url: "/produtos/suporte_escova_dente_pasta_adesivo_sem_furar/main_images/medidas.jpg", alt: "Medidas do suporte: 14 cm de largura, 2,5 cm de altura e profundidade" },
-    ],
-    variants: [
-      { key: "preto", name: "Preto", material: "PLA", colorHex: "#2a2a2a", priceCents: 2490 },
-      { key: "branco", name: "Branco", material: "PLA", colorHex: "#f2f1ec", priceCents: 2490 },
-    ],
   },
 ];
 
