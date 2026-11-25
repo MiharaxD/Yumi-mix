@@ -67,8 +67,7 @@ export default async function ProductPage(props: PageProps<"/produto/[slug]">) {
 
           <div className="mt-7">
             <ProductBuy
-              shopeeUrl={product.shopeeUrl}
-              mercadoLivreUrl={product.mercadoLivreUrl}
+              lojas={product}
               readyToShip={product.readyToShip}
               productionDays={product.productionDays}
               variants={product.variants.map((v) => ({

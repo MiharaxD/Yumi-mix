@@ -7,7 +7,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 // links dos anúncios por slug (vários do mesmo anúncio separados por espaço: o botão alterna)
-const linksLojas: Record<string, { shopeeUrl?: string; mercadoLivreUrl?: string }> = JSON.parse(
+const linksLojas: Record<string, { shopeeUrl?: string; mercadoLivreUrl?: string; shopeePriceCents?: number; mercadoLivrePriceCents?: number }> = JSON.parse(
   readFileSync(new URL("./links-lojas.json", import.meta.url), "utf8"),
 );
 
@@ -257,6 +257,8 @@ async function main() {
         videoUrl: videoDaPasta(p.images[0]?.url),
         shopeeUrl: linksLojas[p.slug]?.shopeeUrl ?? null,
         mercadoLivreUrl: linksLojas[p.slug]?.mercadoLivreUrl ?? null,
+        shopeePriceCents: linksLojas[p.slug]?.shopeePriceCents ?? null,
+        mercadoLivrePriceCents: linksLojas[p.slug]?.mercadoLivrePriceCents ?? null,
         position: index,
         categoryId: categoryIds.get(p.category),
         images: { create: p.images.map((img, i) => ({ url: img.url, alt: img.alt, position: i })) },

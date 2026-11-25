@@ -15,6 +15,8 @@ export type ProductFormValues = {
   productionDays: number;
   shopeeUrl: string;
   mercadoLivreUrl: string;
+  shopeePrice: string;
+  mercadoLivrePrice: string;
   shippingCredit: string;
   weightGrams: number;
   boxHeightCm: number;
@@ -38,6 +40,8 @@ export const EMPTY_PRODUCT: ProductFormValues = {
   productionDays: 3,
   shopeeUrl: "",
   mercadoLivreUrl: "",
+  shopeePrice: "",
+  mercadoLivrePrice: "",
   shippingCredit: "0,00",
   weightGrams: 300,
   boxHeightCm: 10,
@@ -222,7 +226,7 @@ export function ProductForm({
 
       <Secao
         titulo="Onde comprar"
-        descricao="A compra acontece no marketplace: o botão da página da peça leva para estes anúncios. Mesmo anúncio em mais de um link? Cole todos separados por espaço: o botão alterna entre eles. Sem nenhum link, a peça aparece como “em breve”."
+        descricao="A compra acontece no marketplace: o botão da página da peça leva para estes anúncios. Mesmo anúncio em mais de um link? Cole todos separados por espaço: o botão alterna entre eles. Sem nenhum link, a peça aparece como “em breve”. Com o preço das duas lojas, a mais barata ganha o selo “Promoção”."
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Campo
@@ -240,6 +244,22 @@ export function ProductForm({
             defaultValue={initial.mercadoLivreUrl}
             placeholder="https://produto.mercadolivre.com.br/…"
             error={e.mercadoLivreUrl}
+          />
+          <Campo
+            label="Preço na Shopee (R$)"
+            name="shopeePrice"
+            inputMode="decimal"
+            defaultValue={initial.shopeePrice}
+            placeholder="ex.: 18,62"
+            error={e.shopeePrice}
+          />
+          <Campo
+            label="Preço no Mercado Livre (R$)"
+            name="mercadoLivrePrice"
+            inputMode="decimal"
+            defaultValue={initial.mercadoLivrePrice}
+            placeholder="ex.: 21,90"
+            error={e.mercadoLivrePrice}
           />
         </div>
       </Secao>

@@ -8,7 +8,8 @@ import {
   IndicadorFotos,
   useCicloFotos,
 } from "@/components/FotosPeca";
-import { BotaoLoja, lojasDaPeca } from "@/components/BotaoLoja";
+import { BotaoLoja } from "@/components/BotaoLoja";
+import { lojasDaPeca, type LojasInput } from "@/lib/lojas";
 
 type Props = {
   slug: string;
@@ -19,15 +20,13 @@ type Props = {
   readyToShip: boolean;
   productionDays: number;
   colors: string[];
-  shopeeUrl?: string | null;
-  mercadoLivreUrl?: string | null;
   priority?: boolean;
-};
+} & LojasInput;
 
 /** Cartão de peça: foto grande arredondada, nome e preço embaixo. Sob o mouse, sobe e as fotos passam por dissolve. */
 export function ProductTile(p: Props) {
   const ciclo = useCicloFotos(p.images.length);
-  const lojas = lojasDaPeca(p.shopeeUrl, p.mercadoLivreUrl);
+  const lojas = lojasDaPeca(p);
 
   // o link da peça cobre foto e texto; os botões das lojas ficam fora dele (link dentro de link não vale)
   return (
@@ -98,7 +97,7 @@ export function ProductTile(p: Props) {
       </Link>
       {lojas.length > 0 && (
         <div
-          className={`grid gap-1.5 px-1 pb-1 sm:gap-2 sm:px-2 sm:pb-2 ${lojas.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
+          className={`grid gap-1.5 px-1 pb-1 sm:gap-2 sm:px-2 sm:pb-2 ${lojas.length > 1 ? "grid-cols-2" : "grid-cols-1"} ${lojas.some((l) => l.promocao) ? "pt-2" : ""}`}
         >
           {lojas.map((l) => (
             <BotaoLoja key={l.chave} loja={l} compacto />

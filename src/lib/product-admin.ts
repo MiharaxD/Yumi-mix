@@ -32,6 +32,18 @@ const money = (msg: string) =>
     return cents;
   });
 
+// preço opcional: vazio = sem preço cadastrado
+const optionalMoney = (msg: string) =>
+  z.string().default("").transform((v, ctx) => {
+    if (v.trim() === "") return null;
+    const cents = parseBRLToCents(v);
+    if (cents === null || cents <= 0) {
+      ctx.addIssue({ code: "custom", message: msg });
+      return z.NEVER;
+    }
+    return cents;
+  });
+
 const int = (min: number, max: number, msg: string) =>
   z.string().transform((v, ctx) => {
     const n = Number(v.trim().replace(",", "."));
@@ -106,6 +118,8 @@ export const productInputSchema = z
     productionDays: int(1, 60, "Dias de produção: de 1 a 60."),
     shopeeUrl: marketplaceUrl(MARKETPLACE_HOSTS.shopee, "Cole o link do anúncio na Shopee (shopee.com.br)."),
     mercadoLivreUrl: marketplaceUrl(MARKETPLACE_HOSTS.mercadoLivre, "Cole o link do anúncio no Mercado Livre (mercadolivre.com.br)."),
+    shopeePrice: optionalMoney("Preço na Shopee inválido, ex.: 18,62."),
+    mercadoLivrePrice: optionalMoney("Preço no Mercado Livre inválido, ex.: 21,90."),
     shippingCredit: money("Frete embutido inválido, ex.: 10,00."),
     weightGrams: int(1, 30000, "Peso em gramas: de 1 a 30.000."),
     boxHeightCm: int(1, 100, "Altura: de 1 a 100 cm."),

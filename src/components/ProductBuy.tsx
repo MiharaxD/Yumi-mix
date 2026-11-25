@@ -5,7 +5,8 @@ import { ImagemPeca } from "@/components/ImagemPeca";
 import { CamadasFotos, useFotoAtiva } from "@/components/FotosPeca";
 import { formatBRL } from "@/lib/money";
 import { IconePlay } from "@/components/Icones";
-import { BotaoLoja, lojasDaPeca } from "@/components/BotaoLoja";
+import { BotaoLoja } from "@/components/BotaoLoja";
+import { lojasDaPeca, type LojasInput } from "@/lib/lojas";
 import { SeloPrazo } from "@/components/Prazo";
 
 type Variant = { id: string; name: string; material: string; colorHex: string; priceCents: number; imageUrl?: string | null };
@@ -160,14 +161,12 @@ export function ProductBuy({
   variants,
   readyToShip,
   productionDays,
-  shopeeUrl,
-  mercadoLivreUrl,
+  lojas: lojasInput,
 }: {
   variants: Variant[];
   readyToShip: boolean;
   productionDays: number;
-  shopeeUrl: string | null;
-  mercadoLivreUrl: string | null;
+  lojas: LojasInput;
 }) {
   const [variantId, setVariantId] = useState(variants[0]?.id ?? "");
   const variant = variants.find((v) => v.id === variantId) ?? variants[0];
@@ -176,7 +175,7 @@ export function ProductBuy({
 
   if (!variant) return <p className="text-tinta-suave">Esta peça está sem variantes no momento.</p>;
 
-  const lojas = lojasDaPeca(shopeeUrl, mercadoLivreUrl);
+  const lojas = lojasDaPeca(lojasInput);
 
   return (
     <div>

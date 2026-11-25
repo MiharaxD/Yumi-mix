@@ -147,3 +147,29 @@ describe("checkout", () => {
     expect(cepSchema.safeParse("0131").success).toBe(false);
   });
 });
+
+describe("preço por loja e promoção", () => {
+  it("aceita preço vazio (sem preço) e converte vírgula em centavos", async () => {
+    const { productInputSchema: s } = await import("@/lib/product-admin");
+    const base = {
+      name: "Peça teste", description: "Uma descrição qualquer.", readyToShip: true, productionDays: "3",
+      shopeeUrl: "", mercadoLivreUrl: "", shippingCredit: "0", weightGrams: "300", boxHeightCm: "10", boxWidthCm: "10", boxLengthCm: "10",
+      variants: [{ id: "", name: "Preto", material: "PLA", colorHex: "#000000", price: "10,00" }],
+    };
+    const r = s.safeParse({ ...base, shopeePrice: "18,62", mercadoLivrePrice: "" });
+    expect(r.success && r.data.shopeePrice).toBe(1862);
+    expect(r.success && r.data.mercadoLivrePrice).toBeNull();
+    expect(s.safeParse({ ...base, shopeePrice: "abc" }).success).toBe(false);
+  });
+
+  it("marca promoção só na loja mais barata, com as duas lojas e preços diferentes", async () => {
+    const { lojasDaPeca } = await import("@/lib/lojas");
+    const duas = { shopeeUrl: "https://shopee.com.br/a", mercadoLivreUrl: "https://mercadolivre.com.br/b" };
+    const promo = (l: ReturnType<typeof lojasDaPeca>) => l.filter((x) => x.promocao).map((x) => x.chave);
+    expect(promo(lojasDaPeca({ ...duas, shopeePriceCents: 1862, mercadoLivrePriceCents: 2190 }))).toEqual(["shopee"]);
+    expect(promo(lojasDaPeca({ ...duas, shopeePriceCents: 2500, mercadoLivrePriceCents: 2190 }))).toEqual(["ml"]);
+    expect(promo(lojasDaPeca({ ...duas, shopeePriceCents: 2000, mercadoLivrePriceCents: 2000 }))).toEqual([]);
+    expect(promo(lojasDaPeca({ ...duas, shopeePriceCents: 1862 }))).toEqual([]);
+    expect(promo(lojasDaPeca({ shopeeUrl: duas.shopeeUrl, shopeePriceCents: 100, mercadoLivrePriceCents: 900 }))).toEqual([]);
+  });
+});

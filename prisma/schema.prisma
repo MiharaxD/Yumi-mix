@@ -22,6 +22,9 @@ model Product {
   // a venda acontece no marketplace: links dos anúncios
   shopeeUrl           String?
   mercadoLivreUrl     String?
+  // preço de cada anúncio (centavos); a loja mais barata ganha o selo "Promoção"
+  shopeePriceCents       Int?
+  mercadoLivrePriceCents Int?
   position            Int            @default(0)
   // arquivado: some da loja, continua no admin e nos pedidos antigos
   archived            Boolean        @default(false)

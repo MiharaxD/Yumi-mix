@@ -2,26 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { IconeSeta } from "@/components/Icones";
-
-type Marca = { nome: string; fundo: string; texto: string; logo: string; logoLargura: number };
-const MARCAS: Record<"ml" | "shopee", Marca> = {
-  ml: { nome: "Mercado Livre", fundo: "#ffe600", texto: "#2d3277", logo: "/marcas/mercado-livre.png", logoLargura: 43 },
-  shopee: { nome: "Shopee", fundo: "#ed4c2d", texto: "#ffffff", logo: "/marcas/shopee.png", logoLargura: 26 },
-};
-
-function separarLinks(valor: string | null | undefined): string[] {
-  return (valor ?? "").split(/\s+/).filter(Boolean);
-}
-
-/** Lojas com link cadastrado, Mercado Livre primeiro. */
-export function lojasDaPeca(shopeeUrl: string | null | undefined, mercadoLivreUrl: string | null | undefined) {
-  return [
-    { chave: "ml", prefixo: "no", urls: separarLinks(mercadoLivreUrl), marca: MARCAS.ml },
-    { chave: "shopee", prefixo: "na", urls: separarLinks(shopeeUrl), marca: MARCAS.shopee },
-  ].filter((l) => l.urls.length > 0);
-}
-
-export type Loja = ReturnType<typeof lojasDaPeca>[number];
+import type { Loja } from "@/lib/lojas";
 
 // mesmo anúncio em vários links: cada clique abre o próximo (vez guardada no navegador)
 export function BotaoLoja({ loja, compacto = false }: { loja: Loja; compacto?: boolean }) {
@@ -29,7 +10,7 @@ export function BotaoLoja({ loja, compacto = false }: { loja: Loja; compacto?: b
   const chave = `yumi-link:${urls[0]}`;
   const [vez, setVez] = useState(0);
   const href = urls[vez % urls.length];
-  const rotulo = `Comprar ${loja.prefixo} ${marca.nome}`;
+  const rotulo = `Comprar ${loja.prefixo} ${marca.nome}${loja.promocao ? ", em promoção" : ""}`;
 
   useEffect(() => {
     if (urls.length < 2) return;
@@ -64,8 +45,8 @@ export function BotaoLoja({ loja, compacto = false }: { loja: Loja; compacto?: b
       aria-label={compacto ? `${rotulo} (abre em nova aba)` : undefined}
       className={
         compacto
-          ? "botao-loja min-w-0 gap-1.5 px-3 py-2 text-[0.8125rem] shadow-[0_6px_14px_-8px_rgb(23_24_28/0.45)]"
-          : "botao-loja min-w-0 px-5 py-3 text-center"
+          ? "botao-loja relative min-w-0 gap-1.5 px-3 py-2 text-[0.8125rem] shadow-[0_6px_14px_-8px_rgb(23_24_28/0.45)]"
+          : "botao-loja relative min-w-0 px-5 py-3 text-center"
       }
       style={{ backgroundColor: marca.fundo, color: marca.texto }}
     >
@@ -78,13 +59,24 @@ export function BotaoLoja({ loja, compacto = false }: { loja: Loja; compacto?: b
         height={28}
         className={compacto ? "h-5 w-auto shrink-0" : "h-7 w-auto shrink-0"}
       />
+      {loja.promocao && (
+        <span
+          aria-hidden
+          className={`absolute right-3 rounded-full bg-tinta font-bold tracking-wide text-branco uppercase shadow-[0_4px_10px_-4px_rgb(23_24_28/0.5)] ${
+            compacto ? "-top-2 px-1.5 py-px text-[0.5625rem] max-sm:right-1/2 max-sm:translate-x-1/2" : "-top-2.5 px-2 py-0.5 text-[0.6875rem]"
+          }`}
+        >
+          Promoção
+        </span>
+      )}
       {compacto ? (
         <span aria-hidden className="truncate max-sm:hidden">
           {marca.nome}
         </span>
       ) : (
         <>
-          {rotulo}
+          Comprar {loja.prefixo} {marca.nome}
+          {loja.promocao && <span className="sr-only">, em promoção</span>}
           <IconeSeta className="size-4 shrink-0" />
           <span className="sr-only"> (abre em nova aba)</span>
         </>

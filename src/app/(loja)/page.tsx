@@ -27,6 +27,8 @@ function paraPeca(p: {
   productionDays: number;
   shopeeUrl: string | null;
   mercadoLivreUrl: string | null;
+  shopeePriceCents: number | null;
+  mercadoLivrePriceCents: number | null;
 }): PecaResumo {
   return {
     slug: p.slug,
@@ -39,6 +41,8 @@ function paraPeca(p: {
     colors: p.variants.map((v) => v.colorHex),
     shopeeUrl: p.shopeeUrl,
     mercadoLivreUrl: p.mercadoLivreUrl,
+    shopeePriceCents: p.shopeePriceCents,
+    mercadoLivrePriceCents: p.mercadoLivrePriceCents,
   };
 }
 

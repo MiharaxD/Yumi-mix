@@ -6,6 +6,7 @@ import { formatBRL } from "@/lib/money";
 import { IconeSeta, IconeVoltar } from "@/components/Icones";
 import { CamadasFotos, IndicadorFotos, useCicloFotos } from "@/components/FotosPeca";
 
+import type { LojasInput } from "@/lib/lojas";
 export type PecaResumo = {
   slug: string;
   name: string;
@@ -15,9 +16,7 @@ export type PecaResumo = {
   readyToShip: boolean;
   productionDays: number;
   colors: string[];
-  shopeeUrl?: string | null;
-  mercadoLivreUrl?: string | null;
-};
+} & LojasInput;
 
 /** Trilho de destaques com setas redondas e barra de progresso. */
 export function Destaques({ pecas }: { pecas: PecaResumo[] }) {
